@@ -2,9 +2,10 @@
 
 Provides functionality for tracking runners routes and facilitates communication between them via chat.
 
-<p align="center">
-  <img src="1.png" />
-  <img src="2.png" />
+<p style="display: flex; ">
+  <img style="width:30%; padding-right: 2%; height: auto" src="1.png"/>
+  <img style="width:30%; padding-right: 2%; height: auto"src="2.png" />
+  <img style="width:30%; padding-right: 2%; height: auto"src="3.png" />
 </p>
 
 # Getting started: 

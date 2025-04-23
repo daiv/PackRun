@@ -15,7 +15,7 @@ export default function Homepage() {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
-  
+
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function Homepage() {
         console.error("Permission to access location was denied");
         return;
       }
-      
+
       // Subscribe to location updates
       subscriber = await Location.watchPositionAsync(
         {
@@ -54,10 +54,11 @@ export default function Homepage() {
       const response = await fetch(`http://192.168.68.100:3000/location`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'xXBobmanXx', longitude: mapRegion.longitude, latitude: mapRegion.latitude}), 
+        // body: JSON.stringify({ userId: 'xXBobmanXx', longitude: mapRegion.longitude, latitude: mapRegion.latitude}), 
+        body: JSON.stringify({ userId: 'xXBobmanXx', coords: { longitude: mapRegion.longitude, latitude: mapRegion.latitude } }),
       });
       if (!response.ok) throw new Error('Failed to send location');
-        
+
       const sentLocation = await response.json();
       console.log('location saved:', sentLocation);
     }
@@ -69,10 +70,11 @@ export default function Homepage() {
       const response = await fetch(`http://192.168.68.100:3000/location`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: 'Bertha Coolshoes', longitude: 0.335859, latitude: 51.145275}), 
+        // body: JSON.stringify({ userId: 'Bertha Coolshoes', longitude: 0.335859, latitude: 51.145275 }),
+        body: JSON.stringify({ userId: 'Bertha Coolshoes', coords: { longitude: 0.335859, latitude: 51.145275 } }),
       });
       if (!response.ok) throw new Error('Failed to send location');
-        
+
       const sentLocation = await response.json();
       console.log('botlocation saved:', sentLocation);
     }
@@ -97,8 +99,8 @@ export default function Homepage() {
             {/* Moving marker */}
             <Marker coordinate={mapRegion} />
 
-            <TouchableOpacity 
-              style={styles.startbtn} 
+            <TouchableOpacity
+              style={styles.startbtn}
               onPress={() => navigation.navigate('CurrentRun')}
             >
               <View style={{ transform: [{ rotate: '-45deg' }] }}>

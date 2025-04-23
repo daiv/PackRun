@@ -1,9 +1,11 @@
 import { Request, Response } from "express"
 import RunnerModel, { Runner } from "../models/runnerModel";
-import { removeRunnerFromChatRoom } from "./helperFunctions";
+import { removeRunnerFromChatRoom } from "../helpers/chatFunctions";
+import { Op } from "sequelize";
+import ChatRoomModel from "../models/chatRoomModel";
 
 //minutes of inactivity to autologout users
-const LOGIN_EXPIRES_MINUTES = 5;
+const LOGIN_EXPIRES_MINUTES = 30;
 
 export async function logUser(req: Request, res: Response, next: Function) {
 
@@ -11,7 +13,8 @@ export async function logUser(req: Request, res: Response, next: Function) {
   else if (incorrectCoordinates(req)) res.status(400).json('Incorrect coordinates ');
   else {
 
-    const { userId, longitude, latitude } = req.body;
+    const { userId } = req.body;
+    const { longitude, latitude } = req.body.coords;
     const runner: Runner = { userId, longitude, latitude }
 
     const isRunnerLoggedIn = await RunnerModel.findOne({ where: { userId } });
@@ -26,39 +29,39 @@ export async function logUser(req: Request, res: Response, next: Function) {
 
 function isMissingFields(req: Request): boolean {
   return !req.body || Object.keys(req.body).length === 0
-    || !Object.keys(req.body).includes('longitude') || !Object.keys(req.body).includes('latitude')
-    || !Object.keys(req.body).includes('userId')
-
-  /*//! next incoming format 
-  return !req.body || Object.keys(req.body).length === 0
     || !Object.keys(req.body).includes('userId') || !Object.keys(req.body).includes('coords')
     || !Object.keys(req.body.coords).includes('longitude')
-    || !Object.keys(req.body.coords).includes('latitude'); 
-    */
+    || !Object.keys(req.body.coords).includes('latitude');
 }
 
 function incorrectCoordinates(req: Request) {
   return req.body.latitude < -90 || req.body.latitude > 90 || req.body.longitude < -180 || req.body.longitude > 180;
 }
 
-function checkExpiringSessions() {
+async function checkExpiringSessions() {
 
-  const now = Date.now();
-
-  RunnerModel.findAll()
-    .then(res => res.forEach(runner => {
-      if (!runner.dataValues.updatedAt) logoutUser(runner);
-      else now - runner.dataValues.updatedAt.getTime() >= LOGIN_EXPIRES_MINUTES * 1000 * 60 && logoutUser(runner);
-    }))
-    .catch(err => console.log('ERROR', err));
-
-}
-async function logoutUser(runner: Runner) {
-  const runnerEntry = await RunnerModel.findOne({ where: { userId: runner.userId } });
-  if (runnerEntry) {
-    await removeRunnerFromChatRoom(runner.userId, runnerEntry.assignedChatRoom);
-    runnerEntry.destroy();
+  const expiringRunners = await RunnerModel.findAll();
+  if (expiringRunners.length === 0) await ChatRoomModel.destroy({ where: { id: { [Op.gt]: 0 } } });
+  else {
+    Promise.all(expiringRunners.filter(runner => runner.updatedAt <= new Date(Date.now() - LOGIN_EXPIRES_MINUTES * 60 * 1000))
+      .map(async (runner) => removeRunnerFromChatRoom(runner.userId, runner.assignedChatRoom)))
+      .catch(err => console.log(err))
+      .finally(() => checkForEmptyChatRooms());
+    await RunnerModel.destroy({ where: { updatedAt: { [Op.lt]: new Date(Date.now() - LOGIN_EXPIRES_MINUTES * 60 * 1000) } } });
   }
+}
+
+async function checkForEmptyChatRooms() {
+  const chatRooms = await ChatRoomModel.findAll();
+  Promise.all(chatRooms.map(async (chatRoom) => chatRoom.usersId.length === 0 && await ChatRoomModel.destroy({ where: { chatRoomId: chatRoom.dataValues.chatRoomId } })));
+}
+
+export async function checkIfLogged(req: Request, res: Response, next: Function) {
+  const userId = req.params.userId;
+  const isLoggedIn = await RunnerModel.findOne({ where: { userId } });
+
+  isLoggedIn ? next() : res.status(400).send('User not logged in');
+
 }
 
 setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

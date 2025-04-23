@@ -7,6 +7,7 @@ export interface chatRoom {
   usersId: string[],
   messages: Messages[]
 }
+
 export interface Messages {
   author: string,
   message: string,

@@ -1,4 +1,4 @@
-import { Model, DataTypes, DateDataType } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "./model";
 
 export interface Runner {
@@ -19,7 +19,6 @@ class RunnerModel extends Model<Runner> implements Runner {
   updatedAt!: Date;
 }
 
-// initializing a new table with sequelize
 RunnerModel.init(
   {
     id: {
@@ -51,17 +50,3 @@ RunnerModel.init(
 );
 
 export default RunnerModel; 
-
-// Initialize the database and create the "runner" table
-async function initializeDatabase() {
-  try {
-    await sequelize.sync(); // Creates the "runner" table
-    console.log('Database synchronized successfully');
-
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-// Start the process
-initializeDatabase();

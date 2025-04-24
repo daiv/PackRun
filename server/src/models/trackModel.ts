@@ -1,5 +1,3 @@
-//id, location[], owner, converted
-
 import sequelize from "./model";
 import { DataTypes, Model } from "sequelize";
 import { Location } from "../types";

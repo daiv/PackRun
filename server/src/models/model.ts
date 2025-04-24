@@ -10,4 +10,5 @@ import 'dotenv/config';
   database: (process.env.DB_NAME || "packRunDB") + (process.env.NODE_ENV === 'test' ? '_test' : '')
 }); 
 
+
 export default sequelize; 

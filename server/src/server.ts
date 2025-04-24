@@ -9,7 +9,6 @@ import router from './router';
 const app: Application = express();
 const server = createServer(app);
 
-
 const port = 3000;
 const corsOptions = {
   origin: '*',

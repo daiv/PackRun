@@ -1,5 +1,7 @@
 import TrackModel from "../models/trackModel";
 import { Location } from "../types";
+import 'dotenv/config';
+
 
 export async function addToTracking(owner: string, trackId: string, location: Location) {
 
@@ -30,7 +32,8 @@ async function transformToGeoApify(locations: Location[]) {
 }
 
 async function convertToGeoApify(request: any) {
-  const URL = 'https://api.geoapify.com/v1/mapmatching?apiKey=195e52b3f3a64bdb903a12bf0fea9ca7';
+  const URL = 'https://api.geoapify.com/v1/mapmatching?apiKey=' + process.env.GEOAPIFY_API_KEY;
+  // const URL = 'https://api.geoapify.com/v1/mapmatching?apiKey=195e52b3f3a64bdb903a12bf0fea9ca7';
   const response = await fetch(URL, {
     method: "post",
     headers: { "Content-Type": "application/json" },

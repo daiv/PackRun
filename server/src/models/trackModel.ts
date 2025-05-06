@@ -14,13 +14,6 @@ export interface Track {
   createdAt?: Date,
 }
 
-/*
-total time
-total distance
-elevation
-speed?
-
-*/
 class TrackModel extends Model<Track> implements Track {
   id?: bigint;
   owner!: string;

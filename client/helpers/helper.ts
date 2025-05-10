@@ -1,41 +1,71 @@
 import * as Location from 'expo-location';
-import { Runner } from './Types';
-import uuid from 'react-native-uuid';
+import { Platform } from 'react-native';
 
-async function post(location: Location.LocationObject) {
+let serverConnection: NodeJS.Timeout | undefined = undefined;
+let lastPosition: Object | undefined = undefined;
+let positionTracker: NodeJS.Timeout | undefined = undefined;
 
-  //you have to use your computer local ip to be able to reach the server from your mobile (and your mobile needs to stay in the same wifi ofc)
-  const url = "http://192.168.100.18";
-  const { latitude, longitude } = location.coords;
-  const userId = uuid.v4();
-  const runner: Runner = { userId, latitude, longitude }
+export async function serverConnect() {
+  if (!lastPosition) lastPosition = await getLocation();
 
-  try {
+  if (lastPosition) {
+    console.log('lastPosition', lastPosition);
+    const userId = 'userId';
+    const body = { ...lastPosition, userId, timestamp: new Date().toISOString() };
+    fetchFactory('/locations', 'POST', body).then(response => console.log('response', response));
+    serverConnection = setInterval(() => fetchFactory('/locations', 'POST', body), 1000 * 60);
+  } else console.log('Unable to get position. No positions available.');
+}
 
-    const response = await fetch(url + ':3000/location', {
-      method: "post", body: JSON.stringify(runner),
-      headers: { "Content-type": "application/json" }
+export function serverDisconnect() {
+  if (serverConnection) {
+    clearInterval(serverConnection);
+    serverConnection = undefined;
+  }
+}
+export function trackPosition(secondsBetweenUpdates: number, setMapRegion: Function) {
+  if (positionTracker) {
+    clearInterval(positionTracker);
+    positionTracker = undefined;
+  }
+  const track = () => {
+    getLocation().then((GpsPosition) => {
+      if (GpsPosition) lastPosition = GpsPosition && setMapRegion({
+        latitude: GpsPosition.coords.latitude,
+        longitude: GpsPosition.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+      else console.log('Unable to get position. Permission denied.');
     });
-    console.log("the response from server is", response);
-  } catch (error: any) {
 
-    console.error(error.message);
+    positionTracker = setInterval(track, secondsBetweenUpdates * 1000);
   }
 }
 
-async function getLocation(setMapText: Function) {
-
+async function getLocation() {
   let { status } = await Location.requestForegroundPermissionsAsync();
-
-  if (status !== 'granted') setMapText('Unable to get position. Permission denied.');
-  else Location.getCurrentPositionAsync()
-    .then(position => {
-      post(position);
-
-      setMapText('lat ' + position.coords.latitude + ' , ' + position.coords.longitude + ' long')
-        .catch(() => setMapText('Unable to get position. GPS error'))
-    });
+  if (status !== 'granted') return undefined;
+  else return await Location.getCurrentPositionAsync();
 }
 
+function fetchFactory(endPoint: string, method: string, body: object) {
+  const url = 'http://192.168.100.18:3000' + endPoint;
+  const response = fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+    .then((response) => {
+      if (response.status === 200) return response.json();
+      else throw new Error('Network response was not ok.');
+    })
+    .catch((error) => {
+      console.error('There has been a problem with your fetch operation:', error);
+    });
+  return response;
+}
 
-export default { http: { post }, Android: { GPS: { getLocation } }, IOS: {} };

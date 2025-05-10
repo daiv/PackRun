@@ -35,7 +35,7 @@ function isMissingFields(req: Request): boolean {
 }
 
 function incorrectCoordinates(req: Request) {
-  return req.body.latitude < -90 || req.body.latitude > 90 || req.body.longitude < -180 || req.body.longitude > 180;
+  return req.body.coords.latitude < -90 || req.body.coords.latitude > 90 || req.body.coords.longitude < -180 || req.body.coords.longitude > 180;
 }
 
 async function checkExpiringSessions() {
@@ -63,5 +63,12 @@ export async function checkIfLogged(req: Request, res: Response, next: Function)
   isLoggedIn ? next() : res.status(400).send('User not logged in');
 
 }
-
+export async function checkUserBody(req: Request, res: Response, next: Function) {
+  const keys = Object.keys(req.body);
+  if (!keys.includes('author')) res.status(400).send('Missing author');
+  else if (!keys.includes('message')) res.status(400).send('Missing message');
+  else if (!keys.includes('time')) res.status(400).send('Missing time');
+  else if (req.body.time && isNaN(Date.parse(req.body.time))) res.status(400).send('Time is not a date formatted string');
+  else next();
+}
 setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

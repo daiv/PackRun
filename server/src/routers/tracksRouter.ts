@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 
 import { checkIfLogged } from '../controllers/loginController';
-import { createNewTrack, deleteTrack, getTrack, getTracksInfo, postTrack } from '../controllers/tracksController';
+import { checkTrackBody, createNewTrack, deleteTrack, getTrack, getTracksInfo, postTrack } from '../controllers/tracksController';
 
 
 const tracksRouter: Router = express.Router();
@@ -10,7 +10,7 @@ const tracksRouter: Router = express.Router();
 tracksRouter.put('/:userId', checkIfLogged, createNewTrack);
 
 //adds locations to the new track and returns Geoapifyed Object
-tracksRouter.post('/:userId/:trackId', checkIfLogged, postTrack);
+tracksRouter.post('/:userId/:trackId', checkIfLogged, checkTrackBody, postTrack);
 
 
 //returns an array with the user tracks

@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.ts",
   "scripts": {
-    "test": "jest",
+    "test": "tsc && jest",
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "tsc && nodemon --exec ts-node dist/server.js"
@@ -23,6 +23,7 @@
     "@types/jest": "^29.5.14",
     "@types/multer": "^1.4.12",
     "@types/node": "^22.13.10",
+    "@types/pg": "^8.15.0",
     "@types/supertest": "^6.0.3",
     "babel-jest": "^29.7.0",
     "dotenv": "^16.5.0",

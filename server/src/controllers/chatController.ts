@@ -33,6 +33,6 @@ export async function assignChatRoom(req: Request, res: Response) {
   const { longitude, latitude } = req.body.coords;
   const runner: Runner = { userId, longitude, latitude }
   const response = await assignToChatRoom(runner);
-  if (response) res.status(201).json(response);
+  if (response) res.status(200).json(response);
   else res.status(500).json('Server error');
 }

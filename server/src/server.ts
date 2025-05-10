@@ -8,12 +8,7 @@ import router from './router';
 
 const app: Application = express();
 const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
-  }
-});
+
 
 const port = 3000;
 const corsOptions = {
@@ -26,6 +21,13 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use('/', router);
+
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
 
 io.on('connection', (socket) => {
   console.log('socket stuff coming!!!');

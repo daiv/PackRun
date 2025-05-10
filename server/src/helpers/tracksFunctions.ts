@@ -10,7 +10,7 @@ export async function addToTracking(owner: string, trackId: string, location: Lo
   if (trackObject) {
     trackObject.location = [...trackObject.location, location];
 
-    const result = await transformToGeoApify(trackObject.location);
+    const result = trackObject.location.length > 1 ? await transformToGeoApify(trackObject.location) : { error: 'not enought waypoints' };
     if (result && result.features) {
       trackObject.distance = result.features[0].properties.distance;
       trackObject.estimatedTime = result.features[0].properties.time;
@@ -21,19 +21,15 @@ export async function addToTracking(owner: string, trackId: string, location: Lo
 }
 
 async function transformToGeoApify(locations: Location[]) {
-  if (locations.length > 1) {
 
-    const formattedToGeo = await formatToGeoApify(locations);
-    const convertToGeo = await convertToGeoApify(formattedToGeo);
+  const formattedToGeo = await formatToGeoApify(locations);
+  const convertToGeo = await convertToGeoApify(formattedToGeo);
 
-    return convertToGeo;
-
-  } else return 'not enought waypoints';
+  return convertToGeo;
 }
 
 async function convertToGeoApify(request: any) {
   const URL = 'https://api.geoapify.com/v1/mapmatching?apiKey=' + process.env.GEOAPIFY_API_KEY;
-  // const URL = 'https://api.geoapify.com/v1/mapmatching?apiKey=195e52b3f3a64bdb903a12bf0fea9ca7';
   const response = await fetch(URL, {
     method: "post",
     headers: { "Content-Type": "application/json" },
@@ -44,11 +40,12 @@ async function convertToGeoApify(request: any) {
 }
 
 async function formatToGeoApify(arrayToConvert: Location[]) {
-  const waypoints = arrayToConvert.map(locationObj => {
 
-    if (locationObj.timestamp) return { timestamp: locationObj.timestamp, location: [locationObj.coords.longitude, locationObj.coords.latitude] }
-    return { location: [locationObj.coords.longitude, locationObj.coords.latitude] }
+  const waypoints = arrayToConvert.map(locationObj => {
+    if (locationObj.timestamp) return { timestamp: locationObj.timestamp, location: [locationObj.coords.longitude, locationObj.coords.latitude] };
+    return { location: [locationObj.coords.longitude, locationObj.coords.latitude] };
   });
+
   return { mode: "walk", waypoints };
 }
 

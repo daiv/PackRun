@@ -49,10 +49,10 @@ Open the console and run :
   <picture>![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?logo=postgresql&logoColor=white)</picture>
 
 # Contributors
-  * Archie Maunder-Taylor [Github](https://github.com/a-rchi-e)
+  * Archie Maunder-Taylor [Github](https://github.com/vrch1e)
   * Paul Paumier Martinez [Github](https://github.com/nimbus4gh)
   * Rawad Nounou [Github](https://github.com/rawad123321)
-  * Vera Kijewski [Github](https://github.com/rawad123321)
+  * Vera Kijewski [Github](https://github.com/zwergpirate)
 
 # Demo
 

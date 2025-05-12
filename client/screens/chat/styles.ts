@@ -10,7 +10,7 @@ export default StyleSheet.create({
     maxWidth: '80%',
     marginRight: 4
   },
-  botMessage: {
+  othersMessage: {
     backgroundColor: 'orange',
     padding: 10,
     borderRadius: 10,
@@ -32,7 +32,7 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  botText: {
+  othersText: {
     color: 'black',
     // fontWeight: 'bold',
     fontFamily: 'Roboto',

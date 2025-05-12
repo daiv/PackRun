@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import RootStackParamList from '../../components/types.js';
 import styles from './styles';
-import { serverConnect, trackPosition } from '../../helpers/helper';
+import { serverConnect, serverDisconnect, trackGpsPosition } from '../../helpers/helper';
 
 export default function HomePage() {
   const [mapRegion, setMapRegion] = useState({
@@ -17,9 +17,10 @@ export default function HomePage() {
   });
 
   useEffect(() => {
-    trackPosition(30 , setMapRegion);
+    trackGpsPosition(30, setMapRegion);
     serverConnect();
-  });
+    return () => serverDisconnect();
+  }, []);
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 

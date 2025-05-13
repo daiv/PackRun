@@ -20,7 +20,7 @@ export async function addToTracking(owner: string, trackId: string, location: Lo
   }
 }
 
-async function transformToGeoApify(locations: Location[]) {
+export async function transformToGeoApify(locations: Location[]) {
 
   const formattedToGeo = await formatToGeoApify(locations);
   const convertToGeo = await convertToGeoApify(formattedToGeo);

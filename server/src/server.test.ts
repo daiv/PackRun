@@ -1,11 +1,9 @@
 import supertest from 'supertest';
 import express from 'express';
 import router from './router';
-import sequelize from "./models/model";
-import { Client } from 'pg';
+import sequelize, { createDatabaseIfNotExist, dropDatabaseIfExists } from "./models/model";
 import 'dotenv/config';
 import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
-import { mock } from 'node:test';
 
 describe('Endpoints test', () => {
   const app = express();
@@ -14,43 +12,17 @@ describe('Endpoints test', () => {
   app.use('/', router);
 
   const request = supertest(app);
-  function initDbAsAdmin() {
-    const client = new Client({
-      user: process.env.DB_SUSER_NAME,
-      host: "localhost",
-      database: process.env.DB_ADMIN_NAME,
-      password: process.env.DB_SUSER_PASSWORD,
-      port: 5432,
-    });
-    return client;
-  }
+
 
   beforeAll(async () => {
     const database = (process.env.DB_NAME || "packrundb") + '_test';
-    console.log('database', database);
-    const client = initDbAsAdmin();
-    try {
-      await client.connect();
-      await client.query('CREATE DATABASE ' + database);
-    } catch (err) {
-      console.log('Error al conectar o crear la base de datos:', err);
-    } finally {
-      await client.end();
-    }
+    await createDatabaseIfNotExist(database);
     await sequelize.sync();
   });
 
   afterAll(async () => {
-    const client = initDbAsAdmin();
-    try {
-      await sequelize.close();
-      await client.connect();
-      await client.query('DROP DATABASE IF EXISTS ' + process.env.DB_NAME + '_test');
-    } catch (err) {
-      console.log('Error al conectar o eliminar la base de datos:', err);
-    } finally {
-      await client.end();
-    }
+    await sequelize.close();
+    dropDatabaseIfExists(process.env.DB_NAME + '_test');
   });
 
   const userId = 'testUser';

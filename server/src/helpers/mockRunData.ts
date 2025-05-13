@@ -1,0 +1,1054 @@
+import { Location } from "../types";
+
+const mockBeachWalk: Location[] = [
+  {
+    "coords": {
+      "latitude": 38.24421918831909,
+      "longitude": -0.5155115819432666,
+      "altitude": 0.5,
+      "accuracy": 6.789123456789012,
+      "altitudeAccuracy": 1,
+      "heading": 2.109876543210987,
+      "speed": 1.654321098765432
+    },
+    "timestamp": new Date("2025-05-13T17:14:40.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24435518831909,
+      "longitude": -0.5155209819432666,
+      "altitude": 0.2,
+      "accuracy": 9.012345678901234,
+      "altitudeAccuracy": 1,
+      "heading": -3.456789012345679,
+      "speed": 1.1234567890123457
+    },
+    "timestamp": new Date("2025-05-13T17:14:45.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24449018831909,
+      "longitude": -0.5155143819432666,
+      "altitude": 0.8,
+      "accuracy": 5.345678901234568,
+      "altitudeAccuracy": 1,
+      "heading": 1.7890123456789013,
+      "speed": 1.8765432109876543
+    },
+    "timestamp": new Date("2025-05-13T17:14:50.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24462718831909,
+      "longitude": -0.5155236819432666,
+      "altitude": 0.1,
+      "accuracy": 7.654321098765432,
+      "altitudeAccuracy": 1,
+      "heading": -1.2345678901234568,
+      "speed": 1.3901234567890124
+    },
+    "timestamp": new Date("2025-05-13T17:14:55.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24476218831909,
+      "longitude": -0.5155170819432667,
+      "altitude": 0.6,
+      "accuracy": 8.901234567890123,
+      "altitudeAccuracy": 1,
+      "heading": 3.0123456789012346,
+      "speed": 1.056789012345679
+    },
+    "timestamp": new Date("2025-05-13T17:15:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24489918831909,
+      "longitude": -0.5155263819432667,
+      "altitude": 0.3,
+      "accuracy": 5.234567890123457,
+      "altitudeAccuracy": 1,
+      "heading": -4.123456789012346,
+      "speed": 1.9234567890123457
+    },
+    "timestamp": new Date("2025-05-13T17:15:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24503418831909,
+      "longitude": -0.5155197819432667,
+      "altitude": 0.7,
+      "accuracy": 7.5432109876543215,
+      "altitudeAccuracy": 1,
+      "heading": 0.6789012345679013,
+      "speed": 1.4890123456789012
+    },
+    "timestamp": new Date("2025-05-13T17:15:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24517118831909,
+      "longitude": -0.5155290819432667,
+      "altitude": 0.0,
+      "accuracy": 9.876543210987654,
+      "altitudeAccuracy": 1,
+      "heading": -2.7890123456789014,
+      "speed": 1.0123456789012346
+    },
+    "timestamp": new Date("2025-05-13T17:15:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24530618831909,
+      "longitude": -0.5155224819432667,
+      "altitude": 0.4,
+      "accuracy": 6.165432109876543,
+      "altitudeAccuracy": 1,
+      "heading": 1.9012345678901235,
+      "speed": 1.7654321098765433
+    },
+    "timestamp": new Date("2025-05-13T17:15:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24544318831909,
+      "longitude": -0.5155317819432668,
+      "altitude": 0.2,
+      "accuracy": 8.43210987654321,
+      "altitudeAccuracy": 1,
+      "heading": -0.543210987654321,
+      "speed": 1.2789012345679013
+    },
+    "timestamp": new Date("2025-05-13T17:15:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24557818831909,
+      "longitude": -0.5155251819432668,
+      "altitude": 0.9,
+      "accuracy": 5.765432109876544,
+      "altitudeAccuracy": 1,
+      "heading": 3.2109876543210988,
+      "speed": 1.9901234567890123
+    },
+    "timestamp": new Date("2025-05-13T17:15:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24571518831909,
+      "longitude": -0.5155344819432668,
+      "altitude": 0.1,
+      "accuracy": 7.03210987654321,
+      "altitudeAccuracy": 1,
+      "heading": -3.8765432109876545,
+      "speed": 1.1876543210987655
+    },
+    "timestamp": new Date("2025-05-13T17:15:35.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24585018831909,
+      "longitude": -0.5155278819432668,
+      "altitude": 0.6,
+      "accuracy": 9.345678901234568,
+      "altitudeAccuracy": 1,
+      "heading": 0.4321098765432099,
+      "speed": 1.7123456789012346
+    },
+    "timestamp": new Date("2025-05-13T17:15:40.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24598718831909,
+      "longitude": -0.5155371819432668,
+      "altitude": 0.3,
+      "accuracy": 6.612345678901234,
+      "altitudeAccuracy": 1,
+      "heading": -1.9876543210987655,
+      "speed": 1.3345678901234568
+    },
+    "timestamp": new Date("2025-05-13T17:15:45.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24612218831909,
+      "longitude": -0.5155305819432669,
+      "altitude": 0.7,
+      "accuracy": 8.923456789012346,
+      "altitudeAccuracy": 1,
+      "heading": 2.56789012345679,
+      "speed": 1.0765432109876544
+    },
+    "timestamp": new Date("2025-05-13T17:15:50.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24625918831909,
+      "longitude": -0.5155398819432669,
+      "altitude": 0.0,
+      "accuracy": 5.254321098765432,
+      "altitudeAccuracy": 1,
+      "heading": -4.345678901234568,
+      "speed": 1.953210987654321
+    },
+    "timestamp": new Date("2025-05-13T17:15:55.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24639418831909,
+      "longitude": -0.5155332819432669,
+      "altitude": 0.5,
+      "accuracy": 7.565432109876543,
+      "altitudeAccuracy": 1,
+      "heading": 0.2345678901234568,
+      "speed": 1.4210987654321099
+    },
+    "timestamp": new Date("2025-05-13T17:16:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24653118831909,
+      "longitude": -0.5155425819432669,
+      "altitude": 0.2,
+      "accuracy": 9.834567890123457,
+      "altitudeAccuracy": 1,
+      "heading": -2.9012345678901236,
+      "speed": 1.0345678901234568
+    },
+    "timestamp": new Date("2025-05-13T17:16:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24666618831909,
+      "longitude": -0.515535981943267,
+      "altitude": 0.8,
+      "accuracy": 6.123456789012345,
+      "altitudeAccuracy": 1,
+      "heading": 2.345678901234568,
+      "speed": 1.7987654321098766
+    },
+    "timestamp": new Date("2025-05-13T17:16:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 38.24680318831909,
+      "longitude": -0.515545281943267,
+      "altitude": 0.1,
+      "accuracy": 8.456789012345679,
+      "altitudeAccuracy": 1,
+      "heading": -0.6543210987654321,
+      "speed": 1.2109876543210988
+    },
+    "timestamp": new Date("2025-05-13T17:16:15.000Z"),
+    "userId": "testUser"
+  }
+]
+const mockValenciaCityWalk: Location[] = [
+  {
+    "coords": {
+      "latitude": 39.4750,
+      "longitude": -0.3740,
+      "altitude": 15.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 1.2
+    },
+    "timestamp": new Date("2025-05-13T17:12:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4751,
+      "longitude": -0.3738,
+      "altitude": 15.5,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 1.5
+    },
+    "timestamp": new Date("2025-05-13T17:12:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4752,
+      "longitude": -0.3737,
+      "altitude": 16.0,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 0,
+      "speed": 1.1
+    },
+    "timestamp": new Date("2025-05-13T17:12:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4753,
+      "longitude": -0.3737,
+      "altitude": 15.8,
+      "accuracy": 7,
+      "altitudeAccuracy": 1,
+      "heading": 315,
+      "speed": 1.3
+    },
+    "timestamp": new Date("2025-05-13T17:12:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4754,
+      "longitude": -0.3739,
+      "altitude": 15.5,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 270,
+      "speed": 1.0
+    },
+    "timestamp": new Date("2025-05-13T17:12:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4753,
+      "longitude": -0.3741,
+      "altitude": 15.2,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 225,
+      "speed": 1.4
+    },
+    "timestamp": new Date("2025-05-13T17:12:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4752,
+      "longitude": -0.3742,
+      "altitude": 15.0,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 180,
+      "speed": 1.2
+    },
+    "timestamp": new Date("2025-05-13T17:12:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4751,
+      "longitude": -0.3742,
+      "altitude": 14.8,
+      "accuracy": 7,
+      "altitudeAccuracy": 1,
+      "heading": 135,
+      "speed": 1.1
+    },
+    "timestamp": new Date("2025-05-13T17:12:35.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4750,
+      "longitude": -0.3744,
+      "altitude": 15.1,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 1.3
+    },
+    "timestamp": new Date("2025-05-13T17:12:40.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4750,
+      "longitude": -0.3746,
+      "altitude": 15.3,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 1.5
+    },
+    "timestamp": new Date("2025-05-13T17:12:45.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4749,
+      "longitude": -0.3747,
+      "altitude": 15.6,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 0,
+      "speed": 1.2
+    },
+    "timestamp": new Date("2025-05-13T17:12:50.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4748,
+      "longitude": -0.3747,
+      "altitude": 15.4,
+      "accuracy": 7,
+      "altitudeAccuracy": 1,
+      "heading": 315,
+      "speed": 1.4
+    },
+    "timestamp": new Date("2025-05-13T17:12:55.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4747,
+      "longitude": -0.3749,
+      "altitude": 15.2,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 270,
+      "speed": 1.1
+    },
+    "timestamp": new Date("2025-05-13T17:13:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4746,
+      "longitude": -0.3751,
+      "altitude": 15.0,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 225,
+      "speed": 1.3
+    },
+    "timestamp": new Date("2025-05-13T17:13:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4745,
+      "longitude": -0.3752,
+      "altitude": 14.9,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 180,
+      "speed": 1.0
+    },
+    "timestamp": new Date("2025-05-13T17:13:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4744,
+      "longitude": -0.3752,
+      "altitude": 15.2,
+      "accuracy": 7,
+      "altitudeAccuracy": 1,
+      "heading": 135,
+      "speed": 1.2
+    },
+    "timestamp": new Date("2025-05-13T17:13:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4743,
+      "longitude": -0.3754,
+      "altitude": 15.5,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 1.4
+    },
+    "timestamp": new Date("2025-05-13T17:13:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4743,
+      "longitude": -0.3756,
+      "altitude": 15.3,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 1.1
+    },
+    "timestamp": new Date("2025-05-13T17:13:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4742,
+      "longitude": -0.3757,
+      "altitude": 15.0,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 0,
+      "speed": 1.3
+    },
+    "timestamp": new Date("2025-05-13T17:13:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4741,
+      "longitude": -0.3757,
+      "altitude": 14.8,
+      "accuracy": 7,
+      "altitudeAccuracy": 1,
+      "heading": 315,
+      "speed": 1.0
+    },
+    "timestamp": new Date("2025-05-13T17:13:35.000Z"),
+    "userId": "testUser"
+  }
+]
+const mockValenciaRun: Location[] = [
+  {
+    "coords": {
+      "latitude": 39.4780,
+      "longitude": -0.3250,
+      "altitude": 1.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.0
+    },
+    "timestamp": new Date("2025-05-13T19:49:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4782,
+      "longitude": -0.3248,
+      "altitude": 1.2,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 40,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T19:49:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4784,
+      "longitude": -0.3246,
+      "altitude": 0.9,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 48,
+      "speed": 3.9
+    },
+    "timestamp": new Date("2025-05-13T19:49:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4786,
+      "longitude": -0.3244,
+      "altitude": 1.1,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 35,
+      "speed": 4.1
+    },
+    "timestamp": new Date("2025-05-13T19:49:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4788,
+      "longitude": -0.3242,
+      "altitude": 1.3,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 42,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T19:49:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4790,
+      "longitude": -0.3240,
+      "altitude": 1.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 38,
+      "speed": 4.0
+    },
+    "timestamp": new Date("2025-05-13T19:49:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4792,
+      "longitude": -0.3238,
+      "altitude": 1.2,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T19:49:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4794,
+      "longitude": -0.3236,
+      "altitude": 0.9,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 40,
+      "speed": 3.9
+    },
+    "timestamp": new Date("2025-05-13T19:49:35.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4796,
+      "longitude": -0.3234,
+      "altitude": 1.1,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 48,
+      "speed": 4.1
+    },
+    "timestamp": new Date("2025-05-13T19:49:40.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4798,
+      "longitude": -0.3232,
+      "altitude": 1.3,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 35,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T19:49:45.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4800,
+      "longitude": -0.3230,
+      "altitude": 1.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 42,
+      "speed": 4.0
+    },
+    "timestamp": new Date("2025-05-13T19:49:50.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4802,
+      "longitude": -0.3228,
+      "altitude": 1.2,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 38,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T19:49:55.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4804,
+      "longitude": -0.3226,
+      "altitude": 0.9,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 3.9
+    },
+    "timestamp": new Date("2025-05-13T19:50:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4806,
+      "longitude": -0.3224,
+      "altitude": 1.1,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 40,
+      "speed": 4.1
+    },
+    "timestamp": new Date("2025-05-13T19:50:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4808,
+      "longitude": -0.3222,
+      "altitude": 1.3,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 48,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T19:50:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4810,
+      "longitude": -0.3220,
+      "altitude": 1.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 35,
+      "speed": 4.0
+    },
+    "timestamp": new Date("2025-05-13T19:50:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4812,
+      "longitude": -0.3218,
+      "altitude": 1.2,
+      "accuracy": 8,
+      "altitudeAccuracy": 1,
+      "heading": 42,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T19:50:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4814,
+      "longitude": -0.3216,
+      "altitude": 0.9,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 38,
+      "speed": 3.9
+    },
+    "timestamp": new Date("2025-05-13T19:50:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4816,
+      "longitude": -0.3214,
+      "altitude": 1.1,
+      "accuracy": 9,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.1
+    },
+    "timestamp": new Date("2025-05-13T19:50:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 39.4818,
+      "longitude": -0.3212,
+      "altitude": 1.3,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 40,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T19:50:35.000Z"),
+    "userId": "testUser"
+  }
+]
+const mockMadridRun: Location[] = [
+  {
+    "coords": {
+      "latitude": 40.4168,
+      "longitude": -3.6830,
+      "altitude": 670.5,
+      "accuracy": 15,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.5
+    },
+    "timestamp": new Date("2025-05-13T17:21:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4170,
+      "longitude": -3.6825,
+      "altitude": 671.0,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 4.8
+    },
+    "timestamp": new Date("2025-05-13T17:21:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4169,
+      "longitude": -3.6820,
+      "altitude": 670.8,
+      "accuracy": 14,
+      "altitudeAccuracy": 1,
+      "heading": 135,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T17:21:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4167,
+      "longitude": -3.6818,
+      "altitude": 671.2,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 180,
+      "speed": 4.6
+    },
+    "timestamp": new Date("2025-05-13T17:21:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4165,
+      "longitude": -3.6820,
+      "altitude": 670.9,
+      "accuracy": 16,
+      "altitudeAccuracy": 1,
+      "heading": 225,
+      "speed": 4.9
+    },
+    "timestamp": new Date("2025-05-13T17:21:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4163,
+      "longitude": -3.6823,
+      "altitude": 670.6,
+      "accuracy": 13,
+      "altitudeAccuracy": 1,
+      "heading": 270,
+      "speed": 4.4
+    },
+    "timestamp": new Date("2025-05-13T17:21:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4164,
+      "longitude": -3.6828,
+      "altitude": 671.1,
+      "accuracy": 15,
+      "altitudeAccuracy": 1,
+      "heading": 315,
+      "speed": 4.7
+    },
+    "timestamp": new Date("2025-05-13T17:21:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4166,
+      "longitude": -3.6832,
+      "altitude": 670.7,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 0,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T17:21:35.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4169,
+      "longitude": -3.6835,
+      "altitude": 671.3,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.5
+    },
+    "timestamp": new Date("2025-05-13T17:21:40.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4172,
+      "longitude": -3.6833,
+      "altitude": 670.9,
+      "accuracy": 14,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 4.9
+    },
+    "timestamp": new Date("2025-05-13T17:21:45.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4171,
+      "longitude": -3.6828,
+      "altitude": 671.1,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 135,
+      "speed": 4.3
+    },
+    "timestamp": new Date("2025-05-13T17:21:50.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4168,
+      "longitude": -3.6826,
+      "altitude": 670.7,
+      "accuracy": 16,
+      "altitudeAccuracy": 1,
+      "heading": 180,
+      "speed": 4.7
+    },
+    "timestamp": new Date("2025-05-13T17:21:55.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4165,
+      "longitude": -3.6828,
+      "altitude": 671.2,
+      "accuracy": 13,
+      "altitudeAccuracy": 1,
+      "heading": 225,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T17:22:00.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4163,
+      "longitude": -3.6831,
+      "altitude": 670.8,
+      "accuracy": 15,
+      "altitudeAccuracy": 1,
+      "heading": 270,
+      "speed": 4.6
+    },
+    "timestamp": new Date("2025-05-13T17:22:05.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4164,
+      "longitude": -3.6836,
+      "altitude": 671.0,
+      "accuracy": 10,
+      "altitudeAccuracy": 1,
+      "heading": 315,
+      "speed": 4.9
+    },
+    "timestamp": new Date("2025-05-13T17:22:10.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4167,
+      "longitude": -3.6838,
+      "altitude": 670.5,
+      "accuracy": 12,
+      "altitudeAccuracy": 1,
+      "heading": 0,
+      "speed": 4.4
+    },
+    "timestamp": new Date("2025-05-13T17:22:15.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4170,
+      "longitude": -3.6836,
+      "altitude": 671.2,
+      "accuracy": 14,
+      "altitudeAccuracy": 1,
+      "heading": 45,
+      "speed": 4.7
+    },
+    "timestamp": new Date("2025-05-13T17:22:20.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4173,
+      "longitude": -3.6831,
+      "altitude": 670.8,
+      "accuracy": 11,
+      "altitudeAccuracy": 1,
+      "heading": 90,
+      "speed": 4.2
+    },
+    "timestamp": new Date("2025-05-13T17:22:25.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4172,
+      "longitude": -3.6826,
+      "altitude": 671.3,
+      "accuracy": 16,
+      "altitudeAccuracy": 1,
+      "heading": 135,
+      "speed": 4.9
+    },
+    "timestamp": new Date("2025-05-13T17:22:30.000Z"),
+    "userId": "testUser"
+  },
+  {
+    "coords": {
+      "latitude": 40.4169,
+      "longitude": -3.6828,
+      "altitude": 670.9,
+      "accuracy": 13,
+      "altitudeAccuracy": 1,
+      "heading": 180,
+      "speed": 4.4
+    },
+    "timestamp": new Date("2025-05-13T17:22:35.000Z"),
+    "userId": "testUser"
+  }
+]
+const mockRaro = mockMadridRun.map((track, num) => {
+  return { ...track, altitude: num % 2 ? 18 : 21 }
+})
+export const runs = [mockRaro, mockBeachWalk, mockValenciaRun, mockValenciaCityWalk, mockMadridRun];

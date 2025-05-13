@@ -8,7 +8,7 @@ let GpsPositionTracker: NodeJS.Timeout | undefined = undefined;
 
 const URL = 'http://192.168.100.18:3000';
 
-export const USER_ID = 'userId';
+export const USER_ID = 'testUser';
 export const socket = io(URL, { transports: ['websocket'] });
 
 export async function serverConnect() {
@@ -47,6 +47,10 @@ export function trackGpsPosition(secondsBetweenUpdates: number, setMapRegion: Fu
   }
   track();
   GpsPositionTracker = setInterval(track, secondsBetweenUpdates * 1000);
+
+}
+export async function getRunsFromServer() {
+  return await fetchFactory('/tracks/' + USER_ID, 'GET', null);
 
 }
 export async function sendMessageToServer(message: string) {

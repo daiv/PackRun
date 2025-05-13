@@ -1,10 +1,12 @@
 import express, { Application } from 'express';
 import { createServer } from 'node:http';
-import sequelize from './models/model';
+import sequelize, { createDatabaseIfNotExist } from './models/model';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import router from './router';
 import { createSocketIOServer } from './helpers/IoServer';
+import mockFunctions from './helpers/mockFunctions';
+import 'dotenv/config';
 
 const app: Application = express();
 const server = createServer(app);
@@ -21,10 +23,11 @@ app.use('/', router);
 const port = 3000;
 
 createSocketIOServer(server);
-
 (async () => {
   try {
+    await createDatabaseIfNotExist(null);
     await sequelize.sync();
+    if (process.env.NODE_ENV === 'demo') mockFunctions.forEach(fun => fun());
     server.listen(port, () => console.log(`Server running at port ${port}!`))
   } catch (error) {
     console.log(error);

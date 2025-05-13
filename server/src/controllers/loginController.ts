@@ -71,4 +71,4 @@ export async function checkUserBody(req: Request, res: Response, next: Function)
   else if (req.body.time && isNaN(Date.parse(req.body.time))) res.status(400).send('Time is not a date formatted string');
   else next();
 }
-setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);
+if (process.env.NODE_ENV !== 'test') setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

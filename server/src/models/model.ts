@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import { Client } from 'pg';
 import 'dotenv/config';
 
-const database = process.env.NODE_ENV === 'demo' ? 'demo' : (process.env.DB_NAME || "packRunDB") + (process.env.NODE_ENV === 'test' ? '_test' : '')
+const database = (process.env.DB_NAME || "packrundb") + (process.env.NODE_ENV ? '_' + process.env.NODE_ENV : '');
 const sequelize: Sequelize = new Sequelize({
   dialect: "postgres",
   host: "localhost",

@@ -185,6 +185,7 @@ describe('Endpoints test', () => {
     });
 
     describe('GET /messages', () => {
+
       it('should return 200 and an array of messages', async () => {
         const response = await request.get('/messages/' + userId);
         expect(response.status).toBe(200);
@@ -192,6 +193,25 @@ describe('Endpoints test', () => {
         expect(response.body.length).toBe(1);
       });
     });
+
+    describe('POST /messages', () => {
+
+      it('should handle malicious messages', async () => {
+        const maliciousMessage = {
+          author: 'Malicious User',
+          message: "'); DROP TABLE chatroom; --", // Try to inject here
+          time: new Date(),
+        };
+        await request.post('/messages/' + userId).send(maliciousMessage);
+        const response = await request.get('/messages/' + userId);
+        expect(response.status).toBe(200);
+        expect(Array.isArray(response.body)).toBe(true);
+        expect(response.body.length).toBe(2);
+      })
+
+    })
+
+
   });
 
   describe('Tracks', () => {

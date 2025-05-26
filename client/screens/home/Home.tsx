@@ -1,12 +1,10 @@
-import { Button, Pressable, Text, TouchableOpacity, View } from 'react-native';
-
-import { useEffect, useState } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import RootStackParamList from '../../components/types.js';
+import { lastGpsPosition, serverConnect, serverDisconnect, startLocationWatcher } from '../../helpers/helper';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import BlinkingButton from '../../components/BlinkingButton';
+import { Image, Text, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
 import styles from './styles';
-import { serverConnect, serverDisconnect, trackGpsPosition } from '../../helpers/helper';
+import { RunContext, RunProvider } from '../../context/RunContext';
 
 export default function HomePage() {
   const [mapRegion, setMapRegion] = useState({
@@ -17,12 +15,19 @@ export default function HomePage() {
   });
 
   useEffect(() => {
-    trackGpsPosition(30, setMapRegion);
-    serverConnect();
-    return () => serverDisconnect();
-  }, []);
+    startLocationWatcher((location) => console.log('Location updated:', location));
+    // updateGpsPosition();
+    if (lastGpsPosition) setMapRegion({
+      latitude: lastGpsPosition.coords.latitude,
+      longitude: lastGpsPosition.coords.longitude,
+      latitudeDelta: 0.01,
+      longitudeDelta: 0.01,
+    });
 
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+    serverConnect();
+    return serverDisconnect;
+  }, []);
+  const runContext = useContext(RunContext);
 
   return (
     <View style={styles.container}>
@@ -30,19 +35,15 @@ export default function HomePage() {
         <Text style={styles.dashtext}>Great day for a run!</Text>
       </View>
       <View style={styles.mapcontainer}>
-        <MapView style={styles.mapview} region={mapRegion}>
-          <Marker coordinate={mapRegion} />
+        <MapView style={styles.mapview} region={mapRegion}>,
+          <Marker coordinate={mapRegion}>
+            <Image source={require('../../assets/running.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />
+          </Marker>
+          <Polyline coordinates={[{ latitude: 40.416839178964445, longitude: -3.703375944773951 }, { latitude: 42.38400323278806, longitude: -3.90 }]} strokeWidth={10}></Polyline>
         </MapView>
-        <TouchableOpacity
-          style={styles.startbtn}
-          onPress={() => { }}
-        >
-          <View style={{ transform: [{ rotate: '-45deg' }] }}>
-            <Text style={styles.startbtntext}>Run!</Text>
-          </View>
-        </TouchableOpacity>
+        <BlinkingButton onPress={() => { }} blinkingText={'Stop'}>Run!</BlinkingButton>
       </View>
-    </View>
+    </View >
   );
 }
 

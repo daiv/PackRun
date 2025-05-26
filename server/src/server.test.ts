@@ -199,7 +199,7 @@ describe('Endpoints test', () => {
       it('should handle malicious messages', async () => {
         const maliciousMessage = {
           author: 'Malicious User',
-          message: "'); DROP TABLE chatroom; --", // Try to inject here
+          message: "'); DROP TABLE chatroom; --",
           time: new Date(),
         };
         await request.post('/messages/' + userId).send(maliciousMessage);

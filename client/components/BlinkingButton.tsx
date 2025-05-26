@@ -1,27 +1,30 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import styles from "../screens/home/styles";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { RunContext } from "../context/RunContext";
 
 export default function BlinkingButton(
   { children, onPress, blinkingText = children?.toString() }:
-    { children: React.ReactNode, onPress: () => void, blinkingText?: string }) {
+    { children: React.ReactNode, onPress: () => void | undefined, blinkingText?: string }) {
 
   const [isVisible, setIsVisible] = useState(true);
-  const [isBlinking, setIsBlinking] = useState(false);
+  const context = useContext(RunContext);
+  const isRunning = context?.isRunning || false;
+  const setIsRunning = context?.setIsRunning || (() => { });
 
   useEffect(() => {
-    if (isBlinking) {
+    if (isRunning) {
       const interval = setInterval(() => setIsVisible(prev => !prev), 500);
       return () => {
         clearInterval(interval);
-        setIsBlinking(false);
+        setIsRunning(false);
         setIsVisible(true);
       }
     }
-  }, [isBlinking]);
+  }, [isRunning]);
 
   function handleClick() {
-    setIsBlinking(isBlinking => !isBlinking);
+    setIsRunning(isBlinking => !isBlinking);
     onPress && onPress();
   }
 
@@ -31,7 +34,7 @@ export default function BlinkingButton(
       onPress={handleClick}
     >
       <View style={{ transform: [{ rotate: '-45deg' }] }}>
-        <Text style={styles.startbtntext}>{isBlinking ? blinkingText : children}</Text>
+        <Text style={styles.startbtntext}>{isRunning ? blinkingText : children}</Text>
 
       </View>
     </TouchableOpacity>

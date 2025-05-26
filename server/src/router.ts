@@ -8,7 +8,7 @@ import tracksRouter from './routers/tracksRouter';
 
 const router: Router = express.Router();
 
-//logs the user in and returns a userId
+//logs the user in and returns assigned chatroom and nearbyUsers
 router.post('/locations', logUser, assignChatRoom);
 
 router.use('/tracks', tracksRouter);

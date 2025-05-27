@@ -1,11 +1,11 @@
 // CurrentRun.tsx
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Text, View } from 'react-native';
 // import styles from './styles';
 import styles from './styles';
 import { RunDetails } from '../../components/types';
-import BlinkingButton from '../../components/BlinkingButton';
-import { RunContext } from '../../context/RunContext';
+import RunButton from '../../components/RunButton';
+import { useRunContext } from '../../context/RunContext';
 
 
 export default function CurrentRun() {
@@ -19,18 +19,18 @@ export default function CurrentRun() {
     return `${mins < 10 ? `0${mins}` : mins}:${secs < 10 ? `0${secs}` : secs}`;
   };
 
-  const runContext = useContext(RunContext);
+  const runContext = useRunContext();
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.screentext}>Time: {formatTime(runContext ? runContext.timeElapsed : 0)}</Text>
+        <Text style={styles.screentext}>Time: {formatTime(runContext.timeElapsed)}</Text>
         <Text style={styles.screentext}>Speed: {runDetails.speed * 3.6} Kms/h</Text>
         <Text style={styles.screentext}>Pace: {0}/km</Text>
         <Text style={styles.screentext}>Distance: {0}</Text>
         <Text style={styles.screentext}>Elevation: {runDetails.elevation.toFixed(2)}mts</Text>
       </View>
 
-      <BlinkingButton onPress={() => { }} blinkingText={'Stop'}>Run!</BlinkingButton>
+      <RunButton />
     </View>
   );
 }

@@ -1,16 +1,13 @@
 import { TouchableOpacity, View, Text } from "react-native";
 import styles from "../screens/home/styles";
-import { useState, useEffect, useContext } from "react";
-import { RunContext } from "../context/RunContext";
+import { useState, useEffect } from "react";
+import { useRunContext } from "../context/RunContext";
 
-export default function BlinkingButton(
-  { children, onPress, blinkingText = children?.toString() }:
-    { children: React.ReactNode, onPress: () => void | undefined, blinkingText?: string }) {
+export default function RunButton() {
 
   const [isVisible, setIsVisible] = useState(true);
-  const context = useContext(RunContext);
-  const isRunning = context?.isRunning || false;
-  const setIsRunning = context?.setIsRunning || (() => { });
+  const context = useRunContext();
+  const { isRunning, setIsRunning } = context;
 
   useEffect(() => {
     if (isRunning) {
@@ -23,10 +20,7 @@ export default function BlinkingButton(
     }
   }, [isRunning]);
 
-  function handleClick() {
-    setIsRunning(isBlinking => !isBlinking);
-    onPress && onPress();
-  }
+  const handleClick = () => setIsRunning(isRunning => !isRunning);
 
   return (
     <TouchableOpacity
@@ -34,8 +28,7 @@ export default function BlinkingButton(
       onPress={handleClick}
     >
       <View style={{ transform: [{ rotate: '-45deg' }] }}>
-        <Text style={styles.startbtntext}>{isRunning ? blinkingText : children}</Text>
-
+        <Text style={styles.startbtntext}>{isRunning ? 'Stop' : 'Run!'}</Text>
       </View>
     </TouchableOpacity>
   );

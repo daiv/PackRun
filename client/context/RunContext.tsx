@@ -11,7 +11,16 @@ type RunContextType = {
 interface RunProviderProps {
   children: React.ReactNode;
 }
-export const RunContext = createContext<RunContextType | null>(null);
+
+const RunContext = createContext<RunContextType | null>(null);
+
+export const useRunContext = () => {
+  const context = React.useContext(RunContext);
+  if (!context) {
+    throw new Error('useRunContext must be used within a RunProvider');
+  }
+  return context;
+};
 
 export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [isRunning, setIsRunning] = React.useState(false);

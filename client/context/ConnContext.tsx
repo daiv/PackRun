@@ -1,24 +1,42 @@
-import React, { createContext, useEffect, useState, useRef } from 'react';
+import React, { createContext, useEffect, useState, useRef, useContext } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
+import { connContextType } from '../helpers/Types';
 
-const ConnContext = createContext<boolean>(false);
+
+const ConnContext = createContext<connContextType | null>(null);
+
+export const useConnContext = () => {
+  const context = useContext(ConnContext);
+  if (context === null) {
+    throw new Error('useConnContext must be used within a ConnProvider');
+  }
+  return context;
+}
 
 export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-  const getLastKnownLocation = () => lastKnownLocation;
+  const SERVER_TIME_INTERVAL = 60000;
+
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
   const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
-  const [serverTimeInterval, setServerTimeInterval] = useState(30000);
+
   const USER_ID = 'testUser';
 
-  useEffect(() => {
+  let locationUpdateCallback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>> | null = null;
+  const setLocationUpdateCallback = (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => {
+    if (callback) locationUpdateCallback = callback;
+  }
+
+  useEffect(function updateLastKnownLocation() {
     lastKnownLocationRef.current = lastKnownLocation;
+    if (locationUpdateCallback && lastKnownLocation) locationUpdateCallback(lastKnownLocation);
     console.log('Last known location updated:', lastKnownLocation);
   }, [lastKnownLocation]);
 
-  useEffect(() => {
+  useEffect(function startLocationWatcher() {
+    console.log('Starting location watcher with interval:', gpsTimeInterval);
     let locationSubscription: Location.LocationSubscription | null = null;
     Location.requestForegroundPermissionsAsync()
       .then(permission => {
@@ -28,7 +46,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
             {
               accuracy: Location.Accuracy.High,
               timeInterval: gpsTimeInterval,
-              distanceInterval: 1,
+              distanceInterval: 0,
             }
             , setLastKnownLocation)
             .then(subscription => locationSubscription = subscription);
@@ -54,16 +72,22 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .then(res => console.log('Reported location to server:', res))
         .catch(err => console.error('Error reporting location to server:', err));
 
-    }, serverTimeInterval);
+    }, SERVER_TIME_INTERVAL);
+
     return () => {
       clearInterval(interval);
       console.log('GPS interval cleared');
     }
-  }, [serverTimeInterval]);
+  }, []);
+
+  const contextValue: connContextType = {
+    USER_ID, lastKnownLocation, setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
+    setLocationUpdateCallback
+  };
 
   return (
-    <ConnContext.Provider value={false}>
+    <ConnContext.Provider value={contextValue} >
       {children}
-    </ConnContext.Provider>
+    </ConnContext.Provider >
   );
 } 

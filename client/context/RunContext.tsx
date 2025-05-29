@@ -1,22 +1,18 @@
 
-import React, { createContext, useEffect } from 'react';
-
-type RunContextType = {
-  isRunning: boolean;
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
-  timeElapsed: number;
-  setTimeElapsed: React.Dispatch<React.SetStateAction<number>>;
-};
+import React, { createContext, useEffect, useContext } from 'react';
+import { useConnContext } from './ConnContext';
+import Location from 'expo-location';
+import { RunContextType } from '../helpers/Types';
 
 interface RunProviderProps {
   children: React.ReactNode;
 }
 
-const RunContext = createContext<RunContextType | null>(null);
+const RunContext = createContext<RunContextType | undefined>(undefined);
 
 export const useRunContext = () => {
-  const context = React.useContext(RunContext);
-  if (!context) {
+  const context = useContext(RunContext);
+  if (context === undefined) {
     throw new Error('useRunContext must be used within a RunProvider');
   }
   return context;
@@ -25,20 +21,32 @@ export const useRunContext = () => {
 export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [isRunning, setIsRunning] = React.useState(false);
   const [timeElapsed, setTimeElapsed] = React.useState(0);
+  const [lastKnownLocation, setLastKnownLocation] = React.useState<Location.LocationObject | null>(null);
 
-  useEffect(() => {
+  const { setRunningMode, setLocationUpdateCallback, USER_ID } = useConnContext();
+
+  setLocationUpdateCallback(setLastKnownLocation);
+
+  useEffect(function startRun() {
+    let clockTimer: NodeJS.Timeout | null = null;
+
     if (isRunning) {
+      setRunningMode(true);
       setTimeElapsed(0);
-      const timer = setInterval(() => setTimeElapsed(timeElapsed => timeElapsed + 1), 1000);
-      return () => clearInterval(timer);
+      clockTimer = setInterval(() => setTimeElapsed(timeElapsed => timeElapsed + 1), 1000);
     }
+    return () => {
+      if (clockTimer) clearInterval(clockTimer);
+      setRunningMode(false);
+    };
   }, [isRunning]);
 
   const contextValue: RunContextType = {
     isRunning,
     setIsRunning,
     timeElapsed,
-    setTimeElapsed
+    setTimeElapsed,
+    lastKnownLocation
   };
 
   return (

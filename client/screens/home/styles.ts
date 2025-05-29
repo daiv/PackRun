@@ -11,8 +11,6 @@ const styles = StyleSheet.create({
   },
   mapview: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   topdash: {
     height: 68,
@@ -40,6 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 44,
   },
+
   startbtntext: {
     color: 'white',
     fontFamily: 'Roboto',

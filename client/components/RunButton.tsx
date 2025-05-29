@@ -24,11 +24,12 @@ export default function RunButton() {
 
   return (
     <TouchableOpacity
-      style={{ ...styles.startbtn, opacity: isVisible ? 1 : 0 }}
+      style={{ ...styles.startbtn, backgroundColor: isRunning ? 'rgba(236, 97, 35, 0.88)' : 'rgba(48, 172, 77, 1)' }}
       onPress={handleClick}
     >
       <View style={{ transform: [{ rotate: '-45deg' }] }}>
-        <Text style={styles.startbtntext}>{isRunning ? 'Stop' : 'Run!'}</Text>
+
+        <Text style={{ ...styles.startbtntext, opacity: isVisible ? 1 : 0 }}>{isRunning ? 'Stop' : 'Run!'}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -8,13 +8,15 @@ export async function addToTracking(owner: string, trackId: string, location: Lo
   const trackObject = await TrackModel.findOne({ where: { id: trackId, owner } });
   if (location && location.timestamp) {
     const timeCheck = new Date(location.timestamp);
+
     if (isNaN(timeCheck.getTime())) {
+      console.log(`${location.timestamp} is not a valid Date format`);
       throw new Error(`${location.timestamp} is not a valid Date format`);
     }
   }
   if (trackObject) {
     trackObject.location = [...trackObject.location, location];
-    const result = trackObject.location.length > 1 ? await transformToGeoApify(trackObject.location) : { error: 'not enought waypoints' };
+    const result = trackObject.location.length > 1 ? await transformToGeoApify(trackObject.location) : { message: 'not enought waypoints' };
     if (result && result.features) {
       trackObject.distance = result.features[0].properties.distance;
       trackObject.estimatedTime = result.features[0].properties.time;

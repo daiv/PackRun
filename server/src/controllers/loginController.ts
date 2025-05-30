@@ -9,8 +9,8 @@ const LOGIN_EXPIRES_MINUTES = 30;
 
 export async function logUser(req: Request, res: Response, next: Function) {
 
-  if (isMissingFields(req)) res.status(400).json('Missing fields');
-  else if (incorrectCoordinates(req)) res.status(400).json('Incorrect coordinates ');
+  if (isMissingFields(req)) res.status(400).json({ message: 'Missing fields' });
+  else if (incorrectCoordinates(req)) res.status(400).json({ message: 'Incorrect coordinates ' });
   else {
 
     const { userId } = req.body;
@@ -60,15 +60,15 @@ export async function checkIfLogged(req: Request, res: Response, next: Function)
   const userId = req.params.userId;
   const isLoggedIn = await RunnerModel.findOne({ where: { userId } });
 
-  isLoggedIn ? next() : res.status(400).send('User not logged in');
+  isLoggedIn ? next() : res.status(400).json({ message: 'User not logged in' });
 
 }
 export async function checkUserBody(req: Request, res: Response, next: Function) {
   const keys = Object.keys(req.body);
-  if (!keys.includes('author')) res.status(400).send('Missing author');
-  else if (!keys.includes('message')) res.status(400).send('Missing message');
-  else if (!keys.includes('time')) res.status(400).send('Missing time');
-  else if (req.body.time && isNaN(Date.parse(req.body.time))) res.status(400).send('Time is not a date formatted string');
+  if (!keys.includes('author')) res.status(400).json({ message: 'Missing author' });
+  else if (!keys.includes('message')) res.status(400).json({ message: 'Missing message' });
+  else if (!keys.includes('time')) res.status(400).json({ message: 'Missing time' });
+  else if (req.body.time && isNaN(Date.parse(req.body.time))) res.status(400).json({ message: 'Time is not a date formatted string' });
   else next();
 }
 if (process.env.NODE_ENV !== 'test') setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

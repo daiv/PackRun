@@ -27,7 +27,7 @@ describe('Endpoints test', () => {
 
   const userId = 'testUser';
   const mockLocation = {
-    "timestamp": "1743016581565",
+    "timestamp": 1748635519011,
     "coords": {
       "accuracy": 100,
       "speed": 0,
@@ -258,7 +258,7 @@ describe('Endpoints test', () => {
       it('should return 200 and delete the track', async () => {
         const response = await request.delete('/tracks/' + userId + '/' + trackId);
         expect(response.status).toBe(200);
-        expect(response.text).toBe('Track deleted');
+        expect(response.body.message).toBe('Track deleted');
       });
     });
 

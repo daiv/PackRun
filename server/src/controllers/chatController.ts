@@ -22,8 +22,8 @@ export async function postMessage(req: Request, res: Response) {
     if (room && room.messages) {
       const newMessages = room.messages ? [...room.messages, req.body] : [req.body];
       const isMessagePublished = await ChatRoomModel.update({ messages: newMessages }, { where: { chatRoomId } });
-      if (isMessagePublished) res.status(201).send({ 'success': 'Message published' });
-      else res.status(500).send('Server error');
+      if (isMessagePublished) res.status(201).json({ 'success': 'Message published' });
+      else res.status(500).json({ message: 'Server error' });
     }
   }
 };
@@ -34,5 +34,5 @@ export async function assignChatRoom(req: Request, res: Response) {
   const runner: Runner = { userId, longitude, latitude }
   const response = await assignToChatRoom(runner);
   if (response) res.status(200).json(response);
-  else res.status(500).json('Server error');
+  else res.status(500).json({ message: 'Server error' });
 }

@@ -6,7 +6,7 @@ import { useRunContext } from '../../context/RunContext';
 
 
 export default function CurrentRun() {
-  const { timeElapsed, lastKnownLocation, isRunning } = useRunContext();
+  const { timeElapsed, lastKnownLocation, isRunning, distanceRan } = useRunContext();
 
   function formatTime(seconds: number) {
     const mins = Math.floor(seconds / 60);
@@ -20,7 +20,7 @@ export default function CurrentRun() {
         <Text style={styles.screentext}>Time: {formatTime(timeElapsed)}</Text>
         <Text style={styles.screentext}>Speed: {isRunning && lastKnownLocation?.coords.speed ? (lastKnownLocation.coords.speed * 3.6).toFixed(2) : 0} Kms/h</Text>
         <Text style={styles.screentext}>Pace: {0}/km</Text>
-        <Text style={styles.screentext}>Distance: {0}</Text>
+        <Text style={styles.screentext}>Distance: {distanceRan}</Text>
         <Text style={styles.screentext}>Elevation: {isRunning && lastKnownLocation?.coords.altitude ? lastKnownLocation.coords.altitude.toFixed(2) : 0}mts</Text>
       </View>
 

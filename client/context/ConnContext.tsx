@@ -66,13 +66,15 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [gpsTimeInterval]);
 
   useEffect(function reportToServer() {
-    const interval = setInterval(() => {
+    const report = () => {
       const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId: USER_ID, timestamp: new Date().toISOString() } : null;
       if (body) fetchFactory('/locations', 'POST', body)
         .then(res => console.log('Reported location to server:', res))
         .catch(err => console.error('Error reporting location to server:', err));
 
-    }, SERVER_TIME_INTERVAL);
+    }
+    report();
+    const interval = setInterval(report, SERVER_TIME_INTERVAL);
 
     return () => {
       clearInterval(interval);

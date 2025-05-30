@@ -7,20 +7,20 @@ export default function RunButton() {
 
   const [isVisible, setIsVisible] = useState(true);
   const context = useRunContext();
-  const { isRunning, setIsRunning } = context;
+  const { isRunning, toogleRunning } = context;
 
   useEffect(() => {
     if (isRunning) {
       const interval = setInterval(() => setIsVisible(prev => !prev), 500);
       return () => {
         clearInterval(interval);
-        setIsRunning(false);
+        toogleRunning();
         setIsVisible(true);
       }
     }
   }, [isRunning]);
 
-  const handleClick = () => setIsRunning(isRunning => !isRunning);
+  const handleClick = toogleRunning
 
   return (
     <TouchableOpacity

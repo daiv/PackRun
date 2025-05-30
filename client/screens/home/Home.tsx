@@ -12,10 +12,9 @@ export default function HomePage() {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
-  const { lastKnownLocation, isRunning } = useRunContext();
-  
+  const { lastKnownLocation, isRunning, reportedLocations } = useRunContext();
+
   useEffect(function updateMapRegion() {
-    console.log('HOME PAGE: Last known location:', lastKnownLocation);
     if (lastKnownLocation) {
       setMapRegion({
         latitude: lastKnownLocation.coords.latitude,
@@ -36,7 +35,7 @@ export default function HomePage() {
           <Marker coordinate={mapRegion}>
             {isRunning && <Image source={require('../../assets/running.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />}
           </Marker>
-          <Polyline coordinates={[{ latitude: 40.416839178964445, longitude: -3.703375944773951 }, { latitude: 42.38400323278806, longitude: -3.90 }]} strokeWidth={10}></Polyline>
+          <Polyline coordinates={reportedLocations} strokeWidth={10}></Polyline>
         </MapView>
         <RunButton />
       </View>

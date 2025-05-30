@@ -3,11 +3,16 @@ import { addToTracking, createTrack, deleteTrackFromDb, getTrackFromDb, getTrack
 
 export async function postTrack(req: Request, res: Response) {
 
-  const { userId, trackId } = req.params;
-  const result = await addToTracking(userId, trackId, req.body);
-  if (result && result.features) res.status(200).json(result);
-  else if (result.error) res.status(204).json(result);
-  else res.status(500).send('Server error');
+  try {
+    const { userId, trackId } = req.params;
+    const result = await addToTracking(userId, trackId, req.body);
+    if (result && result.features) res.status(200).json(result);
+    else if (result.error) res.status(204).json(result);
+    else res.status(500).send('Server error');
+  } catch (error) {
+    console.log('error 400', error);
+    res.status(400).send({ error });
+  }
 }
 
 export function checkTrackBody(req: Request, res: Response, next: Function) {

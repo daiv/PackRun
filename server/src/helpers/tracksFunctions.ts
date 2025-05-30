@@ -6,10 +6,14 @@ import 'dotenv/config';
 export async function addToTracking(owner: string, trackId: string, location: Location) {
 
   const trackObject = await TrackModel.findOne({ where: { id: trackId, owner } });
-
+  if (location && location.timestamp) {
+    const timeCheck = new Date(location.timestamp);
+    if (isNaN(timeCheck.getTime())) {
+      throw new Error(`${location.timestamp} is not a valid Date format`);
+    }
+  }
   if (trackObject) {
     trackObject.location = [...trackObject.location, location];
-
     const result = trackObject.location.length > 1 ? await transformToGeoApify(trackObject.location) : { error: 'not enought waypoints' };
     if (result && result.features) {
       trackObject.distance = result.features[0].properties.distance;
@@ -42,7 +46,7 @@ async function convertToGeoApify(request: any) {
 async function formatToGeoApify(arrayToConvert: Location[]) {
 
   const waypoints = arrayToConvert.map(locationObj => {
-    if (locationObj.timestamp) return { timestamp: locationObj.timestamp, location: [locationObj.coords.longitude, locationObj.coords.latitude] };
+    if (locationObj.timestamp) return { timestamp: new Date(locationObj.timestamp).toISOString(), location: [locationObj.coords.longitude, locationObj.coords.latitude] };
     return { location: [locationObj.coords.longitude, locationObj.coords.latitude] };
   });
 

@@ -5,7 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import router from './router';
 import { createSocketIOServer } from './helpers/IoServer';
-import mockFunctions from './helpers/mockFunctions';
+import mockFunctions from './mocks/mockFunctions';
 import 'dotenv/config';
 
 const app: Application = express();

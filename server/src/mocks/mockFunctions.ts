@@ -1,7 +1,7 @@
 import TrackModel, { Track } from "../models/trackModel";
 import { Location } from "../types";
 import { runs } from "./mockRunData";
-import { transformToGeoApify } from "./tracksFunctions";
+import { transformToGeoApify } from "../helpers/tracksFunctions";
 
 const user = 'testUser';
 const functions: Function[] = [];

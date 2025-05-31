@@ -22,10 +22,10 @@ export const useRunContext = () => {
 
 export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [isRunning, setIsRunning] = useState(false);
-  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const [trackId, setTrackId] = useState<string | null>(null);
-  const [distanceRan, setDistanceRan] = useState(0);
+  const [metersRan, setMetersRan] = useState(0);
   const [reportedLocations, setReportedLocations] = useState<{ latitude: number; longitude: number }[]>([]);
   const { setRunningMode, setLocationUpdateCallback, USER_ID } = useConnContext();
 
@@ -35,10 +35,10 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     let clockTimer: NodeJS.Timeout | null = null;
     if (isRunning) {
       setRunningMode(true);
-      setTimeElapsed(0);
-      setDistanceRan(0);
+      setSecondsElapsed(0);
+      setMetersRan(0);
       setReportedLocations([]);
-      clockTimer = setInterval(() => setTimeElapsed(timeElapsed => timeElapsed + 1), 1000);
+      clockTimer = setInterval(() => setSecondsElapsed(secondsElapsed => secondsElapsed + 1), 1000);
     }
     return () => {
       if (clockTimer) clearInterval(clockTimer);
@@ -77,11 +77,11 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   }
   const contextValue: RunContextType = {
     isRunning,
-    timeElapsed,
-    setTimeElapsed,
+    secondsElapsed,
+    setSecondsElapsed,
     lastKnownLocation,
     toogleRunning,
-    distanceRan,
+    metersRan,
     reportedLocations
   };
 

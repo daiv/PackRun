@@ -15,9 +15,9 @@ export type connContextType = {
 export type RunContextType = {
   isRunning: boolean;
   toogleRunning: () => void;
-  timeElapsed: number;
-  setTimeElapsed: React.Dispatch<React.SetStateAction<number>>;
+  secondsElapsed: number;
+  setSecondsElapsed: React.Dispatch<React.SetStateAction<number>>;
   lastKnownLocation: Location.LocationObject | null;
-  distanceRan: number;
+  metersRan: number;
   reportedLocations: { latitude: number; longitude: number }[];
 };

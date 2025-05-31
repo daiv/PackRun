@@ -25,26 +25,7 @@ const styles = StyleSheet.create({
     color: '#333',
     fontFamily: 'Roboto',
   },
-  startbtn: {
-    width: 90,
-    height: 90,
-    position: 'absolute',
-    bottom: 75,
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ rotate: '45deg' }],
-    backgroundColor: 'rgba(236, 97, 35, 0.88)',
-    borderRadius: 16,
-    marginBottom: 44,
-  },
 
-  startbtntext: {
-    color: 'white',
-    fontFamily: 'Roboto',
-    fontSize: 20,
-    fontWeight: 'bold',
-  }
 });
 
 export default styles;

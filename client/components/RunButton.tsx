@@ -1,5 +1,5 @@
 import { TouchableOpacity, View, Text } from "react-native";
-import styles from "../screens/home/styles";
+import styles from "./styles";
 import { useState, useEffect } from "react";
 import { useRunContext } from "../context/RunContext";
 

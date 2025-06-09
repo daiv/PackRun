@@ -1,13 +1,16 @@
 // react native
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image, SafeAreaView } from 'react-native';
+import { RunProvider } from './context/RunContext';
+import { ConnProvider } from './context/ConnContext';
+import { useState } from 'react';
+
 import HomePage from './screens/home/Home';
 import RunTracking from './screens/runtracking/RunTracking';
 import RunHistory from './screens/runhistory/RunHistory';
 import ChatScreen from './screens/chat/chat';
-import { Image } from 'react-native';
-import { RunProvider } from './context/RunContext';
-import { ConnProvider } from './context/ConnContext';
+import Login from './screens/login/Login';
 
 
 const icons = {
@@ -18,8 +21,8 @@ const icons = {
 }
 
 export default function App() {
-
   const NavBar = createBottomTabNavigator();
+  const [isLogged, setIsLogged] = useState(false);
   const screenOptions = {
     headerShown: false,
   }
@@ -27,30 +30,34 @@ export default function App() {
   return (
     <ConnProvider>
       <RunProvider>
-        <NavigationContainer>
-          <NavBar.Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }}>
-            <NavBar.Screen name={'Run'} component={HomePage} options={{
-              tabBarIcon: ({ focused }) => (
-                <Image source={icons.run} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
-              )
-            }} />
-            <NavBar.Screen name={'CurrentRun'} component={RunTracking} options={{
-              tabBarIcon: ({ focused }) => (
-                <Image source={icons.metrics} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
-              )
-            }} />
-            <NavBar.Screen name='History' component={RunHistory} options={{
-              tabBarIcon: ({ focused }) => (
-                <Image source={icons.history} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
-              )
-            }} />
-            <NavBar.Screen name='Chat' component={ChatScreen} options={{
-              tabBarIcon: ({ focused }) => (
-                <Image source={icons.chat} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
-              )
-            }} />
-          </NavBar.Navigator>
-        </NavigationContainer>
+        <SafeAreaView style={{ flex: 1 }}>
+          {isLogged ?
+            <NavigationContainer>
+              <NavBar.Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }}>
+                <NavBar.Screen name={'Run'} component={HomePage} options={{
+                  tabBarIcon: ({ focused }) => (
+                    <Image source={icons.run} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
+                  )
+                }} />
+                <NavBar.Screen name={'CurrentRun'} component={RunTracking} options={{
+                  tabBarIcon: ({ focused }) => (
+                    <Image source={icons.metrics} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
+                  )
+                }} />
+                <NavBar.Screen name='History' component={RunHistory} options={{
+                  tabBarIcon: ({ focused }) => (
+                    <Image source={icons.history} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
+                  )
+                }} />
+                <NavBar.Screen name='Chat' component={ChatScreen} options={{
+                  tabBarIcon: ({ focused }) => (
+                    <Image source={icons.chat} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />
+                  )
+                }} />
+              </NavBar.Navigator>
+            </NavigationContainer>
+            : <Login setIsLogged={setIsLogged} />}
+        </SafeAreaView>
       </RunProvider>
     </ConnProvider>
   );

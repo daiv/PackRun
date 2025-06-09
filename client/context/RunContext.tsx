@@ -27,7 +27,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
   const [reportedLocations, setReportedLocations] = useState<{ latitude: number; longitude: number }[]>([]);
-  const { setRunningMode, setLocationUpdateCallback, USER_ID } = useConnContext();
+  const { setRunningMode, setLocationUpdateCallback, userId } = useConnContext();
 
   setLocationUpdateCallback(setLastKnownLocation);
 
@@ -49,7 +49,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   useEffect(function updateServerWithLastKnownLocation() {
     if (lastKnownLocation && isRunning && trackId) {
       const { latitude, longitude } = lastKnownLocation.coords;
-      postLocationToServerTrack(USER_ID, trackId, lastKnownLocation).then(response => {
+      postLocationToServerTrack(userId, trackId, lastKnownLocation).then(response => {
         setReportedLocations([...reportedLocations, { latitude, longitude }]);
         console.log('Location posted to server:', response);
         //setDistanceRan(response.features[0].properties.distance | 0);
@@ -64,7 +64,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     if (isRunning) setIsRunning(false);
     else {
       try {
-        const response = await createTrackOnServer(USER_ID);
+        const response = await createTrackOnServer(userId);
         if (response.trackId) {
           console.log('Track created with ID:', response.trackId);
           setTrackId(response.trackId);

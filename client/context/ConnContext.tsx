@@ -20,9 +20,8 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
-  const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
-
-  const USER_ID = 'testUser';
+  const [gpsTimeInterval, setGpsTimeInterval] = useState(55000);
+  const [userId, setUserId] = useState('');
 
   let locationUpdateCallback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>> | null = null;
   const setLocationUpdateCallback = (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => {
@@ -66,25 +65,30 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [gpsTimeInterval]);
 
   useEffect(function reportToServer() {
-    const report = () => {
-      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId: USER_ID, timestamp: new Date().toISOString() } : null;
-      if (body) fetchFactory('/locations', 'POST', body)
-        .then(res => console.log('Reported location to server:', res))
-        .catch(err => console.error('Error reporting location to server:', err));
+    if (userId) {
+      const report = () => {
+        const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
+        if (body) fetchFactory('/locations', 'POST', body)
+          .then(res => console.log('Reported location to server:', res))
+          .catch(err => console.error('Error reporting location to server:', err));
+      }
+      report();
+      const interval = setInterval(report, SERVER_TIME_INTERVAL);
 
+      return () => {
+        clearInterval(interval);
+        console.log('GPS interval cleared');
+      }
     }
-    report();
-    const interval = setInterval(report, SERVER_TIME_INTERVAL);
-
-    return () => {
-      clearInterval(interval);
-      console.log('GPS interval cleared');
-    }
-  }, []);
+  }, [userId]);
 
   const contextValue: connContextType = {
-    USER_ID, lastKnownLocation, setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
+    userId,
+    setUserId,
+    lastKnownLocation,
+    setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
     setLocationUpdateCallback
+
   };
 
   return (

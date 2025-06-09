@@ -28,7 +28,9 @@ export async function postLocationToServerTrack(userId: string, trackId: string,
   console.log('posting tooo', `/tracks/${userId}/${trackId}`);
   return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
 };
+export async function createAccount(user: string, password: string) {
 
+}
 export function fetchFactory(endPoint: string, method: string, body: object | null) {
 
   const url = URL + endPoint;

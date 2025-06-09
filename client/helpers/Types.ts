@@ -6,7 +6,8 @@ export interface Runner {
   longitude: number
 }
 export type connContextType = {
-  USER_ID: string;
+  userId: string;
+  setUserId: React.Dispatch<React.SetStateAction<string>>;
   lastKnownLocation: Location.LocationObject | null;
   setRunningMode: (arg0: boolean) => void;
   setLocationUpdateCallback: (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => void;

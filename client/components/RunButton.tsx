@@ -6,8 +6,7 @@ import { useRunContext } from "../context/RunContext";
 export default function RunButton() {
 
   const [isVisible, setIsVisible] = useState(true);
-  const context = useRunContext();
-  const { isRunning, toogleRunning } = context;
+  const { isRunning, toogleRunning } = useRunContext();
 
   useEffect(() => {
     if (isRunning) {

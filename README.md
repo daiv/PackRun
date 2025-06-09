@@ -47,6 +47,8 @@ Open the console and run :
   <picture>![Express](https://img.shields.io/badge/Express.js-000000?logo=express&logoColor=white)</picture>
   <picture>![Sequelize](https://img.shields.io/badge/Sequelize-020690?logo=Sequelize&logoColor=white)</picture>
   <picture>![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?logo=postgresql&logoColor=white)</picture>
+  <picture>![Jest](https://img.shields.io/badge/-Jest-C21325?logo=jest&logoColor=white)</picture>
+  <picture>![SuperTest](https://img.shields.io/badge/-SuperTest-333333?logoColor=white)</picture>
 
 # Contributors
   * Archie Maunder-Taylor [Github](https://github.com/vrch1e)

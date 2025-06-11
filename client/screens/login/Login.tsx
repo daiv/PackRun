@@ -2,8 +2,9 @@ import { TextInput, View, Text, TouchableOpacity, Alert, ActivityIndicator } fro
 import { useConnContext } from "../../context/ConnContext";
 import { useState, useRef } from "react";
 import { styles } from './styles'
+import { LoginProps } from "../../helpers/Types";
 
-export default function Login({ setIsLogged }: any) {
+export default function Login({ setIsLogged }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nick, setNick] = useState('');

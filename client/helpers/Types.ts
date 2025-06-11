@@ -5,7 +5,7 @@ export interface Runner {
   latitude: number,
   longitude: number
 }
-export type connContextType = {
+export type ConnContextType = {
   userId: string;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
   lastKnownLocation: Location.LocationObject | null;
@@ -22,3 +22,7 @@ export type RunContextType = {
   metersRan: number;
   reportedLocations: { latitude: number; longitude: number }[];
 };
+
+export type LoginProps = {
+  setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
+}

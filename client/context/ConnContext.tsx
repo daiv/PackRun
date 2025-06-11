@@ -1,10 +1,10 @@
 import React, { createContext, useEffect, useState, useRef, useContext } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
-import { connContextType } from '../helpers/Types';
+import { ConnContextType } from '../helpers/Types';
 
 
-const ConnContext = createContext<connContextType | null>(null);
+const ConnContext = createContext<ConnContextType | null>(null);
 
 export const useConnContext = () => {
   const context = useContext(ConnContext);
@@ -82,7 +82,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [userId]);
 
-  const contextValue: connContextType = {
+  const contextValue: ConnContextType = {
     userId,
     setUserId,
     lastKnownLocation,

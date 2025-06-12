@@ -15,20 +15,20 @@
     "@react-navigation/native-stack": "^7.3.10",
     "expo": "^52.0.46",
     "expo-linear-gradient": "^14.0.2",
-    "expo-location": "^18.1.5",
+    "expo-location": "~18.0.10",
     "expo-status-bar": "~2.0.1",
     "luxon": "^3.6.1",
     "react": "18.3.1",
     "react-native": "^0.76.9",
     "react-native-gifted-charts": "^1.4.60",
     "react-native-maps": "^1.18.0",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "expo-dev-client": "~5.0.20"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/luxon": "^3.6.2",
     "@types/react": "~18.3.12",
-    "@types/react-native": "^0.72.8",
     "@types/uuid": "^10.0.0",
     "eslint-config-expo": "~8.0.1",
     "eslint-config-prettier": "^10.1.1",

@@ -5,8 +5,8 @@ import { styles } from './styles'
 import { LoginProps } from "../../helpers/Types";
 
 export default function Login({ setIsLogged }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('email');//todo replace 'email' with ''
+  const [password, setPassword] = useState('pass'); //todo replace 'pass' with ''
   const [nick, setNick] = useState('');
   const [loginMode, setLoginMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,7 +39,7 @@ export default function Login({ setIsLogged }: LoginProps) {
       setIsLogged(true);
       setUserId('USER_ID');
     }
-      , 5000);
+      , 1000);
   }
 
   const resetFields = () => {

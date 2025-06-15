@@ -1,4 +1,5 @@
-import MapView, { Marker, Polyline } from 'react-native-maps';
+import { Marker, Polyline } from 'react-native-maps';
+import { MapView } from '@maplibre/maplibre-react-native';
 import RunButton from '../../components/RunButton';
 import { Image, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
@@ -31,12 +32,7 @@ export default function HomePage() {
         <Text style={styles.dashtext}>Great day for a run!</Text>
       </View>
       <View style={styles.mapcontainer}>
-        <MapView style={styles.mapview} region={mapRegion}>
-          <Marker coordinate={mapRegion}>
-            {isRunning && <Image source={require('../../assets/running.png')} style={{ width: 40, height: 40, resizeMode: 'contain' }} />}
-          </Marker>
-          <Polyline coordinates={reportedLocations} strokeWidth={10}></Polyline>
-        </MapView>
+        <MapView style={styles.mapview}></MapView>
         <RunButton />
       </View>
     </View >

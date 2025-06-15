@@ -3,7 +3,7 @@ import Location from 'expo-location';
 
 const URL = 'http://192.168.100.18:3000';
 
-export const USER_ID = 'testUser';
+export const USER_ID = 'USER_ID'; //todo remove this mockId
 
 export const socket = io(URL, { transports: ['websocket'] });
 
@@ -47,8 +47,14 @@ export function fetchFactory(endPoint: string, method: string, body: object | nu
 
   return fetch(url, initOptions)
     .then(response => {
-      if (response.status >= 200 && response.status < 300) return response.status === 204 ? response : response.json();
-      else throw new Error('Network response was not ok. ' + response.status);
+      if (response.ok) return response.status === 204 ? null : response.json();
+      else {
+        console.error('ERROR');
+        console.log(response.status);
+        response.json().then(console.error)
+
+        throw new Error('Network response was not ok. ' + response.status);
+      }
     })
     .catch(error => {
       console.error('SERVER ERROR RESPONSE', error);

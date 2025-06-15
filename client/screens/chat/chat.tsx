@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { socket } from '../../helpers/helper';
 import styles from './styles';
 import { getMessagesFromServer, sendMessageToServer, USER_ID } from '../../helpers/helper';
@@ -46,51 +45,49 @@ export default function Chatscreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={{ flex: 1 }}>
-            <FlatList
-              style={{ flex: 1 }}
-              ref={flatListRef}
-              data={messages}
-              keyExtractor={(item) => item.time}
-              renderItem={({ item }) => (
-                <View>
-                  <Text style={item.author === USER_ID ? styles.userText : styles.othersText}>
-                    {item.author}
-                  </Text>
-                  <View style={item.author === USER_ID ? styles.userMessage : styles.othersMessage}>
-                    <Text style={styles.messageText}>{item.message}</Text>
-                  </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1 }}>
+          <FlatList
+            style={{ flex: 1 }}
+            ref={flatListRef}
+            data={messages}
+            keyExtractor={(item) => item.time}
+            renderItem={({ item }) => (
+              <View>
+                <Text style={item.author === USER_ID ? styles.userText : styles.othersText}>
+                  {item.author}
+                </Text>
+                <View style={item.author === USER_ID ? styles.userMessage : styles.othersMessage}>
+                  <Text style={styles.messageText}>{item.message}</Text>
                 </View>
-              )}
-              onContentSizeChange={() => {
-                if (isAtBottom) {
-                  flatListRef.current?.scrollToEnd({ animated: true });
-                }
-              }}
-              onScroll={handleScroll}
-              scrollEventThrottle={16}
+              </View>
+            )}
+            onContentSizeChange={() => {
+              if (isAtBottom) {
+                flatListRef.current?.scrollToEnd({ animated: true });
+              }
+            }}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type a message..."
+              value={input}
+              onChangeText={setInput}
             />
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                placeholder="Type a message..."
-                value={input}
-                onChangeText={setInput}
-              />
-              <TouchableOpacity style={styles.sendButton} onPress={send}>
-                <Text style={styles.sendButtonText}>Send</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.sendButton} onPress={send}>
+              <Text style={styles.sendButtonText}>Send</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 }

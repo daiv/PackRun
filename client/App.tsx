@@ -1,4 +1,3 @@
-// react native
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, SafeAreaView } from 'react-native';
@@ -23,9 +22,7 @@ const icons = {
 export default function App() {
   const NavBar = createBottomTabNavigator();
   const [isLogged, setIsLogged] = useState(false);
-  const screenOptions = {
-    headerShown: false,
-  }
+  const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
 
   return (
     <ConnProvider>
@@ -33,7 +30,7 @@ export default function App() {
         <SafeAreaView style={{ flex: 1 }}>
           {isLogged ?
             <NavigationContainer>
-              <NavBar.Navigator screenOptions={{ headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }}>
+              <NavBar.Navigator screenOptions={screenOptions}>
                 <NavBar.Screen name={'Run'} component={HomePage} options={{
                   tabBarIcon: ({ focused }) => (
                     <Image source={icons.run} style={{ width: 37, height: 37, tintColor: focused ? '#4A90E2' : '#000000' }} />

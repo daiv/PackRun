@@ -3,34 +3,43 @@ import Location from 'expo-location';
 
 const URL = 'http://192.168.100.18:3000';
 
-export const USER_ID = 'USER_ID'; //todo remove this mockId
+let userId = '';
 
 export const socket = io(URL, { transports: ['websocket'] });
 
+export function setHelperUserId(id: string) {
+  userId = id;
+}
 export async function getRunsFromServer() {
-  return await fetchFactory('/tracks/' + USER_ID, 'GET', null);
+  return await fetchFactory('/tracks/' + userId, 'GET', null);
 }
 
 export async function sendMessageToServer(message: string) {
-  return await fetchFactory('/messages/' + USER_ID, 'POST', { message, author: USER_ID, time: new Date().toISOString() });
+  return await fetchFactory('/messages/' + userId, 'POST', { message, author: userId, time: new Date().toISOString() });
 }
 
 export async function getMessagesFromServer() {
-  return await fetchFactory('/messages/' + USER_ID, 'GET', null);
+  return await fetchFactory('/messages/' + userId, 'GET', null);
 }
 
-export async function createTrackOnServer(userId: string) {
+export async function createTrackOnServer() {
   return await fetchFactory('/tracks/' + userId, 'PUT', null);
 }
 
-export async function postLocationToServerTrack(userId: string, trackId: string, location: Location.LocationObject) {
+export async function postLocationToServerTrack(trackId: string, location: Location.LocationObject) {
   console.log('location isssss', location);
   console.log('posting tooo', `/tracks/${userId}/${trackId}`);
   return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
 };
+export async function getStadiaApiKey() {
+  console.log('fetching', 'api/stadia/' + userId);
+  return await fetchFactory('/api/stadia/' + userId, 'GET', null);
+}
+
 export async function createAccount(user: string, password: string) {
 
 }
+
 export function fetchFactory(endPoint: string, method: string, body: object | null) {
 
   const url = URL + endPoint;

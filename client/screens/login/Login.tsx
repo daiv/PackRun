@@ -3,6 +3,7 @@ import { useConnContext } from "../../context/ConnContext";
 import { useState, useRef } from "react";
 import { styles } from './styles'
 import { LoginProps } from "../../helpers/Types";
+import { setHelperUserId } from "../../helpers/helper";
 
 export default function Login({ setIsLogged }: LoginProps) {
   const [email, setEmail] = useState('email');//todo replace 'email' with ''
@@ -38,6 +39,8 @@ export default function Login({ setIsLogged }: LoginProps) {
       setIsLoading(false)
       setIsLogged(true);
       setUserId('USER_ID');
+      setHelperUserId('USER_ID');
+
     }
       , 1000);
   }

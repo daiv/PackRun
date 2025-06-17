@@ -24,6 +24,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userId, setUserId] = useState('');
 
   let locationUpdateCallback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>> | null = null;
+  
   const setLocationUpdateCallback = (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => {
     if (callback) locationUpdateCallback = callback;
   }

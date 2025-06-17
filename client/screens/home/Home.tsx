@@ -1,7 +1,6 @@
-import { Marker, MarkerAnimated, Polyline } from 'react-native-maps';
-import { Camera, MapView, MarkerView } from '@maplibre/maplibre-react-native';
+import { Camera, MapView, MarkerView, LineLayer, ShapeSource } from '@maplibre/maplibre-react-native';
 import RunButton from '../../components/RunButton';
-import { ActivityIndicator, Image, ImageComponent, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import styles from './styles';
 import { useRunContext } from '../../context/RunContext';
@@ -18,7 +17,7 @@ export default function HomePage() {
     longitudeDelta: 0.005,
   });
   const [stadiaKey, setStadiaKey] = useState(null);
-  const { lastKnownLocation, isRunning, reportedLocations } = useRunContext();
+  const { lastKnownLocation, isRunning, route } = useRunContext();
 
   const mapStyle = 'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=';
 
@@ -31,6 +30,7 @@ export default function HomePage() {
         longitudeDelta: 0.005,
       });
     }
+    console.log('reported', route);
   }, [lastKnownLocation]);
 
   useEffect(function getStadiaKey() {
@@ -60,6 +60,11 @@ export default function HomePage() {
                 }
               </View>
             </MarkerView>
+            {route &&
+              <ShapeSource id="route" shape={route}>
+                <LineLayer id='route-style' style={{ lineWidth: 5, lineColor: '#4A90E2' }}></LineLayer>
+              </ShapeSource>
+            }
           </MapView>
           :
           <View style={styles.fullScreen}>

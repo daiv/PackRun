@@ -1,14 +1,12 @@
 
 import { createTrackOnServer, postLocationToServerTrack } from '../helpers/helper';
 import React, { createContext, useEffect, useContext, useState } from 'react';
-import { RunContextType } from '../helpers/Types';
+import { RunContextType, RunProviderProps } from '../helpers/Types';
 import { useConnContext } from './ConnContext';
 import Location from 'expo-location';
 import { Alert } from 'react-native';
 
-interface RunProviderProps {
-  children: React.ReactNode;
-}
+
 
 const RunContext = createContext<RunContextType | undefined>(undefined);
 
@@ -26,7 +24,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
-  const [reportedLocations, setReportedLocations] = useState<{ latitude: number; longitude: number }[]>([]);
+  const [route, setRoute] = useState<GeoJSON.FeatureCollection>();
   const { setRunningMode, setLocationUpdateCallback, userId } = useConnContext();
 
   setLocationUpdateCallback(setLastKnownLocation);
@@ -37,7 +35,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
       setRunningMode(true);
       setSecondsElapsed(0);
       setMetersRan(0);
-      setReportedLocations([]);
+      setRoute(undefined);
       clockTimer = setInterval(() => setSecondsElapsed(secondsElapsed => secondsElapsed + 1), 1000);
     }
     return () => {
@@ -48,18 +46,11 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   useEffect(function updateServerWithLastKnownLocation() {
     if (lastKnownLocation && isRunning && trackId) {
-      const { latitude, longitude } = lastKnownLocation.coords;
-      postLocationToServerTrack(trackId, lastKnownLocation).then(response => {
-        setReportedLocations([...reportedLocations, { latitude, longitude }]);
-        console.log('Location posted to server:', response);
-        //setDistanceRan(response.features[0].properties.distance | 0);
-      }).catch(error => {
-        console.error('Error posting location to server:', error.message);
-      });
-
+      postLocationToServerTrack(trackId, lastKnownLocation).then(setRoute);
     }
 
   }, [lastKnownLocation]);
+
   async function toogleRunning() {
     if (isRunning) setIsRunning(false);
     else {
@@ -75,6 +66,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
       }
     }
   }
+
   const contextValue: RunContextType = {
     isRunning,
     secondsElapsed,
@@ -82,7 +74,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     lastKnownLocation,
     toogleRunning,
     metersRan,
-    reportedLocations
+    route
   };
 
   return (

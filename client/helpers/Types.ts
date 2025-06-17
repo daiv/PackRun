@@ -20,9 +20,12 @@ export type RunContextType = {
   setSecondsElapsed: React.Dispatch<React.SetStateAction<number>>;
   lastKnownLocation: Location.LocationObject | null;
   metersRan: number;
-  reportedLocations: { latitude: number; longitude: number }[];
+  route: GeoJSON.FeatureCollection | undefined;
 };
 
 export type LoginProps = {
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export interface RunProviderProps {
+  children: React.ReactNode;
 }

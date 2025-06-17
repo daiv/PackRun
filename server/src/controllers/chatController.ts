@@ -36,3 +36,8 @@ export async function assignChatRoom(req: Request, res: Response) {
   if (response) res.status(200).json(response);
   else res.status(500).json({ message: 'Server error' });
 }
+
+export async function getStadiaApiKey(_: Request, res: Response) {
+  console.log(process.env.STADIA_MAPS_API_KEY);
+  res.status(200).json({ stadiaApiKey: process.env.STADIA_MAPS_API_KEY });
+}

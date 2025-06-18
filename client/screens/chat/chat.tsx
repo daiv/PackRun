@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { socket } from '../../helpers/helper';
 import styles from './styles';
-import { getMessagesFromServer, sendMessageToServer, USER_ID } from '../../helpers/helper';
+import { getMessagesFromServer, sendMessageToServer } from '../../helpers/helper';
+import { useConnContext } from '../../context/ConnContext';
 
 export default function Chatscreen() {
   const [messages, setMessages] = useState<{ author: string; time: string; message: string }[]>([]);
@@ -10,6 +11,7 @@ export default function Chatscreen() {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
+  const USER_ID = useConnContext().userId;
   const getMessages = async () => {
     const response = await getMessagesFromServer();
     if (messages.length != response.length) setMessages(response);

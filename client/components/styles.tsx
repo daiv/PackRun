@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  dashbutton: {
+/*   dashbutton: {
     marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }, */
   imageContainer: {
     width: 50,
     height: 50,
@@ -15,14 +15,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  bottomdash: {
+/*   bottomdash: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingBottom: 50,
     width: '100%',
     height: 180,
     backgroundColor: '#f8f8f8',
-  },
+  }, */
   startbtn: {
     width: 90,
     height: 90,

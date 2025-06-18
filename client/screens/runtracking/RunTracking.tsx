@@ -26,14 +26,14 @@ export default function CurrentRun() {
 
   return (
     <View style={styles.container}>
-      <View>
+      <View style={{ margin: 15 }}>
         <Text style={styles.screentext}>Time: {formatTime()}</Text>
         <Text style={styles.screentext}>Speed: {isRunning && lastKnownLocation?.coords.speed ? (lastKnownLocation.coords.speed * 3.6).toFixed(2) : 0} Kms/h</Text>
         <Text style={styles.screentext}>Pace: {formatPace()} min/km</Text>
         <Text style={styles.screentext}>Distance: {metersRan} mts</Text>
         <Text style={styles.screentext}>Elevation: {isRunning && lastKnownLocation?.coords.altitude ? lastKnownLocation.coords.altitude.toFixed(2) : 0} mts</Text>
       </View>
-      <RunButton />
+      <RunButton key='RunTracking' bottom={3} />
     </View>
   );
 }

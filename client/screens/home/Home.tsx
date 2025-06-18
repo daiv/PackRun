@@ -73,7 +73,7 @@ export default function HomePage() {
               <Text>Loading map, please wait</Text>
             </View>
           </View>}
-        <RunButton />
+        <RunButton key='Home'/>
       </View>
     </View >
   );

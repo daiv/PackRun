@@ -1,4 +1,5 @@
 import * as Location from 'expo-location';
+import { DimensionValue } from 'react-native';
 
 export interface Runner {
   userId: string,
@@ -26,6 +27,14 @@ export type RunContextType = {
 export type LoginProps = {
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
 export interface RunProviderProps {
   children: React.ReactNode;
+}
+
+export type RunButtonStyleProps = {
+  bottom?: DimensionValue | undefined;
+  top?: DimensionValue | undefined;
+  left?: DimensionValue | undefined;
+  right?: DimensionValue | undefined;
 }

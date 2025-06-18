@@ -2,8 +2,9 @@ import { TouchableOpacity, View, Text } from "react-native";
 import styles from "./styles";
 import { useState, useEffect } from "react";
 import { useRunContext } from "../context/RunContext";
+import { RunButtonStyleProps } from "../helpers/Types";
 
-export default function RunButton() {
+export default function RunButton({ bottom }: RunButtonStyleProps) {
 
   const [isVisible, setIsVisible] = useState(true);
   const { isRunning, toogleRunning } = useRunContext();
@@ -20,16 +21,20 @@ export default function RunButton() {
   }, [isRunning]);
 
   const handleClick = toogleRunning
+  let customStyle = bottom
+    ?
+    { ...styles.startbtn, backgroundColor: isRunning ? 'rgba(236, 97, 35, 0.88)' : 'rgba(48, 172, 77, 1)', bottom }
+    :
+    { ...styles.startbtn, backgroundColor: isRunning ? 'rgba(236, 97, 35, 0.88)' : 'rgba(48, 172, 77, 1)', }
 
   return (
-    <TouchableOpacity
-      style={{ ...styles.startbtn, backgroundColor: isRunning ? 'rgba(236, 97, 35, 0.88)' : 'rgba(48, 172, 77, 1)' }}
+    <TouchableOpacity style={customStyle}
       onPress={handleClick}
     >
       <View style={{ transform: [{ rotate: '-45deg' }] }}>
 
         <Text style={{ ...styles.startbtntext, opacity: isVisible ? 1 : 0 }}>{isRunning ? 'Stop' : 'Run!'}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 }

@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { styles } from './styles'
 import { LoginProps } from "../../helpers/Types";
 import { setHelperUserId } from "../../helpers/helper";
+import { signIn } from 'aws-amplify/auth';
 
 export default function Login({ setIsLogged }: LoginProps) {
   const [email, setEmail] = useState('email');//todo replace 'email' with ''
@@ -74,7 +75,7 @@ export default function Login({ setIsLogged }: LoginProps) {
 
       <View style={{ width: '60%' }}>
 
-        {isLoading && <View style={styles.loading}><ActivityIndicator /><Text>Loading</Text></View>}
+        {isLoading && <View style={styles.loading}><ActivityIndicator size={'large'} /><Text>Loading</Text></View>}
 
         <TextInput
           ref={emailRef}
@@ -104,11 +105,11 @@ export default function Login({ setIsLogged }: LoginProps) {
           value={password} />
 
         <View style={styles.horButtons}>
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={handleAccountCreation}>
+          <TouchableOpacity style={styles.button} onPress={handleAccountCreation} disabled={isLoading}>
             <Text style={styles.buttonText}>Create</Text>
             <Text style={styles.buttonText}>Acount</Text>
           </TouchableOpacity>

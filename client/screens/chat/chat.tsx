@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { socket } from '../../helpers/helper';
 import styles from './styles';
-import { getMessagesFromServer, sendMessageToServer } from '../../helpers/helper';
+import { getMessagesFromServer, sendMessageToServer, socket } from '../../helpers/helper';
 import { useConnContext } from '../../context/ConnContext';
 
 export default function Chatscreen() {

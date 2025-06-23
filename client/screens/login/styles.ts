@@ -9,8 +9,34 @@ export const styles = StyleSheet.create({
     backgroundColor: 'lightgray'
   },
 
+
   horButtons: {
     flexDirection: "row"
+  },
+
+  modalView: {
+    flexDirection: 'row',
+    width: '80%',
+    height: '5%',
+    backgroundColor: 'white',
+    minHeight: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    borderRadius: 5,
+  },
+  modalTextInput: {
+    flex: 4,
+  },
+  modalButton: {
+    flex: 1,
+    backgroundColor: '#007AFF',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modalButtonText: {
+    color: 'white',
   },
 
   loading: {
@@ -40,5 +66,5 @@ export const styles = StyleSheet.create({
     padding: 1,
     textAlign: 'center',
   },
-  
+
 });

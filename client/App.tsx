@@ -10,6 +10,7 @@ import CurrentRun from './screens/CurrentRun/CurrentRun';
 import RunHistory from './screens/runhistory/RunHistory';
 import Chat from './screens/chat/chat';
 import Login from './screens/login/Login';
+import './amplify-config';
 
 
 const icons = {

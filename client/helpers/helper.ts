@@ -32,7 +32,7 @@ export async function postLocationToServerTrack(trackId: string, location: Locat
   console.log('posting tooo', `/tracks/${userId}/${trackId}`);
   return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
 };
-export async function getStadiaApiKey() {
+export async function getStadiaApiKey(): Promise<{ stadiaApiKey: string } | null> {
   console.log('fetching', 'api/stadia/' + userId);
   return await fetchFactory('/api/stadia/' + userId, 'GET', null);
 }

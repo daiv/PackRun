@@ -16,7 +16,7 @@ export default function HomePage() {
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
-  const [stadiaKey, setStadiaKey] = useState(null);
+  const [stadiaKey, setStadiaKey] = useState('');
   const { lastKnownLocation, isRunning, route } = useRunContext();
 
   const mapStyle = 'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=';
@@ -35,7 +35,7 @@ export default function HomePage() {
 
   useEffect(function getStadiaKey() {
     getStadiaApiKey().then(response => {
-      setStadiaKey(response.stadiaApiKey);
+      if (response) setStadiaKey(response.stadiaApiKey);
     })
       .catch(console.error);
   }, []);
@@ -73,7 +73,7 @@ export default function HomePage() {
               <Text>Loading map, please wait</Text>
             </View>
           </View>}
-        <RunButton key='Home'/>
+        <RunButton key='Home' />
       </View>
     </View >
   );

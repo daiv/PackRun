@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
-import { DimensionValue } from 'react-native';
+import React from 'react';
+import { DimensionValue, TextInput, TextInputProps } from 'react-native';
 
 export interface Runner {
   userId: string,
@@ -37,4 +38,8 @@ export type RunButtonStyleProps = {
   top?: DimensionValue | undefined;
   left?: DimensionValue | undefined;
   right?: DimensionValue | undefined;
+}
+export interface SmartInputProps extends TextInputProps {
+  errorMessage?: string;
+  nextRef?: React.RefObject<TextInput>;
 }

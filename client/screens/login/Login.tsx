@@ -5,6 +5,7 @@ import { styles } from './styles'
 import { LoginProps } from "../../helpers/Types";
 import { setHelperUserId } from "../../helpers/helper";
 import { signIn, signUp, confirmSignUp } from 'aws-amplify/auth';
+import SmartInput from "../../components/SmartInput";
 
 export default function Login({ setIsLogged }: LoginProps) {
   const [email, setEmail] = useState('');
@@ -23,6 +24,8 @@ export default function Login({ setIsLogged }: LoginProps) {
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
+
+  const testRef = useRef<TextInput>(null);
 
   function areAllFieldsOk() {
 
@@ -80,7 +83,7 @@ export default function Login({ setIsLogged }: LoginProps) {
       } else {
         setIsLoading(true);
         try {
-          const response = await signUp({ username: email, password });
+          const response = await signUp({ username: email, password, options: { userAttributes: { email } } });
           console.log('signUp response', response);
           setIsLoading(false);
           setIsConfirmingAccount(true)
@@ -95,10 +98,12 @@ export default function Login({ setIsLogged }: LoginProps) {
   function sendConfirmationCode() {
 
   }
+
   function handleCancelModal() {
     setModalVisible(false);
     setConfirmationCode('');
   }
+
   return (
     <View style={styles.mainContainer}>
 
@@ -106,35 +111,22 @@ export default function Login({ setIsLogged }: LoginProps) {
 
         {isLoading && <View style={styles.loading}><ActivityIndicator size={'large'} /><Text>Loading</Text></View>}
 
-        <TextInput
+        <SmartInput
           ref={emailRef}
+          errorMessage={emailError}
           onChangeText={setEmail}
-          keyboardType="email-address"
-          returnKeyType="next"
-          submitBehavior="submit"
-          style={[emailError && { borderColor: 'red', borderWidth: 1 }]}
-          onSubmitEditing={() => { loginMode ? passRef.current && passRef.current.focus() : nickRef.current && nickRef.current.focus() }}
-          placeholder="Email"
-          value={email} />
-        {emailError &&
-          <Text style={{ color: 'red', marginBottom: 6 }}>{emailError}</Text>
-        }
-
-        {loginMode || <>
-          <TextInput
+          placeholder={'Email'}
+          nextRef={loginMode ? passRef : nickRef}
+          value={email}
+        />
+        {loginMode ||
+          <SmartInput
             ref={nickRef}
+            errorMessage={nickError}
             onChangeText={setNick}
-            returnKeyType="next"
-            submitBehavior="submit"
-            style={[nickError && { borderColor: 'red', borderWidth: 1 }]}
-            onSubmitEditing={() => { passRef.current && passRef.current.focus() }}
             placeholder="Nick"
-            value={nick} />
-          {nickError &&
-            <Text style={{ color: 'red', marginBottom: 6 }}>{nickError}</Text>
-          }
-        </>
-        }
+            nextRef={passRef}
+            value={nick} />}
 
         <Modal animationType="fade"
           transparent={true}
@@ -150,19 +142,15 @@ export default function Login({ setIsLogged }: LoginProps) {
             </View>
           </TouchableOpacity>
         </Modal>
-
-        <TextInput
+        <SmartInput
           ref={passRef}
+          errorMessage={passwordError}
           onChangeText={setPassword}
-          secureTextEntry={true}
           placeholder="Password"
-          style={[passwordError && { borderColor: 'red', borderWidth: 1 }]}
-          value={password} />
-        {passwordError &&
-          <Text style={{ color: 'red', marginBottom: 6 }}>{passwordError}</Text>
-        }
+          value={password}
+        />
 
-        <View style={styles.horButtons}>
+        <View style={[styles.horButtons, { marginTop: 10 }]}>
           <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={isLoading}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>

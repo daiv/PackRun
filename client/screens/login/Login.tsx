@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { styles } from './styles'
 import { LoginProps } from "../../helpers/Types";
 import { setHelperUserId } from "../../helpers/helper";
-import { signIn, signUp, confirmSignUp } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, resendSignUpCode, signIn, resetPassword, confirmResetPassword } from 'aws-amplify/auth';
 import SmartInput from "../../components/SmartInput";
 
 export default function Login({ setIsLogged }: LoginProps) {
@@ -25,26 +25,37 @@ export default function Login({ setIsLogged }: LoginProps) {
   const nickRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
 
-  const testRef = useRef<TextInput>(null);
-
   function areAllFieldsOk() {
+    const emailErrorMessage = checkEmail();
+    const passwordErrorMessage = checkPassword();
+    const nickErrorMessage = (loginMode || nick ? '' : 'Nick can not be empty');
 
-    setEmailError(checkEmail());
-    setPasswordError(checkPassword());
-    setNickError(loginMode || nick ? '' : 'Nick can not be empty');
+    setEmailError(emailErrorMessage)
+    setPasswordError(passwordErrorMessage);
+    setNickError(nickErrorMessage);
 
-    return email && !emailError && password && !passwordError && (loginMode || nick && !nickError);
+    return email && !emailErrorMessage && password && !passwordErrorMessage && (loginMode || nick && !nickErrorMessage);
   }
+
   const checkEmail = () => !email ? 'Email can not be empty' : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ? 'Invalid email address' : '';
-  const checkPassword = () => !password ? 'Password can not be empty' : password.length < 6 ? 'Password must be at least 6 characters long' : '';///^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[^a-zA-Z0-9\s]).+$/
+
+  const checkPassword = () => {
+    if (!password) return 'Password can not be empty';
+    if (password.length < 8) return 'Password must be at least 8 characters long';
+    if (! /[0-9]/.test(password)) return 'Password must contain at least one number';
+    if (! /[a-z]/.test(password)) return 'Password must contain at least one lowercase letter';
+    if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter';
+    if (!/[^a-zA-Z0-9\s]/.test(password)) return 'Password must contain at least one special character';
+    return '';
+  }
 
   const mockRequest = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false)
-      setIsLogged(true);
       setUserId('USER_ID');
       setHelperUserId('USER_ID');
+      setIsLogged(true);
     }
       , 1000);
   }
@@ -54,21 +65,27 @@ export default function Login({ setIsLogged }: LoginProps) {
     setPassword('');
     setNick('');
   }
+
   const resetErrors = () => {
     setEmailError('');
     setPasswordError('');
     setNickError('');
   }
+
   function handleLogin() {
     if (!loginMode) {
       setLoginMode(true);
       resetErrors();
     }
     else if (areAllFieldsOk()) {
-      //request login
       resetFields();
       mockRequest();
     }
+  }
+
+  function handleCancelModal() {
+    setModalVisible(false);
+    setConfirmationCode('');
   }
 
   async function handleAccountCreation() {
@@ -85,23 +102,100 @@ export default function Login({ setIsLogged }: LoginProps) {
         try {
           const response = await signUp({ username: email, password, options: { userAttributes: { email } } });
           console.log('signUp response', response);
+          console.log({ response });
           setIsLoading(false);
           setIsConfirmingAccount(true)
 
-        } catch (error) {
-          console.log('signUp error', error);
+          if (response.nextStep.signUpStep === 'CONFIRM_SIGN_UP') {
+            console.log('ha llegado');
+            setModalVisible(true);
+          }
+          console.log('nextStep', response.nextStep);
+          console.log(response.nextStep);
+        } catch (error: any) {
+          console.log(error.message);
+
+          if (error instanceof Error) {
+            if (error.name === 'UsernameExistsException') {
+              Alert.alert('Cannot create account', 'If you already have an account, please login instead. \nDo you have a confirmation code?',
+                [
+                  {
+                    text: 'No', onPress: () => setIsLoading(false)
+                  },
+                  {
+                    text: 'Yes',
+                    onPress: () => {
+                      setIsLoading(false);
+                      setModalVisible(true)
+                    }
+                  },
+                ]);
+            }
+          }
         }
       }
-
     }
   }
-  function sendConfirmationCode() {
+  const resendCodeButton = {
 
-  }
+    text: 'Yes', onPress: async () => {
+      try {
 
-  function handleCancelModal() {
-    setModalVisible(false);
-    setConfirmationCode('');
+        const resendSignUpCodeResponse = await resendSignUpCode({ username: email });
+        console.log('resendSignUpCode response', resendSignUpCodeResponse);
+
+      } catch (error: any) {
+        console.error('resendSignUpCode error', error);
+      } finally {
+        handleCancelModal();
+
+      }
+    }
+  };
+
+  const cancelButton = { text: 'No', onPress: () => handleCancelModal() };
+
+  async function sendConfirmationCode() {
+    console.log('confirmationUserId', email);
+    console.log('confirmationCode', confirmationCode);
+    try {
+      const response = await confirmSignUp({ username: email, confirmationCode });
+      console.log('confirmSignUp response', response);
+      if (response.isSignUpComplete) {
+        setUserId(email);
+        setIsLogged(true);
+      }
+    } catch (error: any) {
+      if (error instanceof Error) {
+        console.log('confirmSignUp error', error);
+        switch (error.name) {
+
+          case 'ExpiredCodeException':
+            console.log('confirmSignUp error', error);
+            Alert.alert('Code expired', 'The confirmation code has expired.\nDo you want to request a new one?.',
+              [
+                cancelButton,
+                resendCodeButton
+              ]);
+            break;
+
+          case 'LimitExceededException':
+            Alert.alert('Limit exceeded', error.message,
+              [
+                { text: 'OK', onPress: () => handleCancelModal() }
+              ]);
+            break;
+          case 'CodeMismatchException':
+            Alert.alert('Code Mismatch', error.message + "\nDo you want to request a new one?",
+              [
+                cancelButton,
+                resendCodeButton
+
+              ]);
+            break;
+        }
+      }
+    }
   }
 
   return (
@@ -135,7 +229,7 @@ export default function Login({ setIsLogged }: LoginProps) {
           <TouchableOpacity
             style={[styles.mainContainer, { backgroundColor: 'rgba(0,0,0,0.5)' }]} onPress={handleCancelModal}>
             <View style={styles.modalView} onStartShouldSetResponder={() => true} >
-              <TextInput style={styles.modalTextInput} placeholder="Confirmation code" value={confirmationCode} onChangeText={setConfirmationCode} />
+              <TextInput style={styles.modalTextInput} placeholder="Confirmation code" value={confirmationCode} onChangeText={text => setConfirmationCode(text.trim())} />
               <TouchableOpacity style={styles.modalButton} onPress={() => { confirmationCode ? sendConfirmationCode() : handleCancelModal() }}>
                 <Text style={styles.modalButtonText}>{confirmationCode ? 'Send' : 'Cancel'}</Text>
               </TouchableOpacity>

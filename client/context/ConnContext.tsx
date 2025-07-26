@@ -23,15 +23,8 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [gpsTimeInterval, setGpsTimeInterval] = useState(55000);
   const [userId, setUserId] = useState('');
 
-  let locationUpdateCallback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>> | null = null;
-  
-  const setLocationUpdateCallback = (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => {
-    if (callback) locationUpdateCallback = callback;
-  }
-
   useEffect(function updateLastKnownLocation() {
     lastKnownLocationRef.current = lastKnownLocation;
-    if (locationUpdateCallback && lastKnownLocation) locationUpdateCallback(lastKnownLocation);
     console.log('Last known location updated:', lastKnownLocation);
   }, [lastKnownLocation]);
 
@@ -84,12 +77,11 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [userId]);
 
   const contextValue: ConnContextType = {
-    userId,
+    userId, //todo convert to tokens
     setUserId,
     lastKnownLocation,
+    setLastKnownLocation,
     setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
-    setLocationUpdateCallback
-
   };
 
   return (

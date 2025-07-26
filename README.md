@@ -11,7 +11,7 @@ Provides functionality for tracking runners routes and facilitates communication
 # Getting started: 
 
 Open the console and run : 
-  * In the server: 
+  * On the server: 
 
     ```
     npm install
@@ -20,7 +20,7 @@ Open the console and run :
     ```
     npm run dev
     ```
-  * In the client: 
+  * On the client: 
 
     ```
     npm install

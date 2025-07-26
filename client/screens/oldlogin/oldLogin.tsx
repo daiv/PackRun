@@ -1,13 +1,14 @@
 import { TextInput, View, Text, TouchableOpacity, Alert, ActivityIndicator, Modal } from "react-native";
 import { useConnContext } from "../../context/ConnContext";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, SetStateAction } from "react";
 import { styles } from './styles'
-import { LoginProps } from "../../helpers/Types";
+import { AuthProps } from "../../helpers/Types";
 import { setHelperUserId } from "../../helpers/helper";
-import { signUp, confirmSignUp, resendSignUpCode, signIn, resetPassword, confirmResetPassword } from 'aws-amplify/auth';
+import { signUp, confirmSignUp, resendSignUpCode, signIn, resetPassword, confirmResetPassword, fetchAuthSession, AuthSession, AuthTokens } from 'aws-amplify/auth';
 import SmartInput from "../../components/SmartInput";
+import CreateAccount from "../../components/CreateAccount";
 
-export default function Login({ setIsLogged }: LoginProps) {
+export default function Login({ setIsLogged }: AuthProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nick, setNick] = useState('');
@@ -19,11 +20,25 @@ export default function Login({ setIsLogged }: LoginProps) {
   const [nickError, setNickError] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [confirmationCode, setConfirmationCode] = useState('');
+  const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
   const { setUserId } = useConnContext();
 
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
+
+  useEffect(function getSession() {
+    fetchAuthSession().then(session => {
+
+      if (session.tokens) {
+        const { tokens } = session;
+
+      }
+      setTokens(session.tokens)
+
+
+    });
+  }, []);
 
   function areAllFieldsOk() {
     const emailErrorMessage = checkEmail();
@@ -72,15 +87,42 @@ export default function Login({ setIsLogged }: LoginProps) {
     setNickError('');
   }
 
-  function handleLogin() {
+  async function handleLogin() {
     if (!loginMode) {
       setLoginMode(true);
       resetErrors();
     }
-    else if (areAllFieldsOk()) {
-      resetFields();
-      mockRequest();
+    else {
+      if (areAllFieldsOk()) {
+        setIsLoading(true);
+        try {
+
+          const signInResponse = await signIn({ username: email, password });
+          console.log('signIn response', signInResponse);
+          if (signInResponse.isSignedIn) {
+            getTokens();
+
+          }
+        } catch (error: unknown) {
+          console.log('signIn error', error);
+          if (error instanceof Error) {
+            console.log('name', error.name);
+            console.log('message', error.message);
+            switch (error.name) {
+              case 'UserAlreadyAuthenticatedException':
+                getTokens();
+                break;
+            }
+          }
+        }
+      }
     }
+  }
+
+  async function getTokens() {
+    const { tokens } = await fetchAuthSession();
+    console.log('tokens', tokens);
+    setIsLoading(false);
   }
 
   function handleCancelModal() {
@@ -112,8 +154,8 @@ export default function Login({ setIsLogged }: LoginProps) {
           }
           console.log('nextStep', response.nextStep);
           console.log(response.nextStep);
-        } catch (error: any) {
-          console.log(error.message);
+        } catch (error: unknown) {
+          if (error instanceof Error) console.log(error.message);
 
           if (error instanceof Error) {
             if (error.name === 'UsernameExistsException') {
@@ -197,12 +239,10 @@ export default function Login({ setIsLogged }: LoginProps) {
       }
     }
   }
-
   return (
     <View style={styles.mainContainer}>
 
       <View style={{ width: '60%' }}>
-
         {isLoading && <View style={styles.loading}><ActivityIndicator size={'large'} /><Text>Loading</Text></View>}
 
         <SmartInput

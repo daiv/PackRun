@@ -11,8 +11,8 @@ export type ConnContextType = {
   userId: string;
   setUserId: React.Dispatch<React.SetStateAction<string>>;
   lastKnownLocation: Location.LocationObject | null;
+  setLastKnownLocation: (arg0: Location.LocationObject) => void;
   setRunningMode: (arg0: boolean) => void;
-  setLocationUpdateCallback: (callback: React.Dispatch<React.SetStateAction<Location.LocationObject | null>>) => void;
 }
 
 export type RunContextType = {
@@ -22,11 +22,12 @@ export type RunContextType = {
   setSecondsElapsed: React.Dispatch<React.SetStateAction<number>>;
   lastKnownLocation: Location.LocationObject | null;
   metersRan: number;
-  route: GeoJSON.FeatureCollection | undefined;
+  route: GeoJSON.FeatureCollection | undefined | null;
 };
 
-export type LoginProps = {
+export type AuthProps = {
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
+  
 }
 
 export interface RunProviderProps {

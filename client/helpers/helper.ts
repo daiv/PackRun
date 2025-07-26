@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import Location from 'expo-location';
 import { parse } from '@babel/core';
+import type { FeatureCollection } from 'geojson';
 
 const URL = 'http://192.168.100.18:3000';
 
@@ -23,22 +24,49 @@ export async function getMessagesFromServer() {
   return await fetchFactory('/messages/' + userId, 'GET', null);
 }
 
-export async function createTrackOnServer() {
+export async function createTrackOnServer(): Promise<{ trackId: string | null } | null> {
   return await fetchFactory('/tracks/' + userId, 'PUT', null);
 }
 
-export async function postLocationToServerTrack(trackId: string, location: Location.LocationObject) {
+export async function postLocationToServerTrack(trackId: string, location: Location.LocationObject): Promise<FeatureCollection | null> {
   console.log('location isssss', location);
   console.log('posting tooo', `/tracks/${userId}/${trackId}`);
   return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
 };
+
 export async function getStadiaApiKey(): Promise<{ stadiaApiKey: string } | null> {
   console.log('fetching', 'api/stadia/' + userId);
   return await fetchFactory('/api/stadia/' + userId, 'GET', null);
 }
+export const checkEmail = (email: string) => !email ? 'Email can not be empty' : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ? 'Invalid email address' : '';
 
-export async function createAccount(user: string, password: string) {
+export const checkPassword = (password: string) => {
+  if (!password) return 'Password can not be empty';
+  if (password.length < 8) return 'Password must be at least 8 characters long';
+  if (! /[0-9]/.test(password)) return 'Password must contain at least one number';
+  if (! /[a-z]/.test(password)) return 'Password must contain at least one lowercase letter';
+  if (!/[A-Z]/.test(password)) return 'Password must contain at least one uppercase letter';
+  if (!/[^a-zA-Z0-9\s]/.test(password)) return 'Password must contain at least one special character';
+  return '';
+}
 
+export const avoidFirstRender = (ref: React.MutableRefObject<boolean>, setter: React.Dispatch<React.SetStateAction<string>>, field: string, value: string) => {
+  if (ref.current) ref.current = false;
+  else {
+    switch (field) {
+      case 'email':
+        setter(checkEmail(value));
+        break;
+      case 'nick':
+        setter(value ? '' : 'Nick can not be empty');
+        break;
+      case 'password':
+        setter(checkPassword(value));
+        break;
+      default:
+        console.warn(`Unknown field: ${field}`);
+    }
+  }
 }
 
 class ApiError extends Error {

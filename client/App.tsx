@@ -9,8 +9,9 @@ import Home from './screens/home/Home';
 import CurrentRun from './screens/CurrentRun/CurrentRun';
 import RunHistory from './screens/runhistory/RunHistory';
 import Chat from './screens/chat/chat';
-import Login from './screens/login/Login';
+import Login from './screens/oldlogin/oldLogin';
 import './amplify-config';
+import Auth from './screens/Authentication/Auth';
 
 
 const icons = {
@@ -54,7 +55,8 @@ export default function App() {
                 }} />
               </NavBar.Navigator>
             </NavigationContainer>
-            : <Login setIsLogged={setIsLogged} />}
+            // : <Login setIsLogged={setIsLogged} />}
+            : <Auth setIsLogged={setIsLogged} />}
         </SafeAreaView>
       </RunProvider>
     </ConnProvider>

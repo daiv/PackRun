@@ -1,4 +1,3 @@
-
 import { createTrackOnServer, postLocationToServerTrack } from '../helpers/helper';
 import React, { createContext, useEffect, useContext, useState } from 'react';
 import { RunContextType, RunProviderProps } from '../helpers/Types';
@@ -21,13 +20,11 @@ export const useRunContext = () => {
 export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
-  const [route, setRoute] = useState<GeoJSON.FeatureCollection>();
-  const { setRunningMode, setLocationUpdateCallback, userId } = useConnContext();
+  const [route, setRoute] = useState<GeoJSON.FeatureCollection | null>();
+  const { setRunningMode, userId, lastKnownLocation } = useConnContext();
 
-  setLocationUpdateCallback(setLastKnownLocation);
 
   useEffect(function startRun() {
     let clockTimer: NodeJS.Timeout | null = null;
@@ -56,7 +53,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     else {
       try {
         const response = await createTrackOnServer();
-        if (response.trackId) {
+        if (response?.trackId) {
           console.log('Track created with ID:', response.trackId);
           setTrackId(response.trackId);
           setIsRunning(true);

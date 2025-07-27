@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import { useAuth } from "../customHooks/useAuth";
 import SmartInput from "./SmartInput";
 import styles from "./styles";
-import { useConnContext } from "../context/ConnContext";
+import { useRunContext } from "../context/RunContext";
+
 
 export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
 
@@ -20,8 +21,8 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { createAccount, confirmAccount, resendConfirmationCode } = useAuth();
-  const { setUserId } = useConnContext();
+  const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens } = useAuth();
+  const { updateCredentials } = useRunContext();
 
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
@@ -83,8 +84,19 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
     const responseConfirmation = await confirmAccount(email, confirmationCode);
     if (responseConfirmation.success) {
       setModalVisible(false);
-      setUserId(email);
+      const loginResponse = await login(email, password);
+      if (loginResponse.success) {
+        getTokens().then(tokens => {
+          if (tokens && tokens.idToken && tokens.idToken.payload && tokens.idToken.payload.email) {
+            console.log('email', tokens.idToken.payload.email);
+            const userEmail = String(tokens.idToken.payload.email);
+            // setUserId(tokens.idToken.payload.sub); // Assuming this is how you set the userId
+            updateCredentials(tokens, userEmail);
+          }
+        }).catch(err => { console.error('error checking status') });
+      }
       console.warn('Account confirmed successfully:', responseConfirmation.message);
+
     } else {
       const alertTitle = 'Account confirmation failed';
       switch (responseConfirmation.errorCode) {

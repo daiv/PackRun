@@ -11,7 +11,7 @@ const router: Router = express.Router();
 //logs the user in and returns assigned chatroom and nearbyUsers
 router.post('/locations', logUser, assignChatRoom);
 
-router.get('/api/stadia/:userId/', checkIfLogged, getStadiaApiKey);
+router.get('/api/stadia/:userId/', /* checkIfLogged, */ getStadiaApiKey);
 
 router.use('/tracks', tracksRouter);
 router.use('/messages', messagesRouter);

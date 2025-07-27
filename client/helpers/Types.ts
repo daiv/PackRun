@@ -1,3 +1,4 @@
+import { AuthTokens } from 'aws-amplify/auth';
 import * as Location from 'expo-location';
 import React from 'react';
 import { DimensionValue, TextInput, TextInputProps } from 'react-native';
@@ -8,14 +9,16 @@ export interface Runner {
   longitude: number
 }
 export type ConnContextType = {
+  updateCredentials: (tokens: AuthTokens | undefined, userEmail: string) => void;
   userId: string;
-  setUserId: React.Dispatch<React.SetStateAction<string>>;
   lastKnownLocation: Location.LocationObject | null;
   setLastKnownLocation: (arg0: Location.LocationObject) => void;
   setRunningMode: (arg0: boolean) => void;
 }
 
 export type RunContextType = {
+  userId: string;
+  updateCredentials: (tokens: AuthTokens | undefined, userEmail: string) => void;
   isRunning: boolean;
   toogleRunning: () => void;
   secondsElapsed: number;
@@ -27,7 +30,7 @@ export type RunContextType = {
 
 export type AuthProps = {
   setIsLogged: React.Dispatch<React.SetStateAction<boolean>>;
-  
+
 }
 
 export interface RunProviderProps {

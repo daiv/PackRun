@@ -3,32 +3,34 @@ import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "reac
 import styles from "./styles";
 import SmartInput from "./SmartInput";
 import { useAuth } from "../customHooks/useAuth";
-import { useConnContext } from "../context/ConnContext";
+import { useRunContext } from "../context/RunContext";
 
-export default function Login({ toggleLogin, setIsLogged }: { toggleLogin: () => void, setIsLogged: React.Dispatch<React.SetStateAction<boolean>> }) {
+export default function Login({ toggleLogin }: { toggleLogin: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const { login, isUserLoggedIn, tokens } = useAuth();
-  const { setUserId } = useConnContext();
+  const { login, getTokens, tokens } = useAuth();
+  const { updateCredentials } = useRunContext();
 
   const emailRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
 
-  useEffect(function isLoggedIn() {
-    
-    isUserLoggedIn().then(isLogged => {
-      console.log('user is logged = ', isLogged);
-      if (isLogged && tokens) {
-        
+  useEffect(getCredentials, []);
 
+  function getCredentials() {
+    getTokens().then(tokens => {
+      console.log(tokens ? 'user is logged' : 'user is not logged');
+      if (tokens && tokens.idToken && tokens.idToken.payload && tokens.idToken.payload.email) {
+        console.log('email', tokens.idToken.payload.email);
+        const userEmail = String(tokens.idToken.payload.email);
+        updateCredentials(tokens, userEmail);
       }
 
     }).catch(err => { console.error('error checking status') });
-  }, []);
+  }
 
   const handleLogin = async () => {
     const currentEmailError = email ? '' : 'Email cannot be empty';
@@ -44,9 +46,25 @@ export default function Login({ toggleLogin, setIsLogged }: { toggleLogin: () =>
 
     setIsLoading(true);
     const loginResponse = await login(email, password);
-    setIsLogged(loginResponse.success);
     setIsLoading(false);
+
+    console.log('loginResponse', loginResponse);
+    if (loginResponse.success) {
+      getCredentials();
+    } else {
+      switch (loginResponse.errorCode) {
+        case 1:
+          console.warn('User already authenticated');
+          break;
+        case 2:
+          console.warn('Invalid credentials');
+          break;
+        default:
+          console.warn('An unknown error occurred while logging in.');
+      }
+    }
   }
+
   return (
     <>
       <Text style={styles.title}>Log in</Text>

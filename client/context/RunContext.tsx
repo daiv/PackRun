@@ -2,10 +2,7 @@ import { createTrackOnServer, postLocationToServerTrack } from '../helpers/helpe
 import React, { createContext, useEffect, useContext, useState } from 'react';
 import { RunContextType, RunProviderProps } from '../helpers/Types';
 import { useConnContext } from './ConnContext';
-import Location from 'expo-location';
 import { Alert } from 'react-native';
-
-
 
 const RunContext = createContext<RunContextType | undefined>(undefined);
 
@@ -23,7 +20,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
   const [route, setRoute] = useState<GeoJSON.FeatureCollection | null>();
-  const { setRunningMode, userId, lastKnownLocation } = useConnContext();
+  const { setRunningMode, userId, lastKnownLocation, updateCredentials } = useConnContext();
 
 
   useEffect(function startRun() {
@@ -43,7 +40,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   useEffect(function updateServerWithLastKnownLocation() {
     if (lastKnownLocation && isRunning && trackId) {
-      postLocationToServerTrack(trackId, lastKnownLocation).then(setRoute);
+      postLocationToServerTrack(userId, trackId, lastKnownLocation).then(setRoute);
     }
 
   }, [lastKnownLocation]);
@@ -52,7 +49,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     if (isRunning) setIsRunning(false);
     else {
       try {
-        const response = await createTrackOnServer();
+        const response = await createTrackOnServer(userId);
         if (response?.trackId) {
           console.log('Track created with ID:', response.trackId);
           setTrackId(response.trackId);
@@ -65,6 +62,8 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   }
 
   const contextValue: RunContextType = {
+    userId: userId || '',
+    updateCredentials,
     isRunning,
     secondsElapsed,
     setSecondsElapsed,

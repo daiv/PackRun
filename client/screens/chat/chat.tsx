@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import styles from './styles';
 import { getMessagesFromServer, sendMessageToServer, socket } from '../../helpers/helper';
-import { useConnContext } from '../../context/ConnContext';
+import { useRunContext } from '../../context/RunContext';
+
 
 export default function Chatscreen() {
   const [messages, setMessages] = useState<{ author: string; time: string; message: string }[]>([]);
@@ -10,10 +11,10 @@ export default function Chatscreen() {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
-  const USER_ID = useConnContext().userId;
+  const { userId } = useRunContext();
   const getMessages = async () => {
-    const response = await getMessagesFromServer();
-    if (messages.length != response.length) setMessages(response);
+    const response = await getMessagesFromServer(userId);
+    if (response && messages.length != response.length) setMessages(response);
   };
 
   useEffect(() => {
@@ -31,8 +32,8 @@ export default function Chatscreen() {
   const send = async () => {
     if (input.trim() !== '') {
       getMessages();
-      sendMessageToServer(input).then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
-      socket.emit('message', { author: USER_ID, time: Date.now().toString(), message: input });
+      sendMessageToServer(userId, input).then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
+      socket.emit('message', { author: userId, time: Date.now().toString(), message: input });
     }
   }
   const handleScroll = (event: any) => {
@@ -60,10 +61,10 @@ export default function Chatscreen() {
             keyExtractor={(item) => item.time}
             renderItem={({ item }) => (
               <View>
-                <Text style={item.author === USER_ID ? styles.userText : styles.othersText}>
+                <Text style={item.author === userId ? styles.userText : styles.othersText}>
                   {item.author}
                 </Text>
-                <View style={item.author === USER_ID ? styles.userMessage : styles.othersMessage}>
+                <View style={item.author === userId ? styles.userMessage : styles.othersMessage}>
                   <Text style={styles.messageText}>{item.message}</Text>
                 </View>
               </View>

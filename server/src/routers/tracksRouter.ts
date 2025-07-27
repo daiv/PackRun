@@ -7,16 +7,16 @@ import { checkTrackBody, createNewTrack, deleteTrack, getTrack, getTracksInfo, p
 const tracksRouter: Router = express.Router();
 
 //creates a new track and returns a trackId
-tracksRouter.put('/:userId', checkIfLogged, createNewTrack);
+tracksRouter.put('/:userId', /* checkIfLogged, */ createNewTrack);
 
 //adds locations to the new track and returns Geoapifyed Object
-tracksRouter.post('/:userId/:trackId', checkIfLogged, checkTrackBody, postTrack);
+tracksRouter.post('/:userId/:trackId', /* checkIfLogged, */ checkTrackBody, postTrack);
 
 
 //returns an array with the user tracks
-tracksRouter.get('/:userId/', checkIfLogged, getTracksInfo);
+tracksRouter.get('/:userId/', /* checkIfLogged, */ getTracksInfo);
 //returns a GeoApifyedObject 
-tracksRouter.get('/:userId/:trackId', checkIfLogged, getTrack);
-tracksRouter.delete('/:userId/:trackId', checkIfLogged, deleteTrack);
+tracksRouter.get('/:userId/:trackId', /* checkIfLogged, */ getTrack);
+tracksRouter.delete('/:userId/:trackId', /* checkIfLogged, */ deleteTrack);
 
 export default tracksRouter;

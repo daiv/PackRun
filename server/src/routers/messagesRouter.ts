@@ -6,10 +6,10 @@ import { getAllMessages, postMessage } from '../controllers/chatController';
 
 const messagesRouter: Router = express.Router();
 
-messagesRouter.get('/:userId', checkIfLogged, getAllMessages);
+messagesRouter.get('/:userId', /* checkIfLogged, */ getAllMessages);
 
 // expected body: {author: string, message: string, time: stringDate}
-messagesRouter.post('/:userId', checkIfLogged, checkUserBody, postMessage);
+messagesRouter.post('/:userId', /* checkIfLogged, */ checkUserBody, postMessage);
 
 
 export default messagesRouter;

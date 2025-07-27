@@ -5,36 +5,31 @@ import type { FeatureCollection } from 'geojson';
 
 const URL = 'http://192.168.100.18:3000';
 
-let userId = '';
-
 export const socket = io(URL, { transports: ['websocket'] });
 
-export function setHelperUserId(id: string) {
-  userId = id;
-}
-export async function getRunsFromServer() {
+export async function getRunsFromServer(userId: string): Promise<any[] | null> {
   return await fetchFactory('/tracks/' + userId, 'GET', null);
 }
 
-export async function sendMessageToServer(message: string) {
+export async function sendMessageToServer(userId: string, message: string) {
   return await fetchFactory('/messages/' + userId, 'POST', { message, author: userId, time: new Date().toISOString() });
 }
 
-export async function getMessagesFromServer() {
+export async function getMessagesFromServer(userId: string): Promise<{ author: string; time: string; message: string }[] | null> {
   return await fetchFactory('/messages/' + userId, 'GET', null);
 }
 
-export async function createTrackOnServer(): Promise<{ trackId: string | null } | null> {
+export async function createTrackOnServer(userId: string): Promise<{ trackId: string | null } | null> {
   return await fetchFactory('/tracks/' + userId, 'PUT', null);
 }
 
-export async function postLocationToServerTrack(trackId: string, location: Location.LocationObject): Promise<FeatureCollection | null> {
+export async function postLocationToServerTrack(userId: string, trackId: string, location: Location.LocationObject): Promise<FeatureCollection | null> {
   console.log('location isssss', location);
   console.log('posting tooo', `/tracks/${userId}/${trackId}`);
   return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
 };
 
-export async function getStadiaApiKey(): Promise<{ stadiaApiKey: string } | null> {
+export async function getStadiaApiKey(userId: string): Promise<{ stadiaApiKey: string } | null> {
   console.log('fetching', 'api/stadia/' + userId);
   return await fetchFactory('/api/stadia/' + userId, 'GET', null);
 }

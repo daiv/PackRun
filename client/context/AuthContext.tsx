@@ -1,15 +1,31 @@
+import { createContext, useCallback, useContext, useState } from "react";
+import { AuthContextType } from "../helpers/Types";
 import { AuthTokens, confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from "aws-amplify/auth";
-import { useCallback, useState } from "react";
 
-export function useAuth() {
 
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (context === null) {
+    throw new Error('useAuthContext must be used within an AuthProvider');
+  }
+  return context;
+}
+
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isLogged, setIsLogged] = useState<boolean>(false);
+
 
   const createAccount = useCallback(async (email: string, password: string)
     : Promise<{ success: boolean, message: string, error?: Error, errorCode?: number }> => {
     try {
-      console.log('hola');
+      setIsLoading(true);
       const signUpResponse = await signUp({ username: email, password, options: { userAttributes: { email } } });
+      setIsLoading(false);
       console.warn('Account created successfully:', signUpResponse);
 
       return { success: true, message: 'Account created successfully. Please check your email for the confirmation code.' };
@@ -30,7 +46,7 @@ export function useAuth() {
       }
 
       return { success: false, message: 'An unknown error occurred while creating the account.', errorCode: 0 };
-    }
+    } finally { setIsLoading(false); }
 
   }, []);
 
@@ -84,8 +100,18 @@ export function useAuth() {
     : Promise<{ success: boolean, message: string, error?: Error, errorCode?: number }> => {
 
     try {
-      const response = await signIn({ username, password });
+      setIsLoading(true);
+      await signIn({ username, password });
+      setIsLoading(false);
+      const tokensResponse = await fetchAuthSession();
+      if (tokensResponse.tokens) {
+        setTokens(tokensResponse.tokens);
+        setUserId(tokensResponse.tokens.idToken?.payload.sub || username);
+        setIsLogged(true);
+      } else throw new Error('No tokens received after login');
+
       return { success: true, message: 'Login successful' };
+
     } catch (error: unknown) {
       if (error instanceof Error) {
         const errorInfo = { success: false, message: error.message, errorCode: 0 };
@@ -101,26 +127,32 @@ export function useAuth() {
         return errorInfo;
       }
       return { success: false, message: 'An unknown error occurred while logging in.', errorCode: 0 };
-    }
+    } finally { setIsLoading(false); }
   }, []);
 
   const getTokens = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await fetchAuthSession();
+      setIsLoading(false);
 
       if (response.tokens) {
-        console.log(response.tokens)
+
+        console.log('tokens received ', response.tokens);
         setTokens(response.tokens);
+        setUserId(response.tokens.idToken?.payload.sub || null);
         return response.tokens;
       }
-      return null;
+      throw new Error('No tokens received');
     } catch (error: unknown) {
-      return null;
-    }
+      console.log('Error fetching tokens:', error);
+    } finally { setIsLoading(false); }
   }, []);
 
   const getUser = useCallback(async () => {
+    setIsLoading(true);
     const userResponse = await getCurrentUser();
+    setIsLoading(false);
     if (userResponse) {
       console.log('Current user:', userResponse);
       return userResponse;
@@ -131,13 +163,37 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
+      setIsLoading(true);
       const signOutResponse = await signOut();
+      setIsLoading(false);
+
       setTokens(undefined);
+      setUserId(null);
       console.log('signoutResponse', signOutResponse);
+      return true;
     } catch (error: unknown) {
       console.error('Error during logout:', error);
-      return { success: false, message: 'Logout failed', error };
-    }
+      return false;
+    } finally { setIsLoading(false); }
   }, []);
-  return { createAccount, confirmAccount, resendConfirmationCode, login, getTokens, tokens, getUser, logout }
+
+  const contextValue: AuthContextType = {
+    createAccount,
+    confirmAccount,
+    resendConfirmationCode,
+    login,
+    logout,
+    getTokens,
+    getUser,
+    tokens,
+    userId,
+    isLoading,
+    isLogged,
+  }
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

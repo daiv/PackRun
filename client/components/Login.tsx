@@ -2,35 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import SmartInput from "./SmartInput";
-import { useAuth } from "../customHooks/useAuth";
-import { useRunContext } from "../context/RunContext";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function Login({ toggleLogin }: { toggleLogin: () => void }) {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const { login, getTokens, tokens } = useAuth();
-  const { updateCredentials } = useRunContext();
+  const { login, getTokens, tokens, isLoading } = useAuthContext();
 
   const emailRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
 
-  useEffect(getCredentials, []);
-
-  function getCredentials() {
-    getTokens().then(tokens => {
-      console.log(tokens ? 'user is logged' : 'user is not logged');
-      if (tokens && tokens.idToken && tokens.idToken.payload && tokens.idToken.payload.email) {
-        console.log('email', tokens.idToken.payload.email);
-        const userEmail = String(tokens.idToken.payload.email);
-        updateCredentials(tokens, userEmail);
-      }
-
-    }).catch(err => { console.error('error checking status') });
-  }
+  useEffect(() => { getTokens() }, []);
 
   const handleLogin = async () => {
     const currentEmailError = email ? '' : 'Email cannot be empty';
@@ -44,13 +29,10 @@ export default function Login({ toggleLogin }: { toggleLogin: () => void }) {
       return;
     }
 
-    setIsLoading(true);
     const loginResponse = await login(email, password);
-    setIsLoading(false);
 
     console.log('loginResponse', loginResponse);
     if (loginResponse.success) {
-      getCredentials();
     } else {
       switch (loginResponse.errorCode) {
         case 1:

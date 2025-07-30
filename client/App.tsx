@@ -13,6 +13,7 @@ import Profile from './screens/profile/Profile';
 import './amplify-config';
 
 import AntDesign from '@expo/vector-icons/AntDesign';
+import { AuthProvider, useAuthContext } from './context/AuthContext';
 
 
 const icons = {
@@ -22,7 +23,7 @@ const icons = {
   chat: require('./assets/chat.png'),
 }
 function MainAppNavigator() {
-  const { userId } = useConnContext();
+  const { userId } = useAuthContext();
   const NavBar = createBottomTabNavigator();
   const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
   if (userId) {
@@ -65,12 +66,14 @@ export default function App() {
   const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
 
   return (
-    <ConnProvider>
-      <RunProvider>
-        <SafeAreaView style={{ flex: 1 }}>
-          <MainAppNavigator />
-        </SafeAreaView>
-      </RunProvider>
-    </ConnProvider>
+    <AuthProvider>
+      <ConnProvider>
+        <RunProvider>
+          <SafeAreaView style={{ flex: 1 }}>
+            <MainAppNavigator />
+          </SafeAreaView>
+        </RunProvider>
+      </ConnProvider>
+    </AuthProvider>
   );
 }

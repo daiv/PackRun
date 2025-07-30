@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState, useRef, useContext, useCallb
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
 import { ConnContextType } from '../helpers/Types';
-import { AuthTokens } from 'aws-amplify/auth';
+import { useAuthContext } from './AuthContext';
 
 
 const ConnContext = createContext<ConnContextType | null>(null);
@@ -22,14 +22,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
   const [gpsTimeInterval, setGpsTimeInterval] = useState(55000);
-  const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
-  const [userId, setUserId] = useState<string>('');
-
-  const updateCredentials = useCallback((tokens: AuthTokens | undefined, userEmail: string) => {
-    setTokens(tokens);
-    setUserId(userEmail);
-    console.log('Credentials updated:', { tokens, userEmail });
-  }, []);
+  const { tokens, userId } = useAuthContext();
 
   useEffect(function updateLastKnownLocation() {
     lastKnownLocationRef.current = lastKnownLocation;
@@ -86,8 +79,6 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [userId]);
 
   const contextValue: ConnContextType = {
-    userId,
-    updateCredentials,
     lastKnownLocation,
     setLastKnownLocation,
     setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),

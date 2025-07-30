@@ -3,6 +3,7 @@ import React, { createContext, useEffect, useContext, useState } from 'react';
 import { RunContextType, RunProviderProps } from '../helpers/Types';
 import { useConnContext } from './ConnContext';
 import { Alert } from 'react-native';
+import { useAuthContext } from './AuthContext';
 
 const RunContext = createContext<RunContextType | undefined>(undefined);
 
@@ -20,7 +21,8 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
   const [route, setRoute] = useState<GeoJSON.FeatureCollection | null>();
-  const { setRunningMode, userId, lastKnownLocation, updateCredentials } = useConnContext();
+  const { setRunningMode, lastKnownLocation } = useConnContext();
+  const { userId } = useAuthContext();
 
 
   useEffect(function startRun() {
@@ -39,7 +41,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   }, [isRunning]);
 
   useEffect(function updateServerWithLastKnownLocation() {
-    if (lastKnownLocation && isRunning && trackId) {
+    if (lastKnownLocation && isRunning && trackId && userId) {
       postLocationToServerTrack(userId, trackId, lastKnownLocation).then(setRoute);
     }
 
@@ -47,7 +49,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   async function toogleRunning() {
     if (isRunning) setIsRunning(false);
-    else {
+    else if (userId) {
       try {
         const response = await createTrackOnServer(userId);
         if (response?.trackId) {
@@ -62,8 +64,6 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   }
 
   const contextValue: RunContextType = {
-    userId: userId || '',
-    updateCredentials,
     isRunning,
     secondsElapsed,
     setSecondsElapsed,

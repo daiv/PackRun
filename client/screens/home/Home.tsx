@@ -8,6 +8,7 @@ import { getStadiaApiKey } from '../../helpers/helper';
 
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { useAuthContext } from '../../context/AuthContext';
 
 export default function HomePage() {
   const [mapRegion, setMapRegion] = useState({
@@ -17,7 +18,8 @@ export default function HomePage() {
     longitudeDelta: 0.005,
   });
   const [stadiaKey, setStadiaKey] = useState('');
-  const { lastKnownLocation, isRunning, route, userId } = useRunContext();
+  const { lastKnownLocation, isRunning, route } = useRunContext();
+  const { userId } = useAuthContext();
 
   const mapStyle = 'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=';
 
@@ -34,7 +36,7 @@ export default function HomePage() {
   }, [lastKnownLocation]);
 
   useEffect(function getStadiaKey() {
-    getStadiaApiKey(userId).then(response => {
+    userId && getStadiaApiKey(userId).then(response => {
       if (response) setStadiaKey(response.stadiaApiKey);
     })
       .catch(console.error);

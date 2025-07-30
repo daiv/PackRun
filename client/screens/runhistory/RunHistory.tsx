@@ -9,7 +9,7 @@ import { LineChart } from "react-native-gifted-charts";
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getRunsFromServer } from '../../helpers/helper';
-import { useRunContext } from '../../context/RunContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 type altitudesType = {
   value: number;
@@ -18,10 +18,11 @@ export default function RunHistory() {
 
   const [runs, setRuns] = useState<{ id: string; date: string; time: string; pace: string; distance: string; profile: altitudesType[] }[]>([]);
   const [refresh, setRefresh] = useState(false);
-  const { userId } = useRunContext();
+  const { userId } = useAuthContext();
   const flatListRef = useRef<FlatList>(null);
 
   const getRuns = async (): Promise<any[]> => {
+    if (!userId) return [];
     const runsArray = await getRunsFromServer(userId);
     console.log('response', runsArray);
     if (!runsArray) throw new Error('Failed to fetch runs');

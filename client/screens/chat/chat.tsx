@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import styles from './styles';
 import { getMessagesFromServer, sendMessageToServer, socket } from '../../helpers/helper';
-import { useRunContext } from '../../context/RunContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 
 export default function Chatscreen() {
@@ -11,10 +11,12 @@ export default function Chatscreen() {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
-  const { userId } = useRunContext();
+  const { userId } = useAuthContext();
   const getMessages = async () => {
-    const response = await getMessagesFromServer(userId);
-    if (response && messages.length != response.length) setMessages(response);
+    if (userId) {
+      const response = await getMessagesFromServer(userId);
+      if (response && messages.length != response.length) setMessages(response);
+    }
   };
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function Chatscreen() {
   }, []);
 
   const send = async () => {
-    if (input.trim() !== '') {
+    if (input.trim() !== '' && userId) {
       getMessages();
       sendMessageToServer(userId, input).then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
       socket.emit('message', { author: userId, time: Date.now().toString(), message: input });

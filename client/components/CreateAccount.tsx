@@ -1,10 +1,9 @@
 import { ActivityIndicator, Alert, Modal, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { avoidFirstRender, checkEmail, checkPassword } from "../helpers/helper";
 import { useEffect, useRef, useState } from "react"
-import { useAuth } from "../customHooks/useAuth";
 import SmartInput from "./SmartInput";
 import styles from "./styles";
-import { useRunContext } from "../context/RunContext";
+import { useAuthContext } from "../context/AuthContext";
 
 
 export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
@@ -19,10 +18,9 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
   const [passwordError, setPasswordError] = useState('');
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens } = useAuth();
-  const { updateCredentials } = useRunContext();
+
+  const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens, isLoading } = useAuthContext();
 
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
@@ -56,9 +54,7 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
       console.warn('There are errors in the form, please fix them before proceeding.');
       return;
     } else {
-      setIsLoading(true);
       const responseAccCreation = await createAccount(email, password);
-      setIsLoading(false);
       if (responseAccCreation.success) {
         setModalVisible(true);
       } else {
@@ -85,16 +81,8 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
     if (responseConfirmation.success) {
       setModalVisible(false);
       const loginResponse = await login(email, password);
-      if (loginResponse.success) {
-        getTokens().then(tokens => {
-          if (tokens && tokens.idToken && tokens.idToken.payload && tokens.idToken.payload.email) {
-            console.log('email', tokens.idToken.payload.email);
-            const userEmail = String(tokens.idToken.payload.email);
-            // setUserId(tokens.idToken.payload.sub); // Assuming this is how you set the userId
-            updateCredentials(tokens, userEmail);
-          }
-        }).catch(err => { console.error('error checking status') });
-      }
+      if (loginResponse.success) getTokens();
+
       console.warn('Account confirmed successfully:', responseConfirmation.message);
 
     } else {

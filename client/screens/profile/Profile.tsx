@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../../customHooks/useAuth";
-import { View, Text, Touchable, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import styles from "./styles";
-import { useConnContext } from "../../context/ConnContext";
+import { useAuthContext } from "../../context/AuthContext";
 
 export default function Profile() {
   const [email, setEmail] = useState('');
-  const { getUser, logout } = useAuth();
-  const { updateCredentials } = useConnContext();
+  const { getUser, logout } = useAuthContext();;
+
   useEffect(() => {
     getUser().then(user => {
       if (user && user.signInDetails && user.signInDetails.loginId) {
@@ -23,8 +22,6 @@ export default function Profile() {
       <Text style={{ alignSelf: 'center' }}>{email}</Text>
       <TouchableOpacity style={styles.button} onPress={async () => {
         const logoutResponse = await logout();
-        updateCredentials(undefined, '');
-
       }} >
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>

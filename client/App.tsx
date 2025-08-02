@@ -2,8 +2,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image, SafeAreaView } from 'react-native';
 import { RunProvider } from './context/RunContext';
-import { ConnProvider, useConnContext } from './context/ConnContext';
-
+import { ConnProvider } from './context/ConnContext';
+import { AuthProvider, useAuthContext } from './context/AuthContext';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Home from './screens/home/Home';
 import CurrentRun from './screens/currentRun/CurrentRun';
 import RunHistory from './screens/runhistory/RunHistory';
@@ -12,8 +14,6 @@ import Auth from './screens/authentication/Auth';
 import Profile from './screens/profile/Profile';
 import './amplify-config';
 
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { AuthProvider, useAuthContext } from './context/AuthContext';
 
 
 const icons = {
@@ -22,10 +22,12 @@ const icons = {
   history: require('./assets/history.png'),
   chat: require('./assets/chat.png'),
 }
+
 function MainAppNavigator() {
   const { userId } = useAuthContext();
   const NavBar = createBottomTabNavigator();
   const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
+
   if (userId) {
     return (
       <NavigationContainer>
@@ -52,7 +54,10 @@ function MainAppNavigator() {
           }} />
           <NavBar.Screen name='Profile' component={Profile} options={{
             tabBarIcon: ({ focused }) => (
-              <AntDesign name="user" size={30} color={focused ? '#4A90E2' : '#000000'} />
+              <MaterialCommunityIcons name="account" size={40}
+                color={focused ? '#4A90E2' : '#000000'}
+                style={{ width: 37, height: 37, }} />
+              // <AntDesign name="user" size={30} color={focused ? '#4A90E2' : '#000000'} />
             )
           }} />
         </NavBar.Navigator>
@@ -62,9 +67,6 @@ function MainAppNavigator() {
 }
 
 export default function App() {
-  const NavBar = createBottomTabNavigator();
-  const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
-
   return (
     <AuthProvider>
       <ConnProvider>

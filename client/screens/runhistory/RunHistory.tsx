@@ -8,30 +8,26 @@ import { LineChart } from "react-native-gifted-charts";
 // styling
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { getRunsFromServer } from '../../helpers/helper';
-import { useAuthContext } from '../../context/AuthContext';
+import { useConnContext } from '../../context/ConnContext';
+import { Run, RunResponse } from '../../helpers/Types';
 
-type altitudesType = {
-  value: number;
-}
+
 export default function RunHistory() {
 
-  const [runs, setRuns] = useState<{ id: string; date: string; time: string; pace: string; distance: string; profile: altitudesType[] }[]>([]);
+  const [runs, setRuns] = useState<Run[]>([]);
   const [refresh, setRefresh] = useState(false);
-  const { userId } = useAuthContext();
+  const { fetchData } = useConnContext();
   const flatListRef = useRef<FlatList>(null);
 
-  const getRuns = async (): Promise<any[]> => {
-    if (!userId) return [];
-    const runsArray = await getRunsFromServer(userId);
+  const getRuns = async (): Promise<RunResponse[]> => {
+    const runsArray = await fetchData<RunResponse[] | null>('/tracks/', true, 'GET');
     console.log('response', runsArray);
-    if (!runsArray) throw new Error('Failed to fetch runs');
-    return runsArray;
-  };
+    return runsArray ? runsArray : [];
+  }
 
   useEffect(() => {
     getRuns()
-      .then(runs => setRuns(runs.map((run: any) => {
+      .then(runs => setRuns(runs.map((run: RunResponse) => {
         const seconds = (new Date(run.updatedAt).getTime() - new Date(run.createdAt).getTime()) / 1000;
         const pace = '';
         return {
@@ -45,7 +41,9 @@ export default function RunHistory() {
       .catch(error => console.error('Error fetching runs:', error));
     console.log('final runs', runs);
   }, [refresh]);
+
   const handleRefresh = () => setRefresh(!refresh);
+
   return (
     <View style={styles.container}>
       {runs.length === 0 ? <Text>no runs yet</Text> :

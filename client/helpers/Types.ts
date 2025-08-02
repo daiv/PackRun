@@ -1,6 +1,7 @@
 import { AuthTokens, AuthUser } from 'aws-amplify/auth';
 import * as Location from 'expo-location';
 import React from 'react';
+import { Socket } from 'socket.io-client';
 import { DimensionValue, TextInput, TextInputProps } from 'react-native';
 
 export interface Runner {
@@ -8,19 +9,24 @@ export interface Runner {
   latitude: number,
   longitude: number
 }
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD';
+
 export type ConnContextType = {
   lastKnownLocation: Location.LocationObject | null;
+  socket: Socket | null;
   setLastKnownLocation: (arg0: Location.LocationObject) => void;
   setRunningMode: (arg0: boolean) => void;
+  fetchData: <T>(endpoint: string, userIdNeeded: boolean, method: HttpMethod, body?: unknown) => Promise<T | null>;
 }
-export type BadName = { success: boolean, message: string, error?: Error, errorCode?: number };
+
+export type AuthResponse = { success: boolean, message: string, error?: Error, errorCode?: number };
 
 export type AuthContextType = {
   userId: string | null;
-  createAccount: (email: string, password: string) => Promise<BadName>;
-  confirmAccount: (username: string, confirmationCode: string) => Promise<BadName>;
+  createAccount: (email: string, password: string) => Promise<AuthResponse>;
+  confirmAccount: (username: string, confirmationCode: string) => Promise<AuthResponse>;
   resendConfirmationCode: (username: string) => Promise<boolean>;
-  login: (email: string, password: string) => Promise<BadName>;
+  login: (email: string, password: string) => Promise<AuthResponse>;
   logout: () => Promise<boolean>;
   getTokens: () => Promise<AuthTokens | undefined>;
   getUser: () => Promise<AuthUser | null>;
@@ -57,4 +63,26 @@ export type RunButtonStyleProps = {
 export interface SmartInputProps extends TextInputProps {
   errorMessage?: string;
   nextRef?: React.RefObject<TextInput>;
+}
+
+export type altitudesType = {
+  value: number;
+}
+
+export type Run = {
+  id: string;
+  date: string;
+  time: string;
+  pace: string;
+  distance: string;
+  profile: altitudesType[];
+}
+
+export type RunResponse = {
+  trackId: string;
+  createdAt: string;
+  updatedAt: string;
+  estimatedTime: string;
+  distance: string;
+  altitudes: altitudesType[];
 }

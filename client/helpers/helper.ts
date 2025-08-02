@@ -1,38 +1,5 @@
-import io from 'socket.io-client';
-import Location from 'expo-location';
-import { parse } from '@babel/core';
-import type { FeatureCollection } from 'geojson';
+import { HttpMethod } from './Types';
 
-const URL = 'http://192.168.100.18:3000';
-
-export const socket = io(URL, { transports: ['websocket'] });
-
-export async function getRunsFromServer(userId: string): Promise<any[] | null> {
-  return await fetchFactory('/tracks/' + userId, 'GET', null);
-}
-
-export async function sendMessageToServer(userId: string, message: string) {
-  return await fetchFactory('/messages/' + userId, 'POST', { message, author: userId, time: new Date().toISOString() });
-}
-
-export async function getMessagesFromServer(userId: string): Promise<{ author: string; time: string; message: string }[] | null> {
-  return await fetchFactory('/messages/' + userId, 'GET', null);
-}
-
-export async function createTrackOnServer(userId: string): Promise<{ trackId: string | null } | null> {
-  return await fetchFactory('/tracks/' + userId, 'PUT', null);
-}
-
-export async function postLocationToServerTrack(userId: string, trackId: string, location: Location.LocationObject): Promise<FeatureCollection | null> {
-  console.log('location isssss', location);
-  console.log('posting tooo', `/tracks/${userId}/${trackId}`);
-  return await fetchFactory(`/tracks/${userId}/${trackId}`, 'POST', location);
-};
-
-export async function getStadiaApiKey(userId: string): Promise<{ stadiaApiKey: string } | null> {
-  console.log('fetching', 'api/stadia/' + userId);
-  return await fetchFactory('/api/stadia/' + userId, 'GET', null);
-}
 export const checkEmail = (email: string) => !email ? 'Email can not be empty' : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ? 'Invalid email address' : '';
 
 export const checkPassword = (password: string) => {
@@ -77,8 +44,8 @@ class ApiError extends Error {
 
 }
 
-export async function fetchFactory<T>(endPoint: string, method: string, body: object | null = null): Promise<T | null> {
-  const url = URL + endPoint;
+export async function fetchFactory<T>(url: string, method: HttpMethod, body: unknown | null = null): Promise<T | null> {
+  // const url = URL + endPoint;
   const initOptions: RequestInit = {
     method,
     headers: {

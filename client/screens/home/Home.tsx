@@ -4,11 +4,10 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import styles from './styles';
 import { useRunContext } from '../../context/RunContext';
-import { getStadiaApiKey } from '../../helpers/helper';
+import { useConnContext } from '../../context/ConnContext';
 
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useAuthContext } from '../../context/AuthContext';
 
 export default function HomePage() {
   const [mapRegion, setMapRegion] = useState({
@@ -19,7 +18,7 @@ export default function HomePage() {
   });
   const [stadiaKey, setStadiaKey] = useState('');
   const { lastKnownLocation, isRunning, route } = useRunContext();
-  const { userId } = useAuthContext();
+  const { fetchData } = useConnContext();
 
   const mapStyle = 'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=';
 
@@ -35,8 +34,8 @@ export default function HomePage() {
     console.log('reported', route);
   }, [lastKnownLocation]);
 
-  useEffect(function getStadiaKey() {
-    userId && getStadiaApiKey(userId).then(response => {
+  useEffect(function getStadia() {
+    fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', true, 'GET', null).then(response => {
       if (response) setStadiaKey(response.stadiaApiKey);
     })
       .catch(console.error);

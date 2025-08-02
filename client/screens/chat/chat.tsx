@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import styles from './styles';
-import { getMessagesFromServer, sendMessageToServer, socket } from '../../helpers/helper';
+
 import { useAuthContext } from '../../context/AuthContext';
+import { useConnContext } from '../../context/ConnContext';
 
 
 export default function Chatscreen() {
@@ -12,32 +13,34 @@ export default function Chatscreen() {
   const flatListRef = useRef<FlatList>(null);
 
   const { userId } = useAuthContext();
+  const { socket, fetchData } = useConnContext();
+
   const getMessages = async () => {
-    if (userId) {
-      const response = await getMessagesFromServer(userId);
-      if (response && messages.length != response.length) setMessages(response);
-    }
+    const response = await fetchData<{ author: string; time: string; message: string }[]>('/messages/', true, 'GET');
+    if (response && messages.length != response.length) setMessages(response);
   };
 
   useEffect(() => {
-    socket.on('message', (message: { author: string; time: string; message: string }) => {
+    socket && socket.on('message', (message: { author: string; time: string; message: string }) => {
       setMessages(prev => [...prev, message]);
     });
     setInterval(() => {
       getMessages();
     }, 5000)
     return () => {
-      socket.off('message');
+      socket && socket.off('message');
     };
   }, []);
 
   const send = async () => {
-    if (input.trim() !== '' && userId) {
+    if (input.trim() !== '') {
       getMessages();
-      sendMessageToServer(userId, input).then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
-      socket.emit('message', { author: userId, time: Date.now().toString(), message: input });
+      fetchData<{ success: boolean, message: string }>('/messages/', true, 'POST', { message: input, author: userId, time: new Date().toISOString() })
+        .then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
+      socket && socket.emit('message', { author: userId, time: Date.now().toString(), message: input });
     }
   }
+
   const handleScroll = (event: any) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = 20;

@@ -1,9 +1,8 @@
-import { createTrackOnServer, postLocationToServerTrack } from '../helpers/helper';
 import React, { createContext, useEffect, useContext, useState } from 'react';
 import { RunContextType, RunProviderProps } from '../helpers/Types';
 import { useConnContext } from './ConnContext';
 import { Alert } from 'react-native';
-import { useAuthContext } from './AuthContext';
+import { FeatureCollection } from 'geojson';
 
 const RunContext = createContext<RunContextType | undefined>(undefined);
 
@@ -21,8 +20,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   const [trackId, setTrackId] = useState<string | null>(null);
   const [metersRan, setMetersRan] = useState(0);
   const [route, setRoute] = useState<GeoJSON.FeatureCollection | null>();
-  const { setRunningMode, lastKnownLocation } = useConnContext();
-  const { userId } = useAuthContext();
+  const { setRunningMode, lastKnownLocation, fetchData } = useConnContext();
 
 
   useEffect(function startRun() {
@@ -41,17 +39,17 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   }, [isRunning]);
 
   useEffect(function updateServerWithLastKnownLocation() {
-    if (lastKnownLocation && isRunning && trackId && userId) {
-      postLocationToServerTrack(userId, trackId, lastKnownLocation).then(setRoute);
+    if (lastKnownLocation && isRunning && trackId) {
+      fetchData<FeatureCollection | null>(`/tracks/${trackId}/`, true, 'POST', lastKnownLocation).then(setRoute);
     }
 
   }, [lastKnownLocation]);
 
   async function toogleRunning() {
     if (isRunning) setIsRunning(false);
-    else if (userId) {
+    else {
       try {
-        const response = await createTrackOnServer(userId);
+        const response = await fetchData<{ trackId: string }>('/tracks/', true, 'PUT', null);
         if (response?.trackId) {
           console.log('Track created with ID:', response.trackId);
           setTrackId(response.trackId);

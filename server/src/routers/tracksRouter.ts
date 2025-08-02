@@ -10,13 +10,15 @@ const tracksRouter: Router = express.Router();
 tracksRouter.put('/:userId', /* checkIfLogged, */ createNewTrack);
 
 //adds locations to the new track and returns Geoapifyed Object
-tracksRouter.post('/:userId/:trackId', /* checkIfLogged, */ checkTrackBody, postTrack);
+tracksRouter.post('/:trackId/:userId', /* checkIfLogged, */ checkTrackBody, postTrack);
 
 
 //returns an array with the user tracks
 tracksRouter.get('/:userId/', /* checkIfLogged, */ getTracksInfo);
 //returns a GeoApifyedObject 
-tracksRouter.get('/:userId/:trackId', /* checkIfLogged, */ getTrack);
-tracksRouter.delete('/:userId/:trackId', /* checkIfLogged, */ deleteTrack);
+tracksRouter.get('/:trackId/:userId', /* checkIfLogged, */ getTrack);
+tracksRouter.delete('/:trackId/:userId', /* checkIfLogged, */ deleteTrack);
+
+
 
 export default tracksRouter;

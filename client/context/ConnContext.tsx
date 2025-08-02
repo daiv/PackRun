@@ -1,9 +1,9 @@
 import React, { createContext, useEffect, useState, useRef, useContext, useCallback } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
-import { ConnContextType } from '../helpers/Types';
+import { ConnContextType, HttpMethod } from '../helpers/Types';
 import { useAuthContext } from './AuthContext';
-
+import io from 'socket.io-client';
 
 const ConnContext = createContext<ConnContextType | null>(null);
 
@@ -18,11 +18,22 @@ export const useConnContext = () => {
 export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const SERVER_TIME_INTERVAL = 60000;
+  const URL = 'http://192.168.100.18:3000';
+
+  const socketRef = useRef<ReturnType<typeof io> | null>(null);
 
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
   const [gpsTimeInterval, setGpsTimeInterval] = useState(55000);
   const { tokens, userId } = useAuthContext();
+
+  useEffect(() => {
+    if (!socketRef.current) socketRef.current = io(URL, { transports: ['websocket'] });
+    return () => {
+      if (socketRef.current) socketRef.current.disconnect();
+      socketRef.current = null;
+    }
+  }, []);
 
   useEffect(function updateLastKnownLocation() {
     lastKnownLocationRef.current = lastKnownLocation;
@@ -58,13 +69,14 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
   }, [gpsTimeInterval]);
+  // useEffect(function getStadia(){}, [userId]);
 
-  useEffect(function reportToServer() {
+  useEffect(function reportLocationToServer() {
     console.log('USERIDCHANGED to', userId);
     if (userId) {
       const report = () => {
         const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
-        if (body) fetchFactory('/locations', 'POST', body)
+        if (body) fetchFactory(URL + '/locations', 'POST', body)
           .then(res => console.log('Reported location to server:', res))
           .catch(err => console.error('Error reporting location to server:', err));
       }
@@ -78,10 +90,17 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [userId]);
 
+  async function fetchData<T>(endpoint: string, userIdNeeded: boolean, method: HttpMethod, body: unknown = null): Promise<T | null> {
+    if (userIdNeeded && !userId) return null;
+    else return await fetchFactory<T>(URL + endpoint + (userIdNeeded ? userId : ''), method, body);
+  }
+
   const contextValue: ConnContextType = {
     lastKnownLocation,
+    socket: socketRef.current,
     setLastKnownLocation,
     setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
+    fetchData,
   };
 
   return (

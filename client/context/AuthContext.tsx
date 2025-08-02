@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useState } from "react";
-import { AuthContextType } from "../helpers/Types";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { AuthContextType, AuthResponse } from "../helpers/Types";
 import { AuthTokens, confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from "aws-amplify/auth";
 
 
@@ -19,9 +19,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userId, setUserId] = useState<string | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
-
+  useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
+  
   const createAccount = useCallback(async (email: string, password: string)
-    : Promise<{ success: boolean, message: string, error?: Error, errorCode?: number }> => {
+    : Promise<AuthResponse> => {
     try {
       setIsLoading(true);
       const signUpResponse = await signUp({ username: email, password, options: { userAttributes: { email } } });
@@ -51,7 +52,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const confirmAccount = useCallback(async (username: string, confirmationCode: string)
-    : Promise<{ success: boolean, message: string, error?: Error, errorCode?: number }> => {
+    : Promise<AuthResponse> => {
     try {
       console.log('confirming');
       const confirmResponse = await confirmSignUp({ username, confirmationCode });
@@ -97,7 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = useCallback(async (username: string, password: string)
-    : Promise<{ success: boolean, message: string, error?: Error, errorCode?: number }> => {
+    : Promise<AuthResponse> => {
 
     try {
       setIsLoading(true);

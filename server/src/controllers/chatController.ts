@@ -22,7 +22,7 @@ export async function postMessage(req: Request, res: Response) {
     if (room && room.messages) {
       const newMessages = room.messages ? [...room.messages, req.body] : [req.body];
       const isMessagePublished = await ChatRoomModel.update({ messages: newMessages }, { where: { chatRoomId } });
-      if (isMessagePublished) res.status(201).json({ 'success': 'Message published' });
+      if (isMessagePublished) res.status(201).json({ success: 'Message published' });
       else res.status(500).json({ message: 'Server error' });
     }
   }

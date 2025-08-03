@@ -17,10 +17,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [isLogged, setIsLogged] = useState<boolean>(false);
 
   useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
-  
+
   const createAccount = useCallback(async (email: string, password: string)
     : Promise<AuthResponse> => {
     try {
@@ -108,7 +107,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (tokensResponse.tokens) {
         setTokens(tokensResponse.tokens);
         setUserId(tokensResponse.tokens.idToken?.payload.sub || username);
-        setIsLogged(true);
       } else throw new Error('No tokens received after login');
 
       return { success: true, message: 'Login successful' };
@@ -189,7 +187,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     tokens,
     userId,
     isLoading,
-    isLogged,
+    // isLogged,
   }
 
   return (

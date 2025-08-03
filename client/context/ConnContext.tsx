@@ -76,7 +76,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (userId) {
       const report = () => {
         const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
-        if (body) fetchFactory(URL + '/locations', 'POST', body)
+        if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
           .then(res => console.log('Reported location to server:', res))
           .catch(err => console.error('Error reporting location to server:', err));
       }
@@ -90,9 +90,9 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [userId]);
 
-  async function fetchData<T>(endpoint: string, userIdNeeded: boolean, method: HttpMethod, body: unknown = null): Promise<T | null> {
-    if (userIdNeeded && !userId) return null;
-    else return await fetchFactory<T>(URL + endpoint + (userIdNeeded ? userId : ''), method, body);
+  async function fetchData<T>(endpoint: string, addUserIdToUrl: boolean, method: HttpMethod, body: unknown = null): Promise<T | null> {
+    if (!userId) throw new Error('User not logged in, cannot fetch data');
+    else return await fetchFactory<T>(URL + endpoint + (addUserIdToUrl ? userId : ''), method, tokens?.idToken?.toString(), body);
   }
 
   const contextValue: ConnContextType = {

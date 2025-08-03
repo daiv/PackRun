@@ -31,7 +31,6 @@ export type AuthContextType = {
   getTokens: () => Promise<AuthTokens | undefined>;
   getUser: () => Promise<AuthUser | null>;
   tokens: AuthTokens | undefined;
-  isLogged: boolean;
   isLoading: boolean;
 }
 

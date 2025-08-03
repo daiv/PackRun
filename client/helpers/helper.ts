@@ -44,7 +44,7 @@ class ApiError extends Error {
 
 }
 
-export async function fetchFactory<T>(url: string, method: HttpMethod, body: unknown | null = null): Promise<T | null> {
+export async function fetchFactory<T>(url: string, method: HttpMethod, token: string | null = null, body: unknown | null = null): Promise<T | null> {
   // const url = URL + endPoint;
   const initOptions: RequestInit = {
     method,
@@ -53,7 +53,9 @@ export async function fetchFactory<T>(url: string, method: HttpMethod, body: unk
       Accept: 'application/json',
     },
   };
-
+  if (token) {
+    initOptions.headers = { ...initOptions.headers, Authorization: `Bearer ${token}` };
+  }
   if (body && !['get', 'head'].includes(method.toLowerCase())) initOptions.body = JSON.stringify(body);
   try {
     const response = await fetch(url, initOptions);

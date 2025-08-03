@@ -15,7 +15,7 @@ export async function logUser(req: Request, res: Response, next: Function) {
 
     const { userId } = req.body;
     const { longitude, latitude } = req.body.coords;
-    const runner: Runner = { userId, longitude, latitude }
+    const runner: Runner = { userId, longitude, latitude };
 
     const isRunnerLoggedIn = await RunnerModel.findOne({ where: { userId } });
 

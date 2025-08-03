@@ -1,6 +1,6 @@
 import sequelize from "./model";
 import { DataTypes, Model } from "sequelize";
-import { Location } from "../types";
+import { Location } from "../types/types";
 
 export interface Track {
   id?: bigint,

@@ -38,6 +38,7 @@
     "typescript": "^5.8.2"
   },
   "dependencies": {
+    "aws-jwt-verify": "^5.1.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "pg": "^8.14.0",

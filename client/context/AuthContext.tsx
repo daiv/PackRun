@@ -187,7 +187,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     tokens,
     userId,
     isLoading,
-    // isLogged,
   }
 
   return (

@@ -59,6 +59,7 @@ export type RunButtonStyleProps = {
   left?: DimensionValue | undefined;
   right?: DimensionValue | undefined;
 }
+
 export interface SmartInputProps extends TextInputProps {
   errorMessage?: string;
   nextRef?: React.RefObject<TextInput>;

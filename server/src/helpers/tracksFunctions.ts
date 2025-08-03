@@ -1,5 +1,5 @@
 import TrackModel from "../models/trackModel";
-import { Location } from "../types";
+import { Location } from "../types/types";
 import 'dotenv/config';
 
 

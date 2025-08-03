@@ -1,3 +1,4 @@
+
 export type LocationObjectCoords = {
   /**
    * The latitude in degrees.

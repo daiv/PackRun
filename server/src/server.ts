@@ -23,6 +23,7 @@ app.use('/', router);
 const port = 3000;
 
 createSocketIOServer(server);
+
 (async () => {
   try {
     await createDatabaseIfNotExist(null);

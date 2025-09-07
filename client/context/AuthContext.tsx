@@ -19,7 +19,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
-
   const createAccount = useCallback(async (email: string, password: string)
     : Promise<AuthResponse> => {
     try {

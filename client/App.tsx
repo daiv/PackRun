@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, SafeAreaView } from 'react-native';
+import { Image, SafeAreaView, StatusBar } from 'react-native';
 import { RunProvider } from './context/RunContext';
 import { ConnProvider } from './context/ConnContext';
 import { AuthProvider, useAuthContext } from './context/AuthContext';
@@ -13,7 +13,6 @@ import Chat from './screens/chat/chat';
 import Auth from './screens/authentication/Auth';
 import Profile from './screens/profile/Profile';
 import './amplify-config';
-
 
 
 const icons = {
@@ -71,11 +70,12 @@ export default function App() {
     <AuthProvider>
       <ConnProvider>
         <RunProvider>
-          <SafeAreaView style={{ flex: 1 }}>
+          <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
+            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
             <MainAppNavigator />
           </SafeAreaView>
         </RunProvider>
       </ConnProvider>
-    </AuthProvider>
+    </AuthProvider >
   );
 }

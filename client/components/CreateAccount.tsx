@@ -11,11 +11,13 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
   const [email, setEmail] = useState('');
   const [nick, setNick] = useState('');
   const [password, setPassword] = useState('');
+  const [matchingPwd, setMatchingPwd] = useState('');
   const [confirmationCode, setConfirmationCode] = useState('');
 
   const [emailError, setEmailError] = useState('');
   const [nickError, setNickError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [pwError, setPwError] = useState('');
+  const [matchingPwdError, setMatchingPwdError] = useState('');
 
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -25,6 +27,7 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
+  const matchPassRef = useRef<TextInput>(null);
 
   const isFirstEmailRender = useRef(true);
   const isFirstPwdRender = useRef(true);
@@ -32,9 +35,9 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
 
 
   useEffect(() => avoidFirstRender(isFirstEmailRender, setEmailError, 'email', email), [email]);
-  useEffect(() => avoidFirstRender(isFirstPwdRender, setPasswordError, 'password', password), [password]);
+  useEffect(() => avoidFirstRender(isFirstPwdRender, setPwError, 'password', password), [password]);
   useEffect(() => avoidFirstRender(isFirstNickRender, setNickError, 'nick', nick), [nick]);
-
+  useEffect(() => { setMatchingPwdError(password === matchingPwd ? '' : 'Passwords does not match') }, [password, matchingPwd]);
 
   function handleCancelModal() {
     setModalVisible(false);
@@ -45,12 +48,13 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
     const currentEmailError = checkEmail(email);
     const currentNickError = nick ? '' : 'Nick can not be empty';
     const currentPasswordError = checkPassword(password);
+    const currentPasswordMatchError = password !== matchingPwd;
 
     setEmailError(currentEmailError);
     setNickError(currentNickError);
-    setPasswordError(currentPasswordError);
+    setPwError(currentPasswordError);
 
-    if (currentEmailError || currentNickError || currentPasswordError) {
+    if (currentEmailError || currentNickError || currentPasswordError || currentPasswordMatchError) {
       console.warn('There are errors in the form, please fix them before proceeding.');
       return;
     } else {
@@ -158,11 +162,20 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
 
       <SmartInput
         ref={passRef}
-        errorMessage={passwordError}
+        errorMessage={pwError}
         onChangeText={setPassword}
         placeholder="Password"
+        nextRef={matchPassRef}
         value={password}
       />
+      <SmartInput
+        ref={matchPassRef}
+        errorMessage={matchingPwdError}
+        onChangeText={setMatchingPwd}
+        placeholder="Repeat password"
+        value={matchingPwd}
+      />
+
 
       <View style={[styles.horButtons, { marginTop: 10 }]}>
         <TouchableOpacity style={styles.button} onPress={toggleLogin} disabled={isLoading}>

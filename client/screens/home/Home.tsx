@@ -11,11 +11,12 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 export default function HomePage() {
   const [mapRegion, setMapRegion] = useState({
-    latitude: 40.416839178964445,
-    longitude: -3.703375944773951,
+    latitude: 38.34500514207054,
+    longitude: -0.49060323026266806,
     latitudeDelta: 0.005,
     longitudeDelta: 0.005,
   });
+
   const [stadiaKey, setStadiaKey] = useState('');
   const { lastKnownLocation, isRunning, route } = useRunContext();
   const { fetchData } = useConnContext();
@@ -33,7 +34,7 @@ export default function HomePage() {
     }
     console.log('reported', route);
   }, [lastKnownLocation]);
-
+  
   useEffect(function getStadia() {
     fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', true, 'GET', null).then(response => {
       if (response) setStadiaKey(response.stadiaApiKey);

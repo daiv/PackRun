@@ -1,7 +1,13 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-
+  title: {
+    paddingTop: 25,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
   button: {
     height: 75,
     width: 75,

@@ -27,17 +27,27 @@ export default function RunHistory() {
 
   useEffect(() => {
     getRuns()
-      .then(runs => setRuns(runs.map((run: RunResponse) => {
-        const seconds = (new Date(run.updatedAt).getTime() - new Date(run.createdAt).getTime()) / 1000;
-        const pace = '';
-        return {
-          id: run.trackId, date: new Date(run.createdAt).toDateString(),
-          time: Math.floor(seconds / 60) + ':' + Math.floor(seconds % 60),
-          pace,
-          distance: run.distance,
-          profile: run.altitudes
-        };
-      })))
+      .then(runs => setRuns(
+        runs.map((run: RunResponse) => {
+          console.log('nº runs', runs.length);
+          let seconds = (new Date(run.updatedAt).getTime() - new Date(run.createdAt).getTime()) / 1000;
+          const hours = Math.floor(seconds / 3600);
+          const minutes = Math.floor((seconds % 3600) / 60);
+          const remainingSeconds = Math.floor(seconds % 60);
+          const pad = (num: number) => String(num).padStart(2, '0');
+          const minPac = (hours * 60) + minutes;
+          const pace = String(Math.floor(Number(run.distance) / minPac));
+
+          return {
+            id: run.trackId,
+            date: new Date(run.createdAt).toDateString(),
+            time: `${pad(hours)}:${pad(minutes)}:${pad(remainingSeconds)}`,
+            pace,
+            distance: run.distance,
+            profile: run.altitudes
+          };
+        }).sort((a: any, b: any) => { return a.id - b.id })
+      ))
       .catch(error => console.error('Error fetching runs:', error));
     console.log('final runs', runs);
   }, [refresh]);
@@ -46,6 +56,7 @@ export default function RunHistory() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>History</Text>
       {runs.length === 0 ? <Text>no runs yet</Text> :
 
         <FlatList style={styles.listContainer} ref={flatListRef} data={runs} keyExtractor={(item) => item.id}
@@ -63,16 +74,17 @@ export default function RunHistory() {
                 <View style={styles.runRow}>
                   <Text style={styles.runLabel}>Time: </Text>
                   <Text style={styles.runValue}>{item.time}</Text>
+
                 </View>
 
                 <View style={styles.runRow}>
                   <Text style={styles.runLabel}>Dist.: </Text>
-                  <Text style={styles.runValue}>{item.distance}</Text>
+                  <Text style={styles.runValue}>{item.distance} mts</Text>
                 </View>
 
                 <View style={styles.runRow}>
-                  <Text style={styles.runLabel}>Pace: </Text>
-                  <Text style={styles.runValue}>{item.pace}</Text>
+                  <Text style={styles.runLabel}>Pace:{item.pace}/km</Text>
+                  {/* <Text style={styles.runValue}>{item.pace}</Text> */}
                 </View>
 
               </View>
@@ -84,8 +96,10 @@ export default function RunHistory() {
               </View>
 
             </View>
+
           )}
         />
+
       }
 
       <TouchableOpacity style={styles.refresh} onPress={handleRefresh} >

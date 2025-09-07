@@ -18,17 +18,19 @@ export default function Profile() {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ alignSelf: 'center' }}>{email}</Text>
-      <TouchableOpacity style={styles.button} onPress={async () => {
-        const logoutResponse = await logout();
-      }} >
-        <Text style={styles.buttonText}>Logout</Text>
-      </TouchableOpacity>
+    <View style={{ flex: 1 }}>
+      <Text style={styles.title}>Profile</Text>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ alignSelf: 'center' }}>{email}</Text>
+        <TouchableOpacity style={styles.button} onPress={async () => {
+          const logoutResponse = await logout();
+        }} >
+          <Text style={styles.buttonText}>Logout</Text>
+        </TouchableOpacity>
 
+
+      </View>
 
     </View>
-
-
   );
 }

@@ -1,6 +1,12 @@
 import { StyleSheet, Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',

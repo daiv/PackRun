@@ -26,6 +26,7 @@ export default function CurrentRun() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Running</Text>
       <View style={{ margin: 15 }}>
         <Text style={styles.screentext}>Time: {formatTime()}</Text>
         <Text style={styles.screentext}>Speed: {isRunning && lastKnownLocation?.coords.speed ? (lastKnownLocation.coords.speed * 3.6).toFixed(2) : 0} Kms/h</Text>

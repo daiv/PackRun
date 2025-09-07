@@ -55,10 +55,11 @@ export default function Chatscreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      keyboardVerticalOffset={100}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, paddingTop: 25 }}>
+          <Text style={styles.title}>Chat</Text>
           <FlatList
             style={{ flex: 1 }}
             ref={flatListRef}

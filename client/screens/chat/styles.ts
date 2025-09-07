@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
+    fontWeight: 'bold',
+    fontSize: 24,
+  },
   messageBubble: {
     backgroundColor: '#4A90E2',
     padding: 10,
@@ -81,21 +87,21 @@ export default StyleSheet.create({
     width: '100%',
     position: 'relative',
     backgroundColor: '#ffp'
-    
+
   },
   topdash: {
-      width: '100%',
-      height: 50,
-      backgroundColor: '#f8f8f8',
-      justifyContent: 'center',
-      alignItems: 'center',
-      paddingBottom: 10
+    width: '100%',
+    height: 50,
+    backgroundColor: '#f8f8f8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 10
   },
   dashtext: {
-      marginTop: 7,
-      fontSize: 20,
-      fontWeight: 'bold',
-      color: '#333',
-      fontFamily: 'Roboto',
+    marginTop: 7,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#333',
+    fontFamily: 'Roboto',
   }
 });

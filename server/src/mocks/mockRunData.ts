@@ -11,7 +11,7 @@ const mockBeachWalk: Location[] = [
       "heading": 2.109876543210987,
       "speed": 1.654321098765432
     },
-    "timestamp": new Date("2025-05-13T17:14:40.000Z"),
+    "timestamp": new Date("2025-08-08T17:14:40.000Z"),
     "userId": "testUser"
   },
   {
@@ -24,7 +24,7 @@ const mockBeachWalk: Location[] = [
       "heading": -3.456789012345679,
       "speed": 1.1234567890123457
     },
-    "timestamp": new Date("2025-05-13T17:14:45.000Z"),
+    "timestamp": new Date("2025-08-08T17:14:45.000Z"),
     "userId": "testUser"
   },
   {
@@ -37,7 +37,7 @@ const mockBeachWalk: Location[] = [
       "heading": 1.7890123456789013,
       "speed": 1.8765432109876543
     },
-    "timestamp": new Date("2025-05-13T17:14:50.000Z"),
+    "timestamp": new Date("2025-08-08T17:14:50.000Z"),
     "userId": "testUser"
   },
   {
@@ -50,7 +50,7 @@ const mockBeachWalk: Location[] = [
       "heading": -1.2345678901234568,
       "speed": 1.3901234567890124
     },
-    "timestamp": new Date("2025-05-13T17:14:55.000Z"),
+    "timestamp": new Date("2025-08-08T17:14:55.000Z"),
     "userId": "testUser"
   },
   {
@@ -63,7 +63,7 @@ const mockBeachWalk: Location[] = [
       "heading": 3.0123456789012346,
       "speed": 1.056789012345679
     },
-    "timestamp": new Date("2025-05-13T17:15:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -76,7 +76,7 @@ const mockBeachWalk: Location[] = [
       "heading": -4.123456789012346,
       "speed": 1.9234567890123457
     },
-    "timestamp": new Date("2025-05-13T17:15:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -89,7 +89,7 @@ const mockBeachWalk: Location[] = [
       "heading": 0.6789012345679013,
       "speed": 1.4890123456789012
     },
-    "timestamp": new Date("2025-05-13T17:15:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -102,7 +102,7 @@ const mockBeachWalk: Location[] = [
       "heading": -2.7890123456789014,
       "speed": 1.0123456789012346
     },
-    "timestamp": new Date("2025-05-13T17:15:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -115,7 +115,7 @@ const mockBeachWalk: Location[] = [
       "heading": 1.9012345678901235,
       "speed": 1.7654321098765433
     },
-    "timestamp": new Date("2025-05-13T17:15:20.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -128,7 +128,7 @@ const mockBeachWalk: Location[] = [
       "heading": -0.543210987654321,
       "speed": 1.2789012345679013
     },
-    "timestamp": new Date("2025-05-13T17:15:25.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -141,7 +141,7 @@ const mockBeachWalk: Location[] = [
       "heading": 3.2109876543210988,
       "speed": 1.9901234567890123
     },
-    "timestamp": new Date("2025-05-13T17:15:30.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -154,7 +154,7 @@ const mockBeachWalk: Location[] = [
       "heading": -3.8765432109876545,
       "speed": 1.1876543210987655
     },
-    "timestamp": new Date("2025-05-13T17:15:35.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:35.000Z"),
     "userId": "testUser"
   },
   {
@@ -167,7 +167,7 @@ const mockBeachWalk: Location[] = [
       "heading": 0.4321098765432099,
       "speed": 1.7123456789012346
     },
-    "timestamp": new Date("2025-05-13T17:15:40.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:40.000Z"),
     "userId": "testUser"
   },
   {
@@ -180,7 +180,7 @@ const mockBeachWalk: Location[] = [
       "heading": -1.9876543210987655,
       "speed": 1.3345678901234568
     },
-    "timestamp": new Date("2025-05-13T17:15:45.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:45.000Z"),
     "userId": "testUser"
   },
   {
@@ -193,7 +193,7 @@ const mockBeachWalk: Location[] = [
       "heading": 2.56789012345679,
       "speed": 1.0765432109876544
     },
-    "timestamp": new Date("2025-05-13T17:15:50.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:50.000Z"),
     "userId": "testUser"
   },
   {
@@ -206,7 +206,7 @@ const mockBeachWalk: Location[] = [
       "heading": -4.345678901234568,
       "speed": 1.953210987654321
     },
-    "timestamp": new Date("2025-05-13T17:15:55.000Z"),
+    "timestamp": new Date("2025-08-08T17:15:55.000Z"),
     "userId": "testUser"
   },
   {
@@ -219,7 +219,7 @@ const mockBeachWalk: Location[] = [
       "heading": 0.2345678901234568,
       "speed": 1.4210987654321099
     },
-    "timestamp": new Date("2025-05-13T17:16:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:16:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -232,7 +232,7 @@ const mockBeachWalk: Location[] = [
       "heading": -2.9012345678901236,
       "speed": 1.0345678901234568
     },
-    "timestamp": new Date("2025-05-13T17:16:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:16:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -245,7 +245,7 @@ const mockBeachWalk: Location[] = [
       "heading": 2.345678901234568,
       "speed": 1.7987654321098766
     },
-    "timestamp": new Date("2025-05-13T17:16:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:16:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -258,7 +258,7 @@ const mockBeachWalk: Location[] = [
       "heading": -0.6543210987654321,
       "speed": 1.2109876543210988
     },
-    "timestamp": new Date("2025-05-13T17:16:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:16:15.000Z"),
     "userId": "testUser"
   }
 ]
@@ -273,7 +273,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 90,
       "speed": 1.2
     },
-    "timestamp": new Date("2025-05-13T17:12:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -286,7 +286,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 45,
       "speed": 1.5
     },
-    "timestamp": new Date("2025-05-13T17:12:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -299,7 +299,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 0,
       "speed": 1.1
     },
-    "timestamp": new Date("2025-05-13T17:12:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -312,7 +312,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 315,
       "speed": 1.3
     },
-    "timestamp": new Date("2025-05-13T17:12:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -325,7 +325,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 270,
       "speed": 1.0
     },
-    "timestamp": new Date("2025-05-13T17:12:20.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -338,7 +338,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 225,
       "speed": 1.4
     },
-    "timestamp": new Date("2025-05-13T17:12:25.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -351,7 +351,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 180,
       "speed": 1.2
     },
-    "timestamp": new Date("2025-05-13T17:12:30.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -364,7 +364,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 135,
       "speed": 1.1
     },
-    "timestamp": new Date("2025-05-13T17:12:35.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:35.000Z"),
     "userId": "testUser"
   },
   {
@@ -377,7 +377,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 90,
       "speed": 1.3
     },
-    "timestamp": new Date("2025-05-13T17:12:40.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:40.000Z"),
     "userId": "testUser"
   },
   {
@@ -390,7 +390,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 45,
       "speed": 1.5
     },
-    "timestamp": new Date("2025-05-13T17:12:45.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:45.000Z"),
     "userId": "testUser"
   },
   {
@@ -403,7 +403,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 0,
       "speed": 1.2
     },
-    "timestamp": new Date("2025-05-13T17:12:50.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:50.000Z"),
     "userId": "testUser"
   },
   {
@@ -416,7 +416,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 315,
       "speed": 1.4
     },
-    "timestamp": new Date("2025-05-13T17:12:55.000Z"),
+    "timestamp": new Date("2025-08-08T17:12:55.000Z"),
     "userId": "testUser"
   },
   {
@@ -429,7 +429,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 270,
       "speed": 1.1
     },
-    "timestamp": new Date("2025-05-13T17:13:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -442,7 +442,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 225,
       "speed": 1.3
     },
-    "timestamp": new Date("2025-05-13T17:13:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -455,7 +455,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 180,
       "speed": 1.0
     },
-    "timestamp": new Date("2025-05-13T17:13:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -468,7 +468,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 135,
       "speed": 1.2
     },
-    "timestamp": new Date("2025-05-13T17:13:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -481,7 +481,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 90,
       "speed": 1.4
     },
-    "timestamp": new Date("2025-05-13T17:13:20.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -494,7 +494,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 45,
       "speed": 1.1
     },
-    "timestamp": new Date("2025-05-13T17:13:25.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -507,7 +507,7 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 0,
       "speed": 1.3
     },
-    "timestamp": new Date("2025-05-13T17:13:30.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -520,10 +520,11 @@ const mockValenciaCityWalk: Location[] = [
       "heading": 315,
       "speed": 1.0
     },
-    "timestamp": new Date("2025-05-13T17:13:35.000Z"),
+    "timestamp": new Date("2025-08-08T17:13:35.000Z"),
     "userId": "testUser"
   }
 ]
+
 const mockValenciaRun: Location[] = [
   {
     "coords": {
@@ -535,7 +536,7 @@ const mockValenciaRun: Location[] = [
       "heading": 45,
       "speed": 4.0
     },
-    "timestamp": new Date("2025-05-13T19:49:00.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -548,7 +549,7 @@ const mockValenciaRun: Location[] = [
       "heading": 40,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T19:49:05.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -561,7 +562,7 @@ const mockValenciaRun: Location[] = [
       "heading": 48,
       "speed": 3.9
     },
-    "timestamp": new Date("2025-05-13T19:49:10.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -574,7 +575,7 @@ const mockValenciaRun: Location[] = [
       "heading": 35,
       "speed": 4.1
     },
-    "timestamp": new Date("2025-05-13T19:49:15.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -587,7 +588,7 @@ const mockValenciaRun: Location[] = [
       "heading": 42,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T19:49:20.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -600,7 +601,7 @@ const mockValenciaRun: Location[] = [
       "heading": 38,
       "speed": 4.0
     },
-    "timestamp": new Date("2025-05-13T19:49:25.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -613,7 +614,7 @@ const mockValenciaRun: Location[] = [
       "heading": 45,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T19:49:30.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -626,7 +627,7 @@ const mockValenciaRun: Location[] = [
       "heading": 40,
       "speed": 3.9
     },
-    "timestamp": new Date("2025-05-13T19:49:35.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:35.000Z"),
     "userId": "testUser"
   },
   {
@@ -639,7 +640,7 @@ const mockValenciaRun: Location[] = [
       "heading": 48,
       "speed": 4.1
     },
-    "timestamp": new Date("2025-05-13T19:49:40.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:40.000Z"),
     "userId": "testUser"
   },
   {
@@ -652,7 +653,7 @@ const mockValenciaRun: Location[] = [
       "heading": 35,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T19:49:45.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:45.000Z"),
     "userId": "testUser"
   },
   {
@@ -665,7 +666,7 @@ const mockValenciaRun: Location[] = [
       "heading": 42,
       "speed": 4.0
     },
-    "timestamp": new Date("2025-05-13T19:49:50.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:50.000Z"),
     "userId": "testUser"
   },
   {
@@ -678,7 +679,7 @@ const mockValenciaRun: Location[] = [
       "heading": 38,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T19:49:55.000Z"),
+    "timestamp": new Date("2025-08-08T19:49:55.000Z"),
     "userId": "testUser"
   },
   {
@@ -691,7 +692,7 @@ const mockValenciaRun: Location[] = [
       "heading": 45,
       "speed": 3.9
     },
-    "timestamp": new Date("2025-05-13T19:50:00.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -704,7 +705,7 @@ const mockValenciaRun: Location[] = [
       "heading": 40,
       "speed": 4.1
     },
-    "timestamp": new Date("2025-05-13T19:50:05.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -717,7 +718,7 @@ const mockValenciaRun: Location[] = [
       "heading": 48,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T19:50:10.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -730,7 +731,7 @@ const mockValenciaRun: Location[] = [
       "heading": 35,
       "speed": 4.0
     },
-    "timestamp": new Date("2025-05-13T19:50:15.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -743,7 +744,7 @@ const mockValenciaRun: Location[] = [
       "heading": 42,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T19:50:20.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -756,7 +757,7 @@ const mockValenciaRun: Location[] = [
       "heading": 38,
       "speed": 3.9
     },
-    "timestamp": new Date("2025-05-13T19:50:25.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -769,7 +770,7 @@ const mockValenciaRun: Location[] = [
       "heading": 45,
       "speed": 4.1
     },
-    "timestamp": new Date("2025-05-13T19:50:30.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -782,10 +783,11 @@ const mockValenciaRun: Location[] = [
       "heading": 40,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T19:50:35.000Z"),
+    "timestamp": new Date("2025-08-08T19:50:35.000Z"),
     "userId": "testUser"
   }
 ]
+
 const mockMadridRun: Location[] = [
   {
     "coords": {
@@ -797,7 +799,7 @@ const mockMadridRun: Location[] = [
       "heading": 45,
       "speed": 4.5
     },
-    "timestamp": new Date("2025-05-13T17:21:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -810,7 +812,7 @@ const mockMadridRun: Location[] = [
       "heading": 90,
       "speed": 4.8
     },
-    "timestamp": new Date("2025-05-13T17:21:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -823,7 +825,7 @@ const mockMadridRun: Location[] = [
       "heading": 135,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T17:21:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -836,7 +838,7 @@ const mockMadridRun: Location[] = [
       "heading": 180,
       "speed": 4.6
     },
-    "timestamp": new Date("2025-05-13T17:21:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -849,7 +851,7 @@ const mockMadridRun: Location[] = [
       "heading": 225,
       "speed": 4.9
     },
-    "timestamp": new Date("2025-05-13T17:21:20.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -862,7 +864,7 @@ const mockMadridRun: Location[] = [
       "heading": 270,
       "speed": 4.4
     },
-    "timestamp": new Date("2025-05-13T17:21:25.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -875,7 +877,7 @@ const mockMadridRun: Location[] = [
       "heading": 315,
       "speed": 4.7
     },
-    "timestamp": new Date("2025-05-13T17:21:30.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -888,7 +890,7 @@ const mockMadridRun: Location[] = [
       "heading": 0,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T17:21:35.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:35.000Z"),
     "userId": "testUser"
   },
   {
@@ -901,7 +903,7 @@ const mockMadridRun: Location[] = [
       "heading": 45,
       "speed": 4.5
     },
-    "timestamp": new Date("2025-05-13T17:21:40.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:40.000Z"),
     "userId": "testUser"
   },
   {
@@ -914,7 +916,7 @@ const mockMadridRun: Location[] = [
       "heading": 90,
       "speed": 4.9
     },
-    "timestamp": new Date("2025-05-13T17:21:45.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:45.000Z"),
     "userId": "testUser"
   },
   {
@@ -927,7 +929,7 @@ const mockMadridRun: Location[] = [
       "heading": 135,
       "speed": 4.3
     },
-    "timestamp": new Date("2025-05-13T17:21:50.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:50.000Z"),
     "userId": "testUser"
   },
   {
@@ -940,7 +942,7 @@ const mockMadridRun: Location[] = [
       "heading": 180,
       "speed": 4.7
     },
-    "timestamp": new Date("2025-05-13T17:21:55.000Z"),
+    "timestamp": new Date("2025-08-08T17:21:55.000Z"),
     "userId": "testUser"
   },
   {
@@ -953,7 +955,7 @@ const mockMadridRun: Location[] = [
       "heading": 225,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T17:22:00.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:00.000Z"),
     "userId": "testUser"
   },
   {
@@ -966,7 +968,7 @@ const mockMadridRun: Location[] = [
       "heading": 270,
       "speed": 4.6
     },
-    "timestamp": new Date("2025-05-13T17:22:05.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:05.000Z"),
     "userId": "testUser"
   },
   {
@@ -979,7 +981,7 @@ const mockMadridRun: Location[] = [
       "heading": 315,
       "speed": 4.9
     },
-    "timestamp": new Date("2025-05-13T17:22:10.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:10.000Z"),
     "userId": "testUser"
   },
   {
@@ -992,7 +994,7 @@ const mockMadridRun: Location[] = [
       "heading": 0,
       "speed": 4.4
     },
-    "timestamp": new Date("2025-05-13T17:22:15.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:15.000Z"),
     "userId": "testUser"
   },
   {
@@ -1005,7 +1007,7 @@ const mockMadridRun: Location[] = [
       "heading": 45,
       "speed": 4.7
     },
-    "timestamp": new Date("2025-05-13T17:22:20.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:20.000Z"),
     "userId": "testUser"
   },
   {
@@ -1018,7 +1020,7 @@ const mockMadridRun: Location[] = [
       "heading": 90,
       "speed": 4.2
     },
-    "timestamp": new Date("2025-05-13T17:22:25.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:25.000Z"),
     "userId": "testUser"
   },
   {
@@ -1031,7 +1033,7 @@ const mockMadridRun: Location[] = [
       "heading": 135,
       "speed": 4.9
     },
-    "timestamp": new Date("2025-05-13T17:22:30.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:30.000Z"),
     "userId": "testUser"
   },
   {
@@ -1044,7 +1046,7 @@ const mockMadridRun: Location[] = [
       "heading": 180,
       "speed": 4.4
     },
-    "timestamp": new Date("2025-05-13T17:22:35.000Z"),
+    "timestamp": new Date("2025-08-08T17:22:35.000Z"),
     "userId": "testUser"
   }
 ]

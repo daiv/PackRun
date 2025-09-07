@@ -41,6 +41,6 @@ ChatRoomModel.init(
       type: DataTypes.ARRAY(DataTypes.JSON),
       allowNull: false,
     }
-  }, { sequelize, tableName: "chatrooms" }
+  }, { sequelize, tableName: "chatrooms", underscored: true }
 );
 export default ChatRoomModel;

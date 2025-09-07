@@ -3,7 +3,7 @@ import { Location } from "../types/types";
 import { runs } from "./mockRunData";
 import { transformToGeoApify } from "../helpers/tracksFunctions";
 
-const user = 'testUser';
+const user = 'a0ecc9dc-10b1-7051-6874-aa005cb57f77';
 const functions: Function[] = [];
 export default functions;
 function populateTracks() {

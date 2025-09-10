@@ -18,13 +18,13 @@ export const useConnContext = () => {
 export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const SERVER_TIME_INTERVAL = 60000;
-  const URL = 'http://192.168.100.18:3000';
+  const URL = 'http://192.168.100.174:3000';
 
   const socketRef = useRef<ReturnType<typeof io> | null>(null);
 
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
-  const [gpsTimeInterval, setGpsTimeInterval] = useState(55000);
+  const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
   const { tokens, userId } = useAuthContext();
 
   useEffect(() => {
@@ -54,7 +54,11 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
               distanceInterval: 0,
             }
             , setLastKnownLocation)
-            .then(subscription => locationSubscription = subscription);
+            .then(subscription => {
+              console.log('Location watcher started', subscription);
+              locationSubscription = subscription
+            }
+            ).catch(error => console.error('Error starting location watcher:', error));
 
         } else console.error('Permission to access location was denied');
       })

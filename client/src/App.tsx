@@ -4,7 +4,6 @@ import { Image, SafeAreaView, StatusBar } from 'react-native';
 import { RunProvider } from './context/RunContext';
 import { ConnProvider } from './context/ConnContext';
 import { AuthProvider, useAuthContext } from './context/AuthContext';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Home from './screens/home/Home';
 import CurrentRun from './screens/currentRun/CurrentRun';
@@ -12,14 +11,14 @@ import RunHistory from './screens/runhistory/RunHistory';
 import Chat from './screens/chat/chat';
 import Auth from './screens/authentication/Auth';
 import Profile from './screens/profile/Profile';
-import './amplify-config';
+import '../amplify-config';
 
 
 const icons = {
-  run: require('./assets/run.png'),
-  metrics: require('./assets/metrics.png'),
-  history: require('./assets/history.png'),
-  chat: require('./assets/chat.png'),
+  run: require('../assets/run.png'),
+  metrics: require('../assets/metrics.png'),
+  history: require('../assets/history.png'),
+  chat: require('../assets/chat.png'),
 }
 
 function MainAppNavigator() {

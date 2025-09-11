@@ -6,7 +6,7 @@ An application for **tracking running routes** and **facilitating communication*
 
 ## Demo & Screenshots
 
-[Watch demo](https://youtu.be/CFTHtGVFQRM)
+[Watch demo](https://www.youtube.com/watch?v=CFTHtGVFQRM)
 
 <p style="display: flex; ">
   <img style="width:30%; padding-right: 2%; height: auto" src="1.png"/>
@@ -71,7 +71,7 @@ First, navigate to the `server` directory.
     COGNITO_USER_POOL_ID="your_cognito_user_pool_id"
     COGNITO_CLIENT_ID="your_cognito_client_id"
     ```
-
+    *Note: Remember to add your env file to [gitignore](https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
     * **Run the server:**
 
     ```bash
@@ -101,10 +101,12 @@ First, navigate to the `server` directory.
         ```bash
         npm run ios
         ```
+4. **Connect to your local server:**
+    To connect to the local server, you must specify your computer's IP address. Open [ConnContext.tsx](./client/src/context/ConnContext.tsx) file and modify the url variable with your IP address.
+    
+5.  **Run the application:**
 
-4.  **Run the application:**
-
-    After the libraries are installed in your device, you can start the app with:
+    After the libraries are installed in your device and your IP address is set, you can start the app with:
 
     ```bash
     npm run start

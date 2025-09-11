@@ -18,7 +18,7 @@ export const useConnContext = () => {
 export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   const SERVER_TIME_INTERVAL = 60000;
-  const URL = 'http://192.168.100.174:3000';
+  const URL = 'http://192.168.100.10:3000';
 
   const socketRef = useRef<ReturnType<typeof io> | null>(null);
 

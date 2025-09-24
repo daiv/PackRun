@@ -43,6 +43,9 @@ TrackModel.init({
     type: DataTypes.STRING,
     allowNull: true,
   }
-}, { sequelize, tableName: "track" });
+}, {
+  sequelize, tableName: "track",
+  underscored: true
+});
 
 export default TrackModel;

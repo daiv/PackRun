@@ -45,7 +45,8 @@ RunnerModel.init(
   },
   {
     sequelize,
-    tableName: "runner"
+    tableName: "runner",
+    underscored: true
   }
 );
 

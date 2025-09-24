@@ -1,10 +1,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, SafeAreaView, StatusBar } from 'react-native';
+import { Image, StatusBar, } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { RunProvider } from './context/RunContext';
 import { ConnProvider } from './context/ConnContext';
 import { AuthProvider, useAuthContext } from './context/AuthContext';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Home from './screens/home/Home';
 import CurrentRun from './screens/currentRun/CurrentRun';
 import RunHistory from './screens/runhistory/RunHistory';
@@ -69,10 +70,12 @@ export default function App() {
     <AuthProvider>
       <ConnProvider>
         <RunProvider>
-          <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
-            <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
-            <MainAppNavigator />
-          </SafeAreaView>
+          <SafeAreaProvider>
+            <SafeAreaView style={{ flex: 1, paddingTop: 10 }}>
+              <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
+              <MainAppNavigator />
+            </SafeAreaView>
+          </SafeAreaProvider>
         </RunProvider>
       </ConnProvider>
     </AuthProvider >

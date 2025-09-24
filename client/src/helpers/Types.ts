@@ -62,7 +62,7 @@ export type RunButtonStyleProps = {
 
 export interface SmartInputProps extends TextInputProps {
   errorMessage?: string;
-  nextRef?: React.RefObject<TextInput>;
+  nextRef?: React.RefObject<TextInput | null>;
 }
 
 export type altitudesType = {

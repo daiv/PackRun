@@ -25,9 +25,22 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [lastKnownLocation, setLastKnownLocation] = useState<Location.LocationObject | null>(null);
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
   const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
+  const [gpsPermissionGranted, setGpsPermissionGranted] = useState(false);
   const { tokens, userId } = useAuthContext();
 
-  useEffect(() => {
+  useEffect(function askGpsPermissions() {
+    Location.getForegroundPermissionsAsync()
+      .then(({ status: permission }) => {
+        console.log('permission', permission);
+        if (permission === 'granted') setGpsPermissionGranted(true);
+        else Location.requestForegroundPermissionsAsync()
+          .then(({ status: permission }) => setGpsPermissionGranted(permission === 'granted'))
+          .catch(err => console.error('Error requesting GPS permissions:', err));
+      })
+      .catch(err => console.error('Error checking GPS permissions:', err));
+  }, []);
+
+  useEffect(function startIoWebSocket() {
     if (!socketRef.current) socketRef.current = io(URL, { transports: ['websocket'] });
     return () => {
       if (socketRef.current) socketRef.current.disconnect();
@@ -35,34 +48,28 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  useEffect(function updateLastKnownLocation() {
-    lastKnownLocationRef.current = lastKnownLocation;
-    console.log('Last known location updated:', lastKnownLocation);
-  }, [lastKnownLocation]);
-
   useEffect(function startLocationWatcher() {
     console.log('Starting location watcher with interval:', gpsTimeInterval);
+    console.log('GPS permission granted:', gpsPermissionGranted);
+    if (!gpsPermissionGranted) return;
+
     let locationSubscription: Location.LocationSubscription | null = null;
-    Location.requestForegroundPermissionsAsync()
-      .then(permission => {
-        if (permission.status === 'granted') {
 
-          Location.watchPositionAsync(
-            {
-              accuracy: Location.Accuracy.High,
-              timeInterval: gpsTimeInterval,
-              distanceInterval: 0,
-            }
-            , setLastKnownLocation)
-            .then(subscription => {
-              console.log('Location watcher started', subscription);
-              locationSubscription = subscription
-            }
-            ).catch(error => console.error('Error starting location watcher:', error));
-
-        } else console.error('Permission to access location was denied');
-      })
-      .catch(error => console.error('Error requesting location permissions:', error));
+    Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: gpsTimeInterval,
+        distanceInterval: 0,
+      }
+      , location => {
+        setLastKnownLocation(location);
+        console.log('Location received: ', location);
+      }, error => console.log('error occurred watching location:', error))
+      .then(subscription => {
+        console.log('Location watcher started', subscription);
+        locationSubscription = subscription
+      }
+      ).catch(error => console.error('Error starting location watcher:', error));
 
     return () => {
       if (locationSubscription) {
@@ -72,27 +79,34 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log('Location watcher stopped');
       }
     }
-  }, [gpsTimeInterval]);
-  // useEffect(function getStadia(){}, [userId]);
+  }, [gpsPermissionGranted, gpsTimeInterval]);
+
+  useEffect(function updateLastKnownLocation() {
+    lastKnownLocationRef.current = lastKnownLocation;
+    console.log('Last known location updated:', lastKnownLocation);
+  }, [lastKnownLocation]);
 
   useEffect(function reportLocationToServer() {
-    console.log('USERIDCHANGED to', userId);
-    if (userId) {
-      const report = () => {
-        const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
-        if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
-          .then(res => console.log('Reported location to server:', res))
-          .catch(err => console.error('Error reporting location to server:', err));
-      }
-      report();
-      const interval = setInterval(report, SERVER_TIME_INTERVAL);
-
-      return () => {
-        clearInterval(interval);
-        console.log('GPS interval cleared');
-      }
+    if (!userId || !tokens?.idToken || !gpsPermissionGranted) {
+      console.log('Not reporting location: missing userId, token, or permission not granted');
+      return;
     }
-  }, [userId]);
+
+    const report = () => {
+      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
+      if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
+        .then(res => console.log('Reported location to server:', res))
+        .catch(err => console.error('Error reporting location to server:', err));
+    }
+    report();
+    const interval = setInterval(report, SERVER_TIME_INTERVAL);
+
+    return () => {
+      clearInterval(interval);
+      console.log('GPS interval cleared');
+    }
+
+  }, [userId, tokens, gpsPermissionGranted]);
 
   async function fetchData<T>(endpoint: string, addUserIdToUrl: boolean, method: HttpMethod, body: unknown = null): Promise<T | null> {
     if (!userId) throw new Error('User not logged in, cannot fetch data');
@@ -112,4 +126,4 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
       {children}
     </ConnContext.Provider >
   );
-} 
+}

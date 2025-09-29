@@ -5,6 +5,7 @@ export interface chatRoom {
   id?: bigint,
   chatRoomId: string,
   usersId: string[],
+  nickname: string[],
   messages: Messages[]
 }
 
@@ -18,6 +19,7 @@ class ChatRoomModel extends Model<chatRoom> implements chatRoom {
   id!: bigint;
   chatRoomId!: string;
   usersId!: string[];
+  nickname!: string[];
   messages!: Messages[]
 }
 
@@ -34,6 +36,10 @@ ChatRoomModel.init(
       allowNull: false,
     },
     usersId: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+    },
+    nickname: {
       type: DataTypes.ARRAY(DataTypes.STRING),
       allowNull: false,
     },

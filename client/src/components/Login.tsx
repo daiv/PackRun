@@ -10,7 +10,7 @@ export default function Login({ toggleLogin }: { toggleLogin: () => void }) {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const { login, getTokens, tokens, isLoading } = useAuthContext();
+  const { login, getTokens, isLoading } = useAuthContext();
 
   const emailRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);

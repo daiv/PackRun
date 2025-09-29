@@ -12,11 +12,11 @@ export default function Chatscreen() {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
-  const { userId } = useAuthContext();
+  const { nickname } = useAuthContext();
   const { socket, fetchData } = useConnContext();
 
   const getMessages = async () => {
-    const response = await fetchData<{ author: string; time: string; message: string }[]>('/messages/', true, 'GET');
+    const response = await fetchData<{ author: string; time: string; message: string }[]>('/messages/', 'GET');
     if (response && messages.length != response.length) setMessages(response);
   };
 
@@ -35,9 +35,9 @@ export default function Chatscreen() {
   const send = async () => {
     if (input.trim() !== '') {
       getMessages();
-      fetchData<{ success: boolean, message: string }>('/messages/', true, 'POST', { message: input, author: userId, time: new Date().toISOString() })
+      fetchData<{ success: boolean, message: string }>('/messages/', 'POST', { message: input, author: nickname, time: new Date().toISOString() })
         .then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
-      socket && socket.emit('message', { author: userId, time: Date.now().toString(), message: input });
+      socket && socket.emit('message', { author: nickname, time: Date.now().toString(), message: input });
     }
   }
 
@@ -67,10 +67,10 @@ export default function Chatscreen() {
             keyExtractor={(item) => item.time}
             renderItem={({ item }) => (
               <View>
-                <Text style={item.author === userId ? styles.userText : styles.othersText}>
+                <Text style={item.author === nickname ? styles.userText : styles.othersText}>
                   {item.author}
                 </Text>
-                <View style={item.author === userId ? styles.userMessage : styles.othersMessage}>
+                <View style={item.author === nickname ? styles.userMessage : styles.othersMessage}>
                   <Text style={styles.messageText}>{item.message}</Text>
                 </View>
               </View>

@@ -1,11 +1,12 @@
 import { Request, Response } from "express"
-import RunnerModel, { Runner } from "../models/runnerModel";
 import { removeRunnerFromChatRoom } from "../helpers/chatFunctions";
-import { Op } from "sequelize";
 import ChatRoomModel from "../models/chatRoomModel";
+import { Runner } from "../types/types";
 
 //minutes of inactivity to autologout users
 const LOGIN_EXPIRES_MINUTES = 30;
+
+export const activeRunners = new Map<string, Runner>();
 
 export async function logUser(req: Request, res: Response, next: Function) {
 
@@ -13,42 +14,58 @@ export async function logUser(req: Request, res: Response, next: Function) {
   else if (incorrectCoordinates(req)) res.status(400).json({ message: 'Incorrect coordinates ' });
   else {
 
-    const { userId } = req.body;
+    const userId = req.user.email;
+    const desiredNickname = req.body.nickname;
     const { longitude, latitude } = req.body.coords;
-    const runner: Runner = { userId, longitude, latitude };
+    const updatedAt = new Date();
+    const runner: Runner = { userId, longitude, latitude, desiredNickname, updatedAt };
 
-    const isRunnerLoggedIn = await RunnerModel.findOne({ where: { userId } });
+    const isRunnerLoggedIn = activeRunners.has(userId);
 
-    if (isRunnerLoggedIn) await RunnerModel.update({ longitude, latitude }, { where: { userId } });
-    else await RunnerModel.create(runner);
+    if (isRunnerLoggedIn) activeRunners.set(userId, { ...activeRunners.get(userId)!, desiredNickname, longitude, latitude, updatedAt });
+    else activeRunners.set(userId, runner);
 
     console.log(`long=${longitude} lat=${latitude} userId=${userId}`);
+    showRunners();
     next();
   }
 }
-
+function showRunners() {
+  console.log('--- ACTIVE RUNNERS ---', activeRunners.size);
+  activeRunners.forEach((runner, userId) => {
+    console.log(`LOGGED USERS: 
+    
+    userId=${userId}, nickname=${runner.currentNickname}, desiredNickname=${runner.desiredNickname}, lat=${runner.latitude}, long=${runner.longitude}, chatRoom=${runner.assignedChatRoom}, updatedAt=${runner.updatedAt}
+    
+    
+    `);
+    console.log('-------------------')
+  })
+}
 function isMissingFields(req: Request): boolean {
-  return !req.body || Object.keys(req.body).length === 0
-    || !Object.keys(req.body).includes('userId') || !Object.keys(req.body).includes('coords')
-    || !Object.keys(req.body.coords).includes('longitude')
-    || !Object.keys(req.body.coords).includes('latitude');
+  return !req.body
+    || !req.body.hasOwnProperty('coords')
+    || !req.body.hasOwnProperty('nickname')
+    || !req.body.coords.hasOwnProperty('latitude')
+    || !req.body.coords.hasOwnProperty('longitude');
 }
 
 function incorrectCoordinates(req: Request) {
-  return req.body.coords.latitude < -90 || req.body.coords.latitude > 90 || req.body.coords.longitude < -180 || req.body.coords.longitude > 180;
+  return req.body.coords.latitude < -90
+    || req.body.coords.latitude > 90
+    || req.body.coords.longitude < -180
+    || req.body.coords.longitude > 180;
 }
 
 async function checkExpiringSessions() {
 
-  const expiringRunners = await RunnerModel.findAll();
-  if (expiringRunners.length === 0) await ChatRoomModel.destroy({ where: { id: { [Op.gt]: 0 } } });
-  else {
-    Promise.all(expiringRunners.filter(runner => runner.updatedAt <= new Date(Date.now() - LOGIN_EXPIRES_MINUTES * 60 * 1000))
-      .map(async (runner) => removeRunnerFromChatRoom(runner.userId, runner.assignedChatRoom)))
-      .catch(err => console.log(err))
-      .finally(() => checkForEmptyChatRooms());
-    await RunnerModel.destroy({ where: { updatedAt: { [Op.lt]: new Date(Date.now() - LOGIN_EXPIRES_MINUTES * 60 * 1000) } } });
-  }
+  activeRunners.forEach((runner, userId) => {
+    if (runner.updatedAt && runner.updatedAt <= new Date(Date.now() - LOGIN_EXPIRES_MINUTES * 60 * 1000)) {
+      runner.assignedChatRoom && removeRunnerFromChatRoom(runner);
+      activeRunners.delete(userId);
+    }
+  });
+  checkForEmptyChatRooms();
 }
 
 async function checkForEmptyChatRooms() {
@@ -56,19 +73,20 @@ async function checkForEmptyChatRooms() {
   Promise.all(chatRooms.map(async (chatRoom) => chatRoom.usersId.length === 0 && await ChatRoomModel.destroy({ where: { chatRoomId: chatRoom.dataValues.chatRoomId } })));
 }
 
-export async function checkIfLogged(req: Request, res: Response, next: Function) {
-  const userId = req.params.userId;
-  const isLoggedIn = await RunnerModel.findOne({ where: { userId } });
-
-  isLoggedIn ? next() : res.status(400).json({ message: 'User not logged in' });
-
+export async function checkIfLoggedIn(req: Request, res: Response, next: Function) {
+  console.log('Checking if user is logged in');
+  activeRunners.has(req.user.email)
+    ?
+    next()
+    :
+    res.status(400).json({ message: 'User not logged in' });
 }
+
 export async function checkUserBody(req: Request, res: Response, next: Function) {
-  const keys = Object.keys(req.body);
-  if (!keys.includes('author')) res.status(400).json({ message: 'Missing author' });
-  else if (!keys.includes('message')) res.status(400).json({ message: 'Missing message' });
-  else if (!keys.includes('time')) res.status(400).json({ message: 'Missing time' });
-  else if (req.body.time && isNaN(Date.parse(req.body.time))) res.status(400).json({ message: 'Time is not a date formatted string' });
-  else next();
+  req.body.hasOwnProperty('message')
+    ?
+    next()
+    :
+    res.status(400).json({ message: 'Missing message' });
 }
 if (process.env.NODE_ENV !== 'test') setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

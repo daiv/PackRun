@@ -40,7 +40,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   useEffect(function updateServerWithLastKnownLocation() {
     if (lastKnownLocation && isRunning && trackId) {
-      fetchData<FeatureCollection | null>(`/tracks/${trackId}/`, true, 'POST', lastKnownLocation).then(setRoute);
+      fetchData<FeatureCollection | null>(`/tracks/${trackId}/`, 'POST', lastKnownLocation).then(setRoute);
     }
 
   }, [lastKnownLocation]);
@@ -49,7 +49,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     if (isRunning) setIsRunning(false);
     else {
       try {
-        const response = await fetchData<{ trackId: string }>('/tracks/', true, 'PUT', null);
+        const response = await fetchData<{ trackId: string }>('/tracks/', 'PUT', null);
         if (response?.trackId) {
           console.log('Track created with ID:', response.trackId);
           setTrackId(response.trackId);

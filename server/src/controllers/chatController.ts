@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import ChatRoomModel from "../models/chatRoomModel";
-import { Runner } from "../models/runnerModel";
 import { assignToChatRoom, getAssignedChatRoom } from "../helpers/chatFunctions";
+import { Runner } from "../types/types";
+import { activeRunners } from "./loginController";
 
 
 export async function getAllMessages(req: Request, res: Response) {
 
-  const chatRoomId = await getAssignedChatRoom(req.params.userId);
+  const chatRoomId = await getAssignedChatRoom(req.user.email);
   if (chatRoomId) {
     const room = await ChatRoomModel.findOne({ where: { chatRoomId } });
     if (room && room.messages) res.json(room.messages);
@@ -15,8 +16,7 @@ export async function getAllMessages(req: Request, res: Response) {
 };
 
 export async function postMessage(req: Request, res: Response) {
-
-  const chatRoomId = await getAssignedChatRoom(req.params.userId);
+  const chatRoomId = await getAssignedChatRoom(req.user.email);
   if (chatRoomId && req.body) {
     const room = await ChatRoomModel.findOne({ where: { chatRoomId } });
     if (room && room.messages) {
@@ -29,10 +29,9 @@ export async function postMessage(req: Request, res: Response) {
 };
 
 export async function assignChatRoom(req: Request, res: Response) {
-  const { userId } = req.body;
-  const { longitude, latitude } = req.body.coords;
-  const runner: Runner = { userId, longitude, latitude }
-  const response = await assignToChatRoom(runner);
+  const runner = activeRunners.get(req.user.email);
+  const response = runner ? await assignToChatRoom(runner) : null;
+
   if (response) res.status(200).json(response);
   else res.status(500).json({ message: 'Server error' });
 }

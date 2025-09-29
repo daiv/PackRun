@@ -16,7 +16,7 @@ export const useAuthContext = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [nickname, setNickname] = useState<string | null>(null);
 
   useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
   const createAccount = useCallback(async (email: string, password: string)
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const tokensResponse = await fetchAuthSession();
       if (tokensResponse.tokens) {
         setTokens(tokensResponse.tokens);
-        setUserId(tokensResponse.tokens.idToken?.payload.sub || username);
+        setNickname(username);
       } else throw new Error('No tokens received after login');
 
       return { success: true, message: 'Login successful' };
@@ -138,7 +138,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         console.log('tokens received ', response.tokens);
         setTokens(response.tokens);
-        setUserId(response.tokens.idToken?.payload.sub || null);
+        // setUserId(response.tokens.idToken?.payload.sub || null);
+        const user = await getUser();
+        setNickname(user?.signInDetails?.loginId || 'user');
         return response.tokens;
       }
       throw new Error('No tokens received');
@@ -166,7 +168,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
 
       setTokens(undefined);
-      setUserId(null);
+      setNickname(null);
       console.log('signoutResponse', signOutResponse);
       return true;
     } catch (error: unknown) {
@@ -184,7 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getTokens,
     getUser,
     tokens,
-    userId,
+    nickname,
     isLoading,
   }
 

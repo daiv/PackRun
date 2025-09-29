@@ -23,11 +23,11 @@ const icons = {
 }
 
 function MainAppNavigator() {
-  const { userId } = useAuthContext();
+  const { nickname } = useAuthContext();
   const NavBar = createBottomTabNavigator();
   const screenOptions = { headerShown: false, tabBarShowLabel: false, tabBarStyle: { height: 100, paddingTop: 20 } }
 
-  if (userId) {
+  if (nickname) {
     return (
       <NavigationContainer>
         <NavBar.Navigator screenOptions={screenOptions}>

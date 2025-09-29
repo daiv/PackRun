@@ -20,7 +20,8 @@ export default function RunButton({ bottom }: RunButtonStyleProps) {
     }
   }, [isRunning]);
 
-  const handleClick = toogleRunning
+  const handleClick = toogleRunning;
+  
   let customStyle = bottom
     ?
     { ...styles.startbtn, backgroundColor: isRunning ? 'rgba(236, 97, 35, 0.88)' : 'rgba(48, 172, 77, 1)', bottom }

@@ -1,4 +1,15 @@
 
+export interface Runner {
+  id?: bigint,
+  userId: string,
+  latitude: number,
+  longitude: number,
+  assignedChatRoom?: string,
+  updatedAt?: Date;
+  desiredNickname: string;
+  currentNickname?: string
+}
+
 export type LocationObjectCoords = {
   /**
    * The latitude in degrees.

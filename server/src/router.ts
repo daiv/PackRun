@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { checkIfLogged, logUser } from './controllers/loginController';
+import { checkIfLoggedIn, logUser } from './controllers/loginController';
 import { assignChatRoom, getStadiaApiKey } from './controllers/chatController';
 
 import messagesRouter from './routers/messagesRouter';
@@ -9,12 +9,16 @@ import auth from './middleware/auth';
 
 const router: Router = express.Router();
 
+router.use(auth);
 //logs the user in and returns assigned chatroom and nearbyUsers
-router.post('/locations', auth, logUser, assignChatRoom);
 
-router.get('/api/stadia/:userId/', auth, /* checkIfLogged, */ getStadiaApiKey);
+router.post('/locations', logUser, assignChatRoom);
 
-router.use('/tracks', auth, tracksRouter);
-router.use('/messages', auth, messagesRouter);
+router.use(checkIfLoggedIn);
+
+router.get('/api/stadia/', getStadiaApiKey);
+
+router.use('/tracks', tracksRouter);
+router.use('/messages', messagesRouter);
 
 export default router;

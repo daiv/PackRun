@@ -17,7 +17,7 @@ export const useConnContext = () => {
 
 export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-  const SERVER_TIME_INTERVAL = 60000;
+  const SERVER_TIME_INTERVAL = 6000;
   const URL = 'http://192.168.100.10:3000';
 
   const socketRef = useRef<ReturnType<typeof io> | null>(null);
@@ -26,7 +26,8 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const lastKnownLocationRef = useRef<Location.LocationObject | null>(null);
   const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
   const [gpsPermissionGranted, setGpsPermissionGranted] = useState(false);
-  const { tokens, userId } = useAuthContext();
+  const [isConnected, setIsConnected] = useState(false);
+  const { tokens, nickname } = useAuthContext();
 
   useEffect(function askGpsPermissions() {
     Location.getForegroundPermissionsAsync()
@@ -87,15 +88,18 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [lastKnownLocation]);
 
   useEffect(function reportLocationToServer() {
-    if (!userId || !tokens?.idToken || !gpsPermissionGranted) {
+    if (!nickname || !tokens?.idToken || !gpsPermissionGranted) {
       console.log('Not reporting location: missing userId, token, or permission not granted');
       return;
     }
 
     const report = () => {
-      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, userId, timestamp: new Date().toISOString() } : null;
+      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, nickname: nickname, timestamp: new Date().toISOString() } : null;
       if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
-        .then(res => console.log('Reported location to server:', res))
+        .then(res => {
+          setIsConnected(true);
+          console.log('Reported location to server:', res);
+        })
         .catch(err => console.error('Error reporting location to server:', err));
     }
     report();
@@ -106,11 +110,11 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('GPS interval cleared');
     }
 
-  }, [userId, tokens, gpsPermissionGranted]);
+  }, [nickname, tokens, gpsPermissionGranted]);
 
-  async function fetchData<T>(endpoint: string, addUserIdToUrl: boolean, method: HttpMethod, body: unknown = null): Promise<T | null> {
-    if (!userId) throw new Error('User not logged in, cannot fetch data');
-    else return await fetchFactory<T>(URL + endpoint + (addUserIdToUrl ? userId : ''), method, tokens?.idToken?.toString(), body);
+  async function fetchData<T>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<T | null> {
+    if (!nickname) throw new Error('User not logged in, cannot fetch data');
+    else return await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
   }
 
   const contextValue: ConnContextType = {
@@ -119,6 +123,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLastKnownLocation,
     setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
     fetchData,
+    isConnected
   };
 
   return (

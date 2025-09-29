@@ -20,7 +20,7 @@ export default function RunHistory() {
   const flatListRef = useRef<FlatList>(null);
 
   const getRuns = async (): Promise<RunResponse[]> => {
-    const runsArray = await fetchData<RunResponse[] | null>('/tracks/', true, 'GET');
+    const runsArray = await fetchData<RunResponse[] | null>('/tracks/', 'GET');
     console.log('response', runsArray);
     return runsArray ? runsArray : [];
   }

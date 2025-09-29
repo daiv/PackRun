@@ -25,6 +25,8 @@ export default async function auth(req: Request, res: Response, next: NextFuncti
     const payload = await verifier.verify(token);
     req.user = payload;
     req.user.email = payload.email;
+    if (!req.user.email) return res.status(401).json({ message: 'Email not found in token' });
+    
   } catch (error) {
     res.status(403).json({ message: 'Invalid token' });
   }

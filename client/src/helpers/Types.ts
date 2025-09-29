@@ -16,13 +16,14 @@ export type ConnContextType = {
   socket: Socket | null;
   setLastKnownLocation: (arg0: Location.LocationObject) => void;
   setRunningMode: (arg0: boolean) => void;
-  fetchData: <T>(endpoint: string, userIdNeeded: boolean, method: HttpMethod, body?: unknown) => Promise<T | null>;
+  fetchData: <T>(endpoint: string, method: HttpMethod, body?: unknown) => Promise<T | null>;
+  isConnected: boolean;
 }
 
 export type AuthResponse = { success: boolean, message: string, error?: Error, errorCode?: number };
 
 export type AuthContextType = {
-  userId: string | null;
+  nickname: string | null;
   createAccount: (email: string, password: string) => Promise<AuthResponse>;
   confirmAccount: (username: string, confirmationCode: string) => Promise<AuthResponse>;
   resendConfirmationCode: (username: string) => Promise<boolean>;

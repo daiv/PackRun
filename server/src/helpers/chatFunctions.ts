@@ -1,10 +1,11 @@
+import { activeRunners } from "../controllers/loginController";
 import ChatRoomModel, { chatRoom } from "../models/chatRoomModel";
-import RunnerModel, { Runner } from "../models/runnerModel";
+import { Runner } from "../types/types";
 
 const CHAT_ROOM_AREA_IN_MTS = 3 * 1000;
 const CHAT_ROOM_TOLERANCY = 250;
 
-export async function assignToChatRoom(runner: Runner): Promise<any | undefined> {
+export async function assignToChatRoom_old(runner: Runner): Promise<any | undefined> {
 
   let chatRoomId = await getNearestChatRoom(runner);
   if (!chatRoomId) chatRoomId = await createNewChatRoom(runner);
@@ -14,18 +15,18 @@ export async function assignToChatRoom(runner: Runner): Promise<any | undefined>
 
   if (nearestChatRoom) {
 
-    const runnerDbObj = await RunnerModel.findOne({ where: { userId: runner.userId } });
+    const runnerDbObj = activeRunners.get(runner.userId);
 
-    if (runnerDbObj && nearestChatRoom.dataValues.chatRoomId && nearestChatRoom.dataValues.chatRoomId !== runnerDbObj.assignedChatRoom) {
+    if (runnerDbObj && nearestChatRoom.dataValues.chatRoomId && runnerDbObj.assignedChatRoom && nearestChatRoom.dataValues.chatRoomId !== runnerDbObj.assignedChatRoom) {
 
-      await removeRunnerFromChatRoom(runner.userId, runnerDbObj.assignedChatRoom);
+      await removeRunnerFromChatRoom(runner);
 
       if (!nearestChatRoom.dataValues.usersId.includes(runner.userId)) {
         nearestChatRoom.usersId = [...nearestChatRoom.dataValues.usersId, runner.userId];
         nearestChatRoom.save();
       }
       runnerDbObj.assignedChatRoom = nearestChatRoom.chatRoomId;
-      await runnerDbObj.save();
+      activeRunners.set(runner.userId, runnerDbObj);
     }
 
     const nearbyUsers = nearestChatRoom.usersId.length - 1;
@@ -33,10 +34,58 @@ export async function assignToChatRoom(runner: Runner): Promise<any | undefined>
 
   }
 }
+export async function assignToChatRoom(runner: Runner): Promise<any | undefined> {
+
+  let chatRoomId = await getNearestChatRoom(runner);
+  let nearbyUsers = -1;
+
+  if (!chatRoomId) {
+    nearbyUsers = 0;
+    chatRoomId = await createNewChatRoom(runner);
+    if (!chatRoomId) return undefined;
+  }
+
+  const nearestChatRoom = await ChatRoomModel.findOne({ where: { chatRoomId } });
+
+  if (nearestChatRoom) {
+
+    if (runner.assignedChatRoom !== nearestChatRoom.chatRoomId) {
+      await removeRunnerFromChatRoom(runner);
+    }
+
+    let newNickname = runner.desiredNickname;
+    const alreadyInRoom = nearestChatRoom.dataValues.usersId.includes(runner.userId);
+    const match = runner.currentNickname && runner.currentNickname.match(/^(.+)-\d{2}$/);
+
+    const baseNickname = match ? match[1] : runner.currentNickname;
+
+    const isNicknameDesired = baseNickname === runner.desiredNickname;
+
+
+    if (!alreadyInRoom ||
+      !isNicknameDesired) {
+      nearestChatRoom.nickname = nearestChatRoom.nickname.filter(nickname => nickname !== runner.currentNickname);
+      let counter = 0;
+      while (nearestChatRoom.nickname.includes(newNickname)) {
+        counter++;
+        newNickname = `${runner.desiredNickname}-${(counter < 10 ? '0' : '') + counter}`;
+      }
+      nearestChatRoom.nickname = [...nearestChatRoom.nickname, newNickname];
+      nearestChatRoom.usersId = [...nearestChatRoom.usersId.filter(id => id !== runner.userId), runner.userId];
+    }
+    nearestChatRoom.save();
+
+    if (nearbyUsers === -1) nearbyUsers = nearestChatRoom.usersId.length - 1;
+    activeRunners.set(runner.userId, { ...runner, currentNickname: newNickname, assignedChatRoom: nearestChatRoom.chatRoomId });
+    return { assignedChatRoom: chatRoomId, nearbyUsers };
+  }
+
+  return undefined;
+}
 
 async function createNewChatRoom(runner: Runner) {
   const chatRoomId = runner.latitude + '_' + runner.longitude;
-  const newChatRoom = { chatRoomId, usersId: [], messages: [] }
+  const newChatRoom = { chatRoomId, usersId: [], nickname: [], messages: [] }
   const isChatRoomCreated = await ChatRoomModel.create(newChatRoom);
   return isChatRoomCreated ? chatRoomId : undefined;
 }
@@ -60,7 +109,9 @@ async function getNearestChatRoom(referencePoint: Runner): Promise<string | unde
   }
 }
 
-export async function removeRunnerFromChatRoom(runnerId: string, chatRoomId: string) {
+export async function removeRunnerFromChatRoom(runner: Runner) {
+  const runnerId = runner.userId;
+  const chatRoomId = runner.assignedChatRoom;
 
   if (chatRoomId && runnerId) {
     const chatRoom = await ChatRoomModel.findOne({ where: { chatRoomId } });
@@ -68,7 +119,11 @@ export async function removeRunnerFromChatRoom(runnerId: string, chatRoomId: str
       if (chatRoom.usersId.length > 1) {
 
         await ChatRoomModel
-          .update({ usersId: chatRoom.dataValues.usersId.filter(userId => userId != runnerId) },
+          .update(
+            {
+              usersId: chatRoom.dataValues.usersId.filter(userId => userId != runnerId),
+              nickname: chatRoom.dataValues.nickname.filter(nick => nick != runner.currentNickname)
+            },
             { where: { chatRoomId } })
       } else await chatRoom.destroy();
     }
@@ -77,7 +132,7 @@ export async function removeRunnerFromChatRoom(runnerId: string, chatRoomId: str
 
 export async function getAssignedChatRoom(userId: string) {
   if (!userId) return undefined;
-  const runner = await RunnerModel.findOne({ where: { userId } });
+  const runner = activeRunners.get(userId);
   return runner?.assignedChatRoom;
 }
 

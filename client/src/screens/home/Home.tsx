@@ -19,7 +19,7 @@ export default function HomePage() {
 
   const [stadiaKey, setStadiaKey] = useState('');
   const { lastKnownLocation, isRunning, route } = useRunContext();
-  const { fetchData } = useConnContext();
+  const { fetchData, isConnected } = useConnContext();
 
   const mapStyle = 'https://tiles.stadiamaps.com/styles/outdoors.json?api_key=';
 
@@ -32,15 +32,15 @@ export default function HomePage() {
         longitudeDelta: 0.005,
       });
     }
-    console.log('reported', route);
+    console.log('reported', lastKnownLocation);
   }, [lastKnownLocation]);
-  
+
   useEffect(function getStadia() {
-    fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', true, 'GET', null).then(response => {
-      if (response) setStadiaKey(response.stadiaApiKey);
-    })
-      .catch(console.error);
-  }, []);
+    isConnected &&
+      fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', 'GET', null)
+        .then(response => response && setStadiaKey(response.stadiaApiKey))
+        .catch(console.error);
+  }, [isConnected]);
 
   return (
     <View style={styles.container}>

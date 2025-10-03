@@ -17,18 +17,20 @@ export default function Chatscreen() {
 
   const getMessages = async () => {
     const response = await fetchData<{ author: string; time: string; message: string }[]>('/messages/', 'GET');
-    if (response && messages.length != response.length) setMessages(response);
+    if (response?.success) response.data && messages.length != response.data.length && setMessages(response.data);
+    else console.error('Error getting messages', response?.error);
   };
 
   useEffect(() => {
     socket && socket.on('message', (message: { author: string; time: string; message: string }) => {
       setMessages(prev => [...prev, message]);
     });
-    setInterval(() => {
+    const interval = setInterval(() => {
       getMessages();
     }, 5000)
     return () => {
       socket && socket.off('message');
+      clearInterval(interval);
     };
   }, []);
 
@@ -36,7 +38,7 @@ export default function Chatscreen() {
     if (input.trim() !== '') {
       getMessages();
       fetchData<{ success: boolean, message: string }>('/messages/', 'POST', { message: input, author: nickname, time: new Date().toISOString() })
-        .then(() => setInput('')).catch((error) => console.error('Error sending message:', error));
+        .then(response => response?.success ? setInput('') : console.error('Error sending message:', response?.error));
       socket && socket.emit('message', { author: nickname, time: Date.now().toString(), message: input });
     }
   }

@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState, useRef, useContext, useCallback } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
-import { ConnContextType, HttpMethod } from '../helpers/Types';
+import { ConnContextType, FetchDataResult, HttpMethod } from '../helpers/Types';
 import { useAuthContext } from './AuthContext';
 import io from 'socket.io-client';
 
@@ -94,7 +94,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const report = () => {
-      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, nickname: nickname, timestamp: new Date().toISOString() } : null;
+      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, timestamp: new Date().toISOString() } : null;
       if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
         .then(res => {
           setIsConnected(true);
@@ -112,9 +112,14 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   }, [nickname, tokens, gpsPermissionGranted]);
 
-  async function fetchData<T>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<T | null> {
-    if (!nickname) throw new Error('User not logged in, cannot fetch data');
-    else return await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
+  async function fetchData<T>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<FetchDataResult<T>> {
+    if (!nickname) return { success: false, error: 'User not logged in, cannot fetch data' };
+    try {
+      const data = await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: (error as Error).message || 'Unknown error' };
+    }
   }
 
   const contextValue: ConnContextType = {

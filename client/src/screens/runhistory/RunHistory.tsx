@@ -20,9 +20,14 @@ export default function RunHistory() {
   const flatListRef = useRef<FlatList>(null);
 
   const getRuns = async (): Promise<RunResponse[]> => {
-    const runsArray = await fetchData<RunResponse[] | null>('/tracks/', 'GET');
+    const runsArray = await fetchData<RunResponse[]>('/tracks/', 'GET');
     console.log('response', runsArray);
-    return runsArray ? runsArray : [];
+    if (runsArray?.success === false) {
+      console.error('Error getting runs from server', runsArray.error);
+      return [];
+    } else {
+      return runsArray?.data ? runsArray.data : [];
+    }
   }
 
   useEffect(() => {
@@ -47,8 +52,7 @@ export default function RunHistory() {
             profile: run.altitudes
           };
         }).sort((a: any, b: any) => { return a.id - b.id })
-      ))
-      .catch(error => console.error('Error fetching runs:', error));
+      ));
     console.log('final runs', runs);
   }, [refresh]);
 

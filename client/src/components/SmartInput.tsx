@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, TextInput, View, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import { SmartInputProps } from "../helpers/Types";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -39,5 +39,4 @@ const SmartInput = React.forwardRef<TextInput, SmartInputProps>((props, ref) => 
     </>
   )
 });
-const styles = StyleSheet.create({});
 export default SmartInput;

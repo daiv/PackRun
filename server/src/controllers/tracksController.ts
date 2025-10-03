@@ -1,7 +1,8 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import { addToTracking, createTrack, deleteTrackFromDb, getTrackFromDb, getTracksInfoFromDb } from "../helpers/tracksFunctions";
+import { AuthRequest } from "../types/types";
 
-export async function postTrack(req: Request, res: Response) {
+export async function postTrack(req: AuthRequest, res: Response) {
 
   try {
     const userId = req.user.email;
@@ -16,13 +17,13 @@ export async function postTrack(req: Request, res: Response) {
   }
 }
 
-export function checkTrackBody(req: Request, res: Response, next: Function) {
+export function checkTrackBody(req: AuthRequest, res: Response, next: Function) {
   req.body && req.body.hasOwnProperty('coords')
     ? next()
     : res.status(400).json({ message: 'Missing body fields' });
 }
 
-export function createNewTrack(req: Request, res: Response) {
+export function createNewTrack(req: AuthRequest, res: Response) {
   const userId = req.user.email;
 
   createTrack(userId)
@@ -33,7 +34,7 @@ export function createNewTrack(req: Request, res: Response) {
     });
 }
 
-export async function getTrack(req: Request, res: Response) {
+export async function getTrack(req: AuthRequest, res: Response) {
   const userId = req.user.email;
   const trackId = req.params.trackId;
   const result = await getTrackFromDb(userId, trackId);
@@ -42,13 +43,13 @@ export async function getTrack(req: Request, res: Response) {
   else res.status(500).json({ message: 'Server error' });
 }
 
-export async function getTracksInfo(req: Request, res: Response) {
+export async function getTracksInfo(req: AuthRequest, res: Response) {
   const userId = req.user.email;
   const result = await getTracksInfoFromDb(userId);
   res.status(200).json(result);
 }
 
-export async function deleteTrack(req: Request, res: Response) {
+export async function deleteTrack(req: AuthRequest, res: Response) {
   const userId = req.user.email;
   const trackId = req.params.trackId;
   if (await deleteTrackFromDb(userId, trackId)) res.status(200).json({ message: 'Track deleted' });

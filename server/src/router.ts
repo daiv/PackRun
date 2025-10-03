@@ -6,6 +6,7 @@ import { assignChatRoom, getStadiaApiKey } from './controllers/chatController';
 import messagesRouter from './routers/messagesRouter';
 import tracksRouter from './routers/tracksRouter';
 import auth from './middleware/auth';
+import profileRouter from './routers/profileRouter';
 
 const router: Router = express.Router();
 
@@ -20,5 +21,7 @@ router.get('/api/stadia/', getStadiaApiKey);
 
 router.use('/tracks', tracksRouter);
 router.use('/messages', messagesRouter);
+
+router.use('/profile', profileRouter);
 
 export default router;

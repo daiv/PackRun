@@ -10,7 +10,7 @@ type userPayload = CognitoIdTokenPayload & {
 declare global {
   namespace Express {
     interface Request {
-      user?: userPayload;
+      user: userPayload;
     }
   }
 }

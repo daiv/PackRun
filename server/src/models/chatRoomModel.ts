@@ -1,4 +1,4 @@
-import { Model, DataTypes, DataTypeAbstract } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "./model";
 
 export interface chatRoom {

@@ -1,3 +1,5 @@
+import { userPayload } from "./express";
+import { Request } from "express";
 
 export interface Runner {
   id?: bigint,
@@ -9,7 +11,9 @@ export interface Runner {
   desiredNickname: string;
   currentNickname?: string
 }
-
+export interface AuthRequest extends Request {
+  user: userPayload
+}
 export type LocationObjectCoords = {
   /**
    * The latitude in degrees.

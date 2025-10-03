@@ -40,7 +40,8 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   useEffect(function updateServerWithLastKnownLocation() {
     if (lastKnownLocation && isRunning && trackId) {
-      fetchData<FeatureCollection | null>(`/tracks/${trackId}/`, 'POST', lastKnownLocation).then(setRoute);
+      fetchData<FeatureCollection>(`/tracks/${trackId}/`, 'POST', lastKnownLocation)
+        .then(response => response?.success && setRoute(response.data));
     }
 
   }, [lastKnownLocation]);
@@ -48,16 +49,12 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
   async function toogleRunning() {
     if (isRunning) setIsRunning(false);
     else {
-      try {
-        const response = await fetchData<{ trackId: string }>('/tracks/', 'PUT', null);
-        if (response?.trackId) {
-          console.log('Track created with ID:', response.trackId);
-          setTrackId(response.trackId);
-          setIsRunning(true);
-        }
-      } catch (error) {
-        Alert.alert('Error Failed to start the run. Please try again later.');
-      }
+      const response = await fetchData<{ trackId: string }>('/tracks/', 'PUT', null);
+      if (response?.success) {
+        response.data?.trackId && setTrackId(response.data.trackId);
+        console.log('Track created with ID:', response.data?.trackId);
+        setIsRunning(true);
+      } else Alert.alert('Error Failed to start the run. Please try again later. ', response?.error || 'Unknown error.');
     }
   }
 

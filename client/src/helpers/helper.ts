@@ -12,7 +12,7 @@ export const checkPassword = (password: string) => {
   return '';
 }
 
-export const avoidFirstRender = (ref: React.MutableRefObject<boolean>, setter: React.Dispatch<React.SetStateAction<string>>, field: string, value: string) => {
+export const avoidFirstRender = (ref: React.RefObject<boolean>, setter: React.Dispatch<React.SetStateAction<string>>, field: string, value: string) => {
   if (ref.current) ref.current = false;
   else {
     switch (field) {

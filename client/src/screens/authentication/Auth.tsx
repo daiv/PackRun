@@ -8,7 +8,7 @@ import { styles } from "./styles";
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
 
-  const toggleLogin = () => setIsLogin(() => !isLogin);
+  const toggleLogin = () => setIsLogin(isLogin => !isLogin);
 
   return (
     <View style={styles.mainContainer}>

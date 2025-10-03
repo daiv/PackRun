@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import SmartInput from "./SmartInput";
 import styles from "./styles";
 import { useAuthContext } from "../context/AuthContext";
+import { useConnContext } from "../context/ConnContext";
 
 
 export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
@@ -23,6 +24,7 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
 
 
   const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens, isLoading } = useAuthContext();
+  const { fetchData } = useConnContext();
 
   const emailRef = useRef<TextInput>(null);
   const nickRef = useRef<TextInput>(null);
@@ -85,8 +87,17 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
     if (responseConfirmation.success) {
       setModalVisible(false);
       const loginResponse = await login(email, password);
-      if (loginResponse.success) getTokens();
-
+      if (loginResponse.success) {
+        const tokens = await getTokens();
+        if (tokens) {
+          const response = await fetchData('/profile', 'POST', { desiredNickname: nick });
+          if (response?.success) {
+            console.warn('Nickname set on server successfully');
+          } else {
+            console.warn('Could not set nickname on server', response?.error);
+          }
+        }
+      }
       console.warn('Account confirmed successfully:', responseConfirmation.message);
 
     } else {
@@ -134,15 +145,15 @@ export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void
         nextRef={nickRef}
         value={email}
       />
-      {
-        <SmartInput
-          ref={nickRef}
-          errorMessage={nickError}
-          onChangeText={setNick}
-          placeholder="Nick"
-          nextRef={passRef}
-          value={nick} />
-      }
+
+      <SmartInput
+        ref={nickRef}
+        errorMessage={nickError}
+        onChangeText={setNick}
+        placeholder="Nick"
+        nextRef={passRef}
+        value={nick} />
+
 
       <Modal animationType="fade"
         transparent={true}

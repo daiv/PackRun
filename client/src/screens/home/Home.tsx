@@ -38,8 +38,10 @@ export default function HomePage() {
   useEffect(function getStadia() {
     isConnected &&
       fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', 'GET', null)
-        .then(response => response && setStadiaKey(response.stadiaApiKey))
-        .catch(console.error);
+        .then(response => {
+          if (response?.success) response.data?.stadiaApiKey && setStadiaKey(response.data.stadiaApiKey);
+          else console.error(response?.error);
+        });
   }, [isConnected]);
 
   return (

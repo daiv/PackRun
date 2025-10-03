@@ -16,9 +16,12 @@ export type ConnContextType = {
   socket: Socket | null;
   setLastKnownLocation: (arg0: Location.LocationObject) => void;
   setRunningMode: (arg0: boolean) => void;
-  fetchData: <T>(endpoint: string, method: HttpMethod, body?: unknown) => Promise<T | null>;
+  fetchData: <T>(endpoint: string, method: HttpMethod, body?: unknown) => Promise<FetchDataResult<T> | null>;
   isConnected: boolean;
 }
+export type FetchDataResult<T> =
+  | { success: true, data: T | null }
+  | { success: false, error: string };
 
 export type AuthResponse = { success: boolean, message: string, error?: Error, errorCode?: number };
 

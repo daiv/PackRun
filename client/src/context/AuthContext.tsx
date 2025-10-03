@@ -19,6 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [nickname, setNickname] = useState<string | null>(null);
 
   useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
+
   const createAccount = useCallback(async (email: string, password: string)
     : Promise<AuthResponse> => {
     try {
@@ -151,12 +152,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const getUser = useCallback(async () => {
     setIsLoading(true);
-    const userResponse = await getCurrentUser();
-    setIsLoading(false);
-    if (userResponse) {
-      console.log('Current user:', userResponse);
-      return userResponse;
-    }
+    try {
+      const userResponse = await getCurrentUser();
+      setIsLoading(false);
+      if (userResponse) {
+        console.log('Current user:', userResponse);
+        return userResponse;
+      }
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      return null;
+    } finally { setIsLoading(false); }
     return null;
 
   }, []);

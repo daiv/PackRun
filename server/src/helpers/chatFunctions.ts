@@ -1,3 +1,4 @@
+import { LocationResponse } from "@common";
 import { activeRunners } from "../controllers/loginController";
 import ChatRoomModel, { chatRoom } from "../models/chatRoomModel";
 import { Runner } from "../types/types";
@@ -5,36 +6,7 @@ import { Runner } from "../types/types";
 const CHAT_ROOM_AREA_IN_MTS = 3 * 1000;
 const CHAT_ROOM_TOLERANCY = 250;
 
-export async function assignToChatRoom_old(runner: Runner): Promise<any | undefined> {
-
-  let chatRoomId = await getNearestChatRoom(runner);
-  if (!chatRoomId) chatRoomId = await createNewChatRoom(runner);
-  if (!chatRoomId) return undefined;
-
-  const nearestChatRoom = await ChatRoomModel.findOne({ where: { chatRoomId } });
-
-  if (nearestChatRoom) {
-
-    const runnerDbObj = activeRunners.get(runner.userId);
-
-    if (runnerDbObj && nearestChatRoom.dataValues.chatRoomId && runnerDbObj.assignedChatRoom && nearestChatRoom.dataValues.chatRoomId !== runnerDbObj.assignedChatRoom) {
-
-      await removeRunnerFromChatRoom(runner);
-
-      if (!nearestChatRoom.dataValues.usersId.includes(runner.userId)) {
-        nearestChatRoom.usersId = [...nearestChatRoom.dataValues.usersId, runner.userId];
-        nearestChatRoom.save();
-      }
-      runnerDbObj.assignedChatRoom = nearestChatRoom.chatRoomId;
-      activeRunners.set(runner.userId, runnerDbObj);
-    }
-
-    const nearbyUsers = nearestChatRoom.usersId.length - 1;
-    return { assignedChatRoom: chatRoomId, nearbyUsers };
-
-  }
-}
-export async function assignToChatRoom(runner: Runner): Promise<any | undefined> {
+export async function assignToChatRoom(runner: Runner): Promise<LocationResponse | undefined> {
 
   let chatRoomId = await getNearestChatRoom(runner);
   let nearbyUsers = -1;
@@ -77,7 +49,7 @@ export async function assignToChatRoom(runner: Runner): Promise<any | undefined>
 
     if (nearbyUsers === -1) nearbyUsers = nearestChatRoom.usersId.length - 1;
     activeRunners.set(runner.userId, { ...runner, currentNickname: newNickname, assignedChatRoom: nearestChatRoom.chatRoomId });
-    return { assignedChatRoom: chatRoomId, nearbyUsers };
+    return { assignedChatRoom: chatRoomId, nearbyUsers, nickName: newNickname };
   }
 
   return undefined;

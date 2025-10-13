@@ -26,7 +26,9 @@ export type FetchDataResult<T> =
 export type AuthResponse = { success: boolean, message: string, error?: Error, errorCode?: number };
 
 export type AuthContextType = {
-  nickname: string | null;
+  userId: string | null;
+  nickName: string | null;
+  setNickName: React.Dispatch<React.SetStateAction<string | null>>;
   createAccount: (email: string, password: string) => Promise<AuthResponse>;
   confirmAccount: (username: string, confirmationCode: string) => Promise<AuthResponse>;
   resendConfirmationCode: (username: string) => Promise<boolean>;

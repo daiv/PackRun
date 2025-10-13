@@ -1,27 +1,3 @@
-import { Message } from "@common";
-import { userPayload } from "./express";
-import { Request } from "express";
-
-export interface Runner {
-  id?: bigint,
-  userId: string,
-  latitude: number,
-  longitude: number,
-  assignedChatRoom?: string,
-  updatedAt?: Date;
-  desiredNickname: string;
-  currentNickname?: string
-}
-export interface AuthRequest extends Request {
-  user: userPayload
-}
-export interface AuthSocketData {
-  user: userPayload;
-}
-
-export interface ClientToServerEvents { message: (msg: Message) => void; trackrun: () => void };
-export interface ServerToClientEvents extends ClientToServerEvents { };
-export interface InterServerEvents { };
 export type LocationObjectCoords = {
   /**
    * The latitude in degrees.
@@ -54,9 +30,19 @@ export type LocationObjectCoords = {
    */
   speed: number | null;
 };
+export type Message = {
+  author: string;
+  time: Date;
+  message: string
+}
 
-export type Location = {
+export type LocationObj = {
   coords: LocationObjectCoords;
-  timestamp: Date;
   userId: string;
+  //userAlias: string;
+}
+export type LocationResponse = {
+  assignedChatRoom: string;
+  nearbyUsers: Number;
+  nickName: string;
 }

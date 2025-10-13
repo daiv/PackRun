@@ -15,7 +15,7 @@ export async function logUser(req: AuthRequest, res: Response, next: Function) {
   else if (incorrectCoordinates(req)) res.status(400).json({ message: 'Incorrect coordinates ' });
   else {
 
-    const userId = req.user.email;
+    const userId = req.user?.email;
     const { desiredNickname } = await getDBPreferredNick(userId);
     const { longitude, latitude } = req.body.coords;
     const updatedAt = new Date();

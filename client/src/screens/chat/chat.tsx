@@ -1,56 +1,51 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import styles from './styles';
 
 import { useAuthContext } from '../../context/AuthContext';
 import { useConnContext } from '../../context/ConnContext';
+import { Message } from '../../../../common/commonTypes';
 
 
 export default function Chatscreen() {
-  const [messages, setMessages] = useState<{ author: string; time: string; message: string }[]>([]);
+
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
-  const { nickname } = useAuthContext();
+  const { nickName } = useAuthContext();
   const { socket, fetchData } = useConnContext();
 
-  const getMessages = async () => {
-    const response = await fetchData<{ author: string; time: string; message: string }[]>('/messages/', 'GET');
-    if (response?.success) response.data && messages.length != response.data.length && setMessages(response.data);
-    else console.error('Error getting messages', response?.error);
-  };
 
-  useEffect(() => {
-    socket && socket.on('message', (message: { author: string; time: string; message: string }) => {
-      setMessages(prev => [...prev, message]);
-    });
-    const interval = setInterval(() => {
-      getMessages();
-    }, 5000)
-    return () => {
-      socket && socket.off('message');
-      clearInterval(interval);
-    };
+  useEffect(function getInitialMessagesFromServer() {
+    fetchData<Message[]>('/messages/', 'GET')
+      .then(messagesArray => {
+        if (messagesArray?.success) {
+          messagesArray.data && setMessages(messagesArray.data);
+        } else console.error('Error getting messages', messagesArray?.error);
+      });
   }, []);
 
-  const send = async () => {
-    if (input.trim() !== '') {
-      getMessages();
-      fetchData<{ success: boolean, message: string }>('/messages/', 'POST', { message: input, author: nickname, time: new Date().toISOString() })
-        .then(response => response?.success ? setInput('') : console.error('Error sending message:', response?.error));
-      socket && socket.emit('message', { author: nickname, time: Date.now().toString(), message: input });
-    }
+  useEffect(function ioSocketInit() {
+    socket && socket.on('message', (message: Message) => {
+      console.log('receivedMessageSocket', message);
+      setMessages(prevMess => [...prevMess, message]);
+    });
+
+    return () => { socket && socket.off('message') };
+  }, []);
+
+  async function send() {
+    if (socket) socket.emit('message', { message: input });
+    else console.error('socket error');
+    setInput('');
   }
 
-  const handleScroll = (event: any) => {
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
     const paddingToBottom = 20;
-    if (layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom) {
-      setIsAtBottom(true);
-    } else {
-      setIsAtBottom(false);
-    }
+    setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
   };
 
   return (
@@ -69,10 +64,10 @@ export default function Chatscreen() {
             keyExtractor={(item) => item.time}
             renderItem={({ item }) => (
               <View>
-                <Text style={item.author === nickname ? styles.userText : styles.othersText}>
+                <Text style={item.author === nickName ? styles.userText : styles.othersText}>
                   {item.author}
                 </Text>
-                <View style={item.author === nickname ? styles.userMessage : styles.othersMessage}>
+                <View style={item.author === nickName ? styles.userMessage : styles.othersMessage}>
                   <Text style={styles.messageText}>{item.message}</Text>
                 </View>
               </View>

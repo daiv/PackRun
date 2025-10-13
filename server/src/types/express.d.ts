@@ -7,10 +7,16 @@ type userPayload = CognitoIdTokenPayload & {
   sub: string;
 };
 
-declare global {
+/* declare global {
   namespace Express {
     interface Request {
       user: userPayload;
     }
+  }
+}
+*/
+declare module 'express-serve-static-core' {
+  interface Request {
+    user: userPayload;
   }
 }

@@ -24,7 +24,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
 
   useEffect(function startRun() {
-    let clockTimer: number | null = null;
+    let clockTimer: NodeJS.Timeout | null = null;
     if (isRunning) {
       setRunningMode(true);
       setSecondsElapsed(0);

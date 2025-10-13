@@ -40,7 +40,7 @@ export default function HomePage() {
       fetchData<{ stadiaApiKey: string } | null>('/api/stadia/', 'GET', null)
         .then(response => {
           if (response?.success) response.data?.stadiaApiKey && setStadiaKey(response.data.stadiaApiKey);
-          else console.error(response?.error);
+          else console.error('STADIA ERROR', response?.error);
         });
   }, [isConnected]);
 

@@ -27,7 +27,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [gpsTimeInterval, setGpsTimeInterval] = useState(5000);
   const [gpsPermissionGranted, setGpsPermissionGranted] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const { tokens, nickname } = useAuthContext();
+  const { tokens, userId, setNickName } = useAuthContext();
 
   useEffect(function askGpsPermissions() {
     Location.getForegroundPermissionsAsync()
@@ -42,12 +42,12 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(function startIoWebSocket() {
-    if (!socketRef.current) socketRef.current = io(URL, { transports: ['websocket'] });
+    if (!socketRef.current && tokens) socketRef.current = io(URL, { transports: ['websocket'], auth: { token: tokens?.idToken?.toString() } });
     return () => {
       if (socketRef.current) socketRef.current.disconnect();
       socketRef.current = null;
     }
-  }, []);
+  }, [tokens]);
 
   useEffect(function startLocationWatcher() {
     console.log('Starting location watcher with interval:', gpsTimeInterval);
@@ -88,19 +88,18 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [lastKnownLocation]);
 
   useEffect(function reportLocationToServer() {
-    if (!nickname || !tokens?.idToken || !gpsPermissionGranted) {
+    if (!userId || !tokens?.idToken || !gpsPermissionGranted) {
       console.log('Not reporting location: missing userId, token, or permission not granted');
       return;
     }
 
-    const report = () => {
-      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, timestamp: new Date().toISOString() } : null;
-      if (body) fetchFactory(URL + '/locations', 'POST', tokens?.idToken?.toString(), body)
-        .then(res => {
-          setIsConnected(true);
-          console.log('Reported location to server:', res);
-        })
-        .catch(err => console.error('Error reporting location to server:', err));
+    const report = async () => {
+      const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, timeStamp: new Date().toISOString() } : null;
+      if (body) {
+        const reportResponse = await fetchData<{ assignedChatRoom: string, nickName: string }>('/locations', 'POST', body);
+        setIsConnected(reportResponse.success);
+        reportResponse.success && setNickName(reportResponse.data?.nickName ? reportResponse.data?.nickName : null);
+      }
     }
     report();
     const interval = setInterval(report, SERVER_TIME_INTERVAL);
@@ -110,10 +109,10 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log('GPS interval cleared');
     }
 
-  }, [nickname, tokens, gpsPermissionGranted]);
+  }, [userId, tokens, gpsPermissionGranted]);
 
   async function fetchData<T>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<FetchDataResult<T>> {
-    if (!nickname) return { success: false, error: 'User not logged in, cannot fetch data' };
+    if (!userId) return { success: false, error: 'User not logged in, cannot fetch data' };
     try {
       const data = await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
       return { success: true, data };

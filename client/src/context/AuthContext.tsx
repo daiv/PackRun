@@ -16,7 +16,8 @@ export const useAuthContext = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [tokens, setTokens] = useState<AuthTokens | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [nickname, setNickname] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [nickName, setNickName] = useState<string | null>(null);
 
   useEffect(() => { console.log('tokens updated', tokens) }, [tokens]);
 
@@ -106,7 +107,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const tokensResponse = await fetchAuthSession();
       if (tokensResponse.tokens) {
         setTokens(tokensResponse.tokens);
-        setNickname(username);
+        setUserId(username);
       } else throw new Error('No tokens received after login');
 
       return { success: true, message: 'Login successful' };
@@ -141,7 +142,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setTokens(response.tokens);
         // setUserId(response.tokens.idToken?.payload.sub || null);
         const user = await getUser();
-        setNickname(user?.signInDetails?.loginId || 'user');
+        setUserId(user?.signInDetails?.loginId || 'user');
         return response.tokens;
       }
       throw new Error('No tokens received');
@@ -174,7 +175,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(false);
 
       setTokens(undefined);
-      setNickname(null);
+      setUserId(null);
       console.log('signoutResponse', signOutResponse);
       return true;
     } catch (error: unknown) {
@@ -192,7 +193,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getTokens,
     getUser,
     tokens,
-    nickname,
+    userId,
+    nickName,
+    setNickName,
     isLoading,
   }
 

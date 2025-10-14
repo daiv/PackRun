@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useContext, useState } from 'react';
-import { RunContextType, RunProviderProps } from '../helpers/Types';
+import { RunContextType, RunProviderProps } from '../types/types';
 import { useConnContext } from './ConnContext';
 import { Alert } from 'react-native';
 import { FeatureCollection } from 'geojson';

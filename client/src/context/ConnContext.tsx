@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState, useRef, useContext, useCallback } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
-import { ConnContextType, FetchDataResult, HttpMethod } from '../helpers/Types';
+import { ConnContextType, FetchDataResult, HttpMethod } from '../types/types';
 import { useAuthContext } from './AuthContext';
 import io from 'socket.io-client';
 

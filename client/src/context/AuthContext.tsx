@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { AuthContextType, AuthResponse } from "../helpers/Types";
+import { AuthContextType, AuthResponse } from "../types/types";
 import { AuthTokens, confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from "aws-amplify/auth";
 
 

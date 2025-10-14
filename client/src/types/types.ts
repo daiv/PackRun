@@ -71,7 +71,7 @@ export interface SmartInputProps extends TextInputProps {
   nextRef?: React.RefObject<TextInput | null>;
 }
 
-export type altitudesType = {
+type altitudesType = {
   value: number;
 }
 

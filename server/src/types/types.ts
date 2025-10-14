@@ -22,7 +22,7 @@ export interface AuthSocketData {
 export interface ClientToServerEvents { message: (msg: Message) => void; trackrun: () => void };
 export interface ServerToClientEvents extends ClientToServerEvents { };
 export interface InterServerEvents { };
-export type LocationObjectCoords = {
+type LocationObjectCoords = {
   /**
    * The latitude in degrees.
    */

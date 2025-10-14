@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import {
+  Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform,
+  TouchableWithoutFeedback, Keyboard, NativeSyntheticEvent, NativeScrollEvent
+} from 'react-native';
 import styles from './styles';
 
 import { useAuthContext } from '../../context/AuthContext';
 import { useConnContext } from '../../context/ConnContext';
-import { Message } from '../../../../common/commonTypes';
+import { Message } from '@common';
 
 
 export default function Chatscreen() {

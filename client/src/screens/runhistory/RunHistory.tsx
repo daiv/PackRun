@@ -1,16 +1,10 @@
-// react native
 import React, { useEffect, useRef, useState } from 'react';
 import { Text, View, FlatList, TouchableOpacity } from 'react-native';
-
-// extra libraries
 import { LineChart } from "react-native-gifted-charts";
-
-// styling
 import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useConnContext } from '../../context/ConnContext';
-import { Run, RunResponse } from '../../helpers/Types';
-
+import { Run, RunResponse } from '../../types/types';
 
 export default function RunHistory() {
 
@@ -51,7 +45,7 @@ export default function RunHistory() {
             distance: run.distance,
             profile: run.altitudes
           };
-        }).sort((a: any, b: any) => { return a.id - b.id })
+        }).sort((a: Run, b: Run) => Number(a.id) - Number(b.id))
       ));
     console.log('final runs', runs);
   }, [refresh]);

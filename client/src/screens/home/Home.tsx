@@ -32,7 +32,6 @@ export default function HomePage() {
         longitudeDelta: 0.005,
       });
     }
-    console.log('reported', lastKnownLocation);
   }, [lastKnownLocation]);
 
   useEffect(function getStadia() {

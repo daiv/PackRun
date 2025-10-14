@@ -1,4 +1,4 @@
-import { HttpMethod } from './Types';
+import { HttpMethod } from '../types/types';
 
 export const checkEmail = (email: string) => !email ? 'Email can not be empty' : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ? 'Invalid email address' : '';
 

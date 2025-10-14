@@ -2,7 +2,7 @@ import { TouchableOpacity, View, Text } from "react-native";
 import styles from "./styles";
 import { useState, useEffect } from "react";
 import { useRunContext } from "../context/RunContext";
-import { RunButtonStyleProps } from "../helpers/Types";
+import { RunButtonStyleProps } from "../types/types";
 
 export default function RunButton({ bottom }: RunButtonStyleProps) {
 

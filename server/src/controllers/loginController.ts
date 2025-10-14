@@ -89,11 +89,4 @@ export async function checkIfLoggedIn(req: AuthRequest, res: Response, next: Fun
     res.status(400).json({ message: 'User not logged in' });
 }
 
-export async function checkUserBody(req: AuthRequest, res: Response, next: Function) {
-  req.body.hasOwnProperty('message')
-    ?
-    next()
-    :
-    res.status(400).json({ message: 'Missing message' });
-}
 if (process.env.NODE_ENV !== 'test') setInterval(checkExpiringSessions, 1000 * 60 * LOGIN_EXPIRES_MINUTES / 2);

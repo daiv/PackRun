@@ -1,77 +1,127 @@
 import supertest from 'supertest';
-import express from 'express';
-import router from './router';
-import sequelize, { createDatabaseIfNotExist, dropDatabaseIfExists } from "./models/model";
 import 'dotenv/config';
-import { afterAll, beforeAll, describe, expect, it } from '@jest/globals';
+import { Application, NextFunction, Request, Response } from 'express';
+import sequelize, { createDatabaseIfNotExist, dropDatabaseIfExists } from "./models/model";
+import { afterAll, beforeAll, describe, expect, it, jest } from '@jest/globals';
+import { Socket, Server as SocketIOServer } from 'socket.io';
+import io, { Socket as ClientSocket } from 'socket.io-client'
+import { AckResponse, SocketIONext } from './types/types';
+import { setupServer } from './server'
+import TestAgent from 'supertest/lib/agent';
+import { Server as HttpServer } from 'node:http';
+import { AddressInfo } from 'node:net';
 
-describe('Endpoints test', () => {
-  const app = express();
-  console.log('env', process.env.NODE_ENV);
-  app.use(express.json());
-  app.use('/', router);
 
-  const request = supertest(app);
 
+//const mockUser = { user: { email: 'mocked@mock.es', desiredNickname: 'Timotea' }, };
+const socketUsers = [
+  { user: { email: 'Timotea@mock.es', desiredNickname: 'Timotea' }, },
+  { user: { email: 'Stacy@mock.es', desiredNickname: 'Stacy' }, },
+];
+const TIMOTEA = 0;
+const STACY = 1;
+let userSelected = TIMOTEA;
+jest.mock('./middleware/auth', () => ({
+  auth: jest.fn((req: Request, _: Response, next: NextFunction) => {
+    req.user = socketUsers[userSelected].user
+    next();
+  }),
+  authSocket: jest.fn((socket: Socket, next: SocketIONext) => {
+    // socket.data.user = mockUser.user;
+    socket.data.user = socketUsers[userSelected].user;
+    next();
+  })
+
+}));
+
+const mockLocation = {
+  "timestamp": 1748635519011,
+  "coords": {
+    "accuracy": 100,
+    "speed": 0,
+    "altitudeAccuracy": 100,
+    "heading": 0,
+    "latitude": 38.345258778845256,
+    "longitude": -0.48129400007124534,
+    "altitude": 0
+  },
+}
+
+describe('Server tests', () => {
+  let app: Application, httpServer: HttpServer, ioServer: SocketIOServer;
+  let request: TestAgent;
+  let clientSocket: ClientSocket[] = [];
+  let port: Number;
 
   beforeAll(async () => {
+    const serverSetup = setupServer();
+    app = serverSetup.app;
+    httpServer = serverSetup.server;
+    ioServer = serverSetup.ioServer;
+    request = supertest(app);
+
+    await new Promise<void>((resolve, reject) => {
+      httpServer.listen(() => {
+
+        const address = httpServer.address();
+        if (!address) return reject(new Error('Server addres is null'));
+
+        port = (address as AddressInfo).port;
+        resolve();
+      });
+    });
+
+
+    for (let client = 0; client < socketUsers.length; client++) {
+      userSelected = client;
+      await new Promise<void>((resolve, reject) => {
+        clientSocket[client] = io(`http://localhost:${port}`, { transports: ['websocket'] });
+        clientSocket[client].once('connect', resolve);
+        clientSocket[client].once('connect_error', reject);
+      })
+    }
+
     const database = (process.env.DB_NAME || "packrundb") + '_test';
     await createDatabaseIfNotExist(database);
     await sequelize.sync();
+    for (let client = 0; client < socketUsers.length; client++) {
+      userSelected = client;
+      await request.post('/locations').send({ ...mockLocation, });
+      await request.post('/profile').send({ desiredNickname: socketUsers[client].user.desiredNickname });
+    }
+    userSelected = TIMOTEA;
   });
 
   afterAll(async () => {
+    ioServer.close();
+    // clientSocket.disconnect();
+    clientSocket.forEach(client => client.disconnect());
+    httpServer.close();
     await sequelize.close();
     dropDatabaseIfExists(process.env.DB_NAME + '_test');
   });
-
-  const userId = 'testUser';
-  const mockLocation = {
-    "timestamp": 1748635519011,
-    "coords": {
-      "accuracy": 100,
-      "speed": 0,
-      "altitudeAccuracy": 100,
-      "heading": 0,
-      "latitude": 38.345258778845256,
-      "longitude": -0.48129400007124534,
-      "altitude": 0
-    },
-  }
 
   describe('Locations', () => {
 
     describe('POST /locations', () => {
 
       it('should return a chatroom id', async () => {
-        const response = await request.post('/locations').send({ ...mockLocation, userId });
+        const response = await request.post('/locations').send({ ...mockLocation, });
         expect(response.body).toHaveProperty('assignedChatRoom');
         expect(response.status).toBe(200);
         expect(typeof response.body.assignedChatRoom).toBe('string');
       });
 
       it('should return nearby users', async () => {
-        const response = await request.post('/locations').send({ ...mockLocation, userId });
+        const response = await request.post('/locations').send({ ...mockLocation, });
         expect(response.body).toHaveProperty('nearbyUsers');
         expect(response.status).toBe(200);
         expect(typeof response.body.nearbyUsers).toBe('number');
       });
 
-      it('should return 400 if no userId is provided', async () => {
-        const response = await request.post('/locations').send({
-          "timestamp": "1743016581565",
-          "coords": {
-            "latitude": 38.345258778845256,
-            "longitude": -0.48129400007124534
-          }
-        });
-        expect(response.status).toBe(400);
-      });
-
       it('should return 400 if no coords are provided', async () => {
         const response = await request.post('/locations').send({
           "timestamp": "1743016581565",
-          userId
         });
         expect(response.status).toBe(400);
       });
@@ -82,7 +132,6 @@ describe('Endpoints test', () => {
           "coords": {
             "longitude": -0.48129400007124534
           },
-          userId
         });
         expect(response.status).toBe(400);
       });
@@ -93,7 +142,6 @@ describe('Endpoints test', () => {
           "coords": {
             "latitude": 38.345258778845256,
           },
-          userId
         });
         expect(response.status).toBe(400);
       });
@@ -105,7 +153,6 @@ describe('Endpoints test', () => {
             "latitude": 38.345258778845256,
             "longitude": -200
           },
-          userId
         });
         expect(response.status).toBe(400);
       });
@@ -117,19 +164,43 @@ describe('Endpoints test', () => {
             "latitude": 200,
             "longitude": -0.48129400007124534
           },
-          userId
         });
         expect(response.status).toBe(400);
       });
 
     });
-  });
 
+  });
+  describe('Profile', () => {
+
+    describe('nickname', () => {
+      it('should set and get preferred name', async () => {
+        userSelected = TIMOTEA;
+        const body = { desiredNickname: socketUsers[userSelected].user.desiredNickname };
+        const response = await request.post('/profile').send(body);
+        expect([200, 201].includes(response.status)).toBe(true);
+        const nick = await request.get('/profile');
+        expect(nick.body).toHaveProperty('desiredNickname');
+        expect(nick.body.desiredNickname).toBe(socketUsers[userSelected].user.desiredNickname);
+      });
+    });
+
+  });
   describe('Messages', () => {
+    const mockMessage = "this is a mock message.";
+
+    const sender = async (message: string, client: number) => {
+      return new Promise<void>((resolve, reject) => {
+        clientSocket[client].emit('message', { message }, (response: AckResponse) => {
+          if (response.success) resolve();
+          else reject(new Error('Something went wrong'));
+        });
+      });
+    };
 
     describe('GET /messages', () => {
-      it('should return 200 return an emtpy array when no messages', async () => {
-        const response = await request.get('/messages/' + userId);
+      it('should return 200 return an empty array when no messages', async () => {
+        const response = await request.get('/messages/');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(0);
@@ -137,81 +208,45 @@ describe('Endpoints test', () => {
     });
 
     describe('POST /messages', () => {
-      const mockMessage = {
-        "author": "David",
-        "message": "hello",
-        "time": "09/01/2023 12:00:00"
-      }
 
-      it('should return 400 if no author is provided', async () => {
-        const response = await request.post('/messages/' + userId).send({
-          "message": "hello",
-          "time": "now"
-        });
-        expect(response.status).toBe(400);
-      });
-
-      it('should return 400 if no message is provided', async () => {
-        const response = await request.post('/messages/' + userId).send({
-          "author": "David",
-          "time": "now"
-        });
-        expect(response.status).toBe(400);
-      });
-
-      it('should return 400 if no time is provided', async () => {
-        const response = await request.post('/messages/' + userId).send({
-          "author": "David",
-          "message": "hello"
-        });
-        expect(response.status).toBe(400);
-      });
-
-      it('should return 400 if time is not a date formatted string', async () => {
-        const response = await request.post('/messages/' + userId).send({
-          "author": "David",
-          "message": "hello",
-          "time": 123456789
-        });
-        expect(response.status).toBe(400);
-      });
-
-      it('should return 201 and the message', async () => {
-        const response = await request.post('/messages/' + userId).send(mockMessage);
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('success');
-
+      it('should send a message and await server acknowledgement', async () => {
+        await sender(mockMessage, TIMOTEA);
       });
     });
 
     describe('GET /messages', () => {
 
-      it('should return 200 and an array of messages', async () => {
-        const response = await request.get('/messages/' + userId);
+      it('should return 200 and an array of previously sent messages', async () => {
+        const response = await request.get('/messages/');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(1);
+        expect(response.body[0].message).toBe(mockMessage);
       });
     });
 
     describe('POST /messages', () => {
 
       it('should handle malicious messages', async () => {
-        const maliciousMessage = {
-          author: 'Malicious User',
-          message: "'); DROP TABLE chatroom; --",
-          time: new Date(),
-        };
-        await request.post('/messages/' + userId).send(maliciousMessage);
-        const response = await request.get('/messages/' + userId);
+        const maliciousMessage = "'); DROP TABLE chatroom; --";
+        await sender(maliciousMessage, TIMOTEA);
+        const response = await request.get('/messages/');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(2);
+      });
+    });
+    describe('Message integrity', () => {
+      it('should identify sender', async () => {
+        const response = await request.get('/messages/');
+        expect(response.body[0].author).toBe(socketUsers[userSelected].user.desiredNickname);
+      });
+      it('should show Date', async () => {
+        const response = await request.get('/messages/');
+        
       })
 
-    })
-
-
+    });
   });
 
   describe('Tracks', () => {
@@ -220,7 +255,7 @@ describe('Endpoints test', () => {
 
     describe('PUT /tracks', () => {
       it('should return 201 and the trackId', async () => {
-        const response = await request.put('/tracks/' + userId);
+        const response = await request.put('/tracks/');
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty('trackId');
         expect(response.body.trackId).not.toBeNaN();
@@ -230,7 +265,7 @@ describe('Endpoints test', () => {
 
     describe('GET /tracks', () => {
       it('should return 200 and an array when there is tracks', async () => {
-        const response = await request.get('/tracks/' + userId);
+        const response = await request.get('/tracks/');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(1);
@@ -239,24 +274,24 @@ describe('Endpoints test', () => {
 
     describe('POST /tracks', () => {
       it('should return 204 if not enough waypoints', async () => {
-        const response = await request.post('/tracks/' + userId + '/' + trackId).send(mockLocation);
+        const response = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
         expect(response.status).toBe(204);
       });
 
       it('should return 400 if no coords are provided', async () => {
-        const response = await request.post('/tracks/' + userId + '/' + trackId).send({});
+        const response = await request.post('/tracks/' + '/' + trackId).send({});
         expect(response.status).toBe(400);
       });
 
       it('should return 200 and the waypoints', async () => {
-        const result = await request.options('/tracks/' + userId + '/' + trackId).send(mockLocation);
+        const result = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
         expect(result.status).toBe(200);
       });
     });
 
     describe('DELETE /tracks', () => {
       it('should return 200 and delete the track', async () => {
-        const response = await request.delete('/tracks/' + userId + '/' + trackId);
+        const response = await request.delete('/tracks/' + '/' + trackId);
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Track deleted');
       });
@@ -264,7 +299,7 @@ describe('Endpoints test', () => {
 
     describe('GET /tracks', () => {
       it('should return 200 and an empty array when no tracks', async () => {
-        const response = await request.get('/tracks/' + userId);
+        const response = await request.get('/tracks/');
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
         expect(response.body.length).toBe(0);

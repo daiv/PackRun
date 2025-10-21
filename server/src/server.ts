@@ -1,5 +1,5 @@
 import express, { Application } from 'express';
-import { createServer } from 'node:http';
+import { createServer, Server } from 'node:http';
 import sequelize, { createDatabaseIfNotExist } from './models/model';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -8,29 +8,38 @@ import { createSocketIOServer } from './helpers/IoServer';
 import mockFunctions from './mocks/mockFunctions';
 import 'dotenv/config';
 
-const app: Application = express();
-const server = createServer(app);
-app.use(express.json());
+export function setupServer() {
 
-app.use(cors({
-  origin: '*',
-  methods: 'GET, HEAD, PUT, POST, DELETE',
-  credentials: true
-}));
+  const app: Application = express();
+  const server:Server = createServer(app);
+  app.use(express.json());
 
-app.use(bodyParser.json());
-app.use('/', router);
-const port = 3000;
+  app.use(cors({
+    origin: '*',
+    methods: 'GET, HEAD, PUT, POST, DELETE',
+    credentials: true
+  }));
 
-createSocketIOServer(server);
+  app.use(bodyParser.json());
+  app.use('/', router);
 
-(async () => {
-  try {
-    await createDatabaseIfNotExist(null);
-    await sequelize.sync();
-    if (process.env.NODE_ENV === 'demo') mockFunctions.forEach(fun => fun());
-    server.listen(port, () => console.log(`Server running at port ${port}!`))
-  } catch (error) {
-    console.log(error);
-  }
-})();
+  const ioServer = createSocketIOServer(server);
+
+  return { app, server, ioServer }
+}
+export function createAndRunServer() {
+  const { server } = setupServer();
+  const port = 3000;
+  (async () => {
+    try {
+      await createDatabaseIfNotExist(null);
+      await sequelize.sync();
+      if (process.env.NODE_ENV === 'demo') mockFunctions.forEach(fun => fun());
+      server.listen(port, () => console.log(`Server running at port ${port}!`))
+    } catch (error) {
+      console.log(error);
+    }
+  })();
+}
+
+if (require.main === module) createAndRunServer();

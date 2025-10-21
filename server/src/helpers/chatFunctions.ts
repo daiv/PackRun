@@ -24,35 +24,68 @@ export async function assignToChatRoom(runner: Runner): Promise<LocationResponse
     if (runner.assignedChatRoom !== nearestChatRoom.chatRoomId) {
       await removeRunnerFromChatRoom(runner);
     }
+    runner.assignedChatRoom = nearestChatRoom.chatRoomId;
+    joinChatRoom(runner);
 
-    let newNickname = runner.desiredNickname;
-    const alreadyInRoom = nearestChatRoom.dataValues.usersId.includes(runner.userId);
-    const match = runner.currentNickname && runner.currentNickname.match(/^(.+)-\d{2}$/);
+    return { assignedChatRoom: chatRoomId, nearbyUsers, nickName: runner.currentNickname || 'axu' };
 
-    const baseNickname = match ? match[1] : runner.currentNickname;
-
-    const isNicknameDesired = baseNickname === runner.desiredNickname;
-
-
-    if (!alreadyInRoom ||
-      !isNicknameDesired) {
-      nearestChatRoom.nickname = nearestChatRoom.nickname.filter(nickname => nickname !== runner.currentNickname);
-      let counter = 0;
-      while (nearestChatRoom.nickname.includes(newNickname)) {
-        counter++;
-        newNickname = `${runner.desiredNickname}-${(counter < 10 ? '0' : '') + counter}`;
-      }
-      nearestChatRoom.nickname = [...nearestChatRoom.nickname, newNickname];
-      nearestChatRoom.usersId = [...nearestChatRoom.usersId.filter(id => id !== runner.userId), runner.userId];
-    }
-    nearestChatRoom.save();
-
-    if (nearbyUsers === -1) nearbyUsers = nearestChatRoom.usersId.length - 1;
-    activeRunners.set(runner.userId, { ...runner, currentNickname: newNickname, assignedChatRoom: nearestChatRoom.chatRoomId });
-    return { assignedChatRoom: chatRoomId, nearbyUsers, nickName: newNickname };
-  }
+  } else console.error('Error getting nearest chatRoom');
 
   return undefined;
+}
+export async function joinChatRoom(runner: Runner) {
+  if (!runner || !runner.assignedChatRoom) return;
+
+  const room = await ChatRoomModel.findOne({ where: { chatRoomId: runner.assignedChatRoom } });
+  if (!room) return;
+
+  let alreadyIn = false;
+  const existingNicks = new Set<string>();
+  room.usersId.forEach(userId => {
+    if (userId === runner.userId) alreadyIn = true;
+    else {
+      const currentNick = activeRunners.get(userId)?.currentNickname;
+      if (currentNick) existingNicks.add(currentNick);
+    }
+  });
+
+  runner.currentNickname = getUniqueNickName(runner.desiredNickname, existingNicks);
+  if (!alreadyIn) {
+    room.usersId.push(runner.userId);
+    await ChatRoomModel.update(
+      { usersId: room.usersId },
+      { where: { chatRoomId: runner.assignedChatRoom } });
+  }
+}
+
+function getUniqueNickName(desiredNickname: string, existingNicks: Set<string>): string {
+  let newNick = desiredNickname;
+  if (existingNicks.has(newNick)) {
+    const match = newNick.match(/^(.*)-\d{2}$/);
+    let uniqueNick = '';
+    if (match) newNick = match[1];
+    let counter = 1;
+    do {
+      const suffix = counter < 10 ? '0' + counter : String(counter);
+      uniqueNick = `${newNick}-${suffix}`;
+    } while (existingNicks.has(uniqueNick));
+    newNick = uniqueNick;
+  }
+  return newNick;
+}
+export async function changeNickName(runner: Runner) {
+  if (!runner || !runner.assignedChatRoom) return;
+  const room = await ChatRoomModel.findOne({ where: { chatRoomId: runner.assignedChatRoom } });
+  if (!room || !room.usersId.includes(runner.userId)) return;
+  const existingNicks = new Set<string>();
+  
+  room.usersId.forEach(userId => {
+    if (userId != runner.userId) {
+      const currentNick = activeRunners.get(userId)?.currentNickname;
+      if (currentNick) existingNicks.add(currentNick);
+    }
+  });
+  runner.currentNickname = getUniqueNickName(runner.desiredNickname, existingNicks);
 }
 
 async function createNewChatRoom(runner: Runner) {
@@ -94,7 +127,6 @@ export async function removeRunnerFromChatRoom(runner: Runner) {
           .update(
             {
               usersId: chatRoom.dataValues.usersId.filter(userId => userId != runnerId),
-              nickname: chatRoom.dataValues.nickname.filter(nick => nick != runner.currentNickname)
             },
             { where: { chatRoomId } })
       } else await chatRoom.destroy();

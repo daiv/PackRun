@@ -9,10 +9,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 6.789123456789012,
       "altitudeAccuracy": 1,
       "heading": 2.109876543210987,
-      "speed": 1.654321098765432
+      "speed": 1.654321098765432,
     },
     "timestamp": new Date("2025-08-08T17:14:40.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -22,10 +21,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 9.012345678901234,
       "altitudeAccuracy": 1,
       "heading": -3.456789012345679,
-      "speed": 1.1234567890123457
+      "speed": 1.1234567890123457,
     },
     "timestamp": new Date("2025-08-08T17:14:45.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -35,10 +33,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 5.345678901234568,
       "altitudeAccuracy": 1,
       "heading": 1.7890123456789013,
-      "speed": 1.8765432109876543
+      "speed": 1.8765432109876543,
     },
     "timestamp": new Date("2025-08-08T17:14:50.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -48,10 +45,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 7.654321098765432,
       "altitudeAccuracy": 1,
       "heading": -1.2345678901234568,
-      "speed": 1.3901234567890124
+      "speed": 1.3901234567890124,
     },
     "timestamp": new Date("2025-08-08T17:14:55.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -61,10 +57,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 8.901234567890123,
       "altitudeAccuracy": 1,
       "heading": 3.0123456789012346,
-      "speed": 1.056789012345679
+      "speed": 1.056789012345679,
     },
     "timestamp": new Date("2025-08-08T17:15:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -74,10 +69,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 5.234567890123457,
       "altitudeAccuracy": 1,
       "heading": -4.123456789012346,
-      "speed": 1.9234567890123457
+      "speed": 1.9234567890123457,
     },
     "timestamp": new Date("2025-08-08T17:15:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -87,10 +81,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 7.5432109876543215,
       "altitudeAccuracy": 1,
       "heading": 0.6789012345679013,
-      "speed": 1.4890123456789012
+      "speed": 1.4890123456789012,
     },
     "timestamp": new Date("2025-08-08T17:15:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -100,10 +93,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 9.876543210987654,
       "altitudeAccuracy": 1,
       "heading": -2.7890123456789014,
-      "speed": 1.0123456789012346
+      "speed": 1.0123456789012346,
     },
     "timestamp": new Date("2025-08-08T17:15:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -113,10 +105,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 6.165432109876543,
       "altitudeAccuracy": 1,
       "heading": 1.9012345678901235,
-      "speed": 1.7654321098765433
+      "speed": 1.7654321098765433,
     },
     "timestamp": new Date("2025-08-08T17:15:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -126,10 +117,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 8.43210987654321,
       "altitudeAccuracy": 1,
       "heading": -0.543210987654321,
-      "speed": 1.2789012345679013
+      "speed": 1.2789012345679013,
     },
     "timestamp": new Date("2025-08-08T17:15:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -139,10 +129,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 5.765432109876544,
       "altitudeAccuracy": 1,
       "heading": 3.2109876543210988,
-      "speed": 1.9901234567890123
+      "speed": 1.9901234567890123,
     },
     "timestamp": new Date("2025-08-08T17:15:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -152,10 +141,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 7.03210987654321,
       "altitudeAccuracy": 1,
       "heading": -3.8765432109876545,
-      "speed": 1.1876543210987655
+      "speed": 1.1876543210987655,
     },
     "timestamp": new Date("2025-08-08T17:15:35.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -165,10 +153,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 9.345678901234568,
       "altitudeAccuracy": 1,
       "heading": 0.4321098765432099,
-      "speed": 1.7123456789012346
+      "speed": 1.7123456789012346,
     },
     "timestamp": new Date("2025-08-08T17:15:40.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -178,10 +165,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 6.612345678901234,
       "altitudeAccuracy": 1,
       "heading": -1.9876543210987655,
-      "speed": 1.3345678901234568
+      "speed": 1.3345678901234568,
     },
     "timestamp": new Date("2025-08-08T17:15:45.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -191,10 +177,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 8.923456789012346,
       "altitudeAccuracy": 1,
       "heading": 2.56789012345679,
-      "speed": 1.0765432109876544
+      "speed": 1.0765432109876544,
     },
     "timestamp": new Date("2025-08-08T17:15:50.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -204,10 +189,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 5.254321098765432,
       "altitudeAccuracy": 1,
       "heading": -4.345678901234568,
-      "speed": 1.953210987654321
+      "speed": 1.953210987654321,
     },
     "timestamp": new Date("2025-08-08T17:15:55.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -217,10 +201,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 7.565432109876543,
       "altitudeAccuracy": 1,
       "heading": 0.2345678901234568,
-      "speed": 1.4210987654321099
+      "speed": 1.4210987654321099,
     },
     "timestamp": new Date("2025-08-08T17:16:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -230,10 +213,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 9.834567890123457,
       "altitudeAccuracy": 1,
       "heading": -2.9012345678901236,
-      "speed": 1.0345678901234568
+      "speed": 1.0345678901234568,
     },
     "timestamp": new Date("2025-08-08T17:16:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -243,10 +225,9 @@ const mockBeachWalk: Location[] = [
       "accuracy": 6.123456789012345,
       "altitudeAccuracy": 1,
       "heading": 2.345678901234568,
-      "speed": 1.7987654321098766
+      "speed": 1.7987654321098766,
     },
     "timestamp": new Date("2025-08-08T17:16:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -256,11 +237,10 @@ const mockBeachWalk: Location[] = [
       "accuracy": 8.456789012345679,
       "altitudeAccuracy": 1,
       "heading": -0.6543210987654321,
-      "speed": 1.2109876543210988
+      "speed": 1.2109876543210988,
     },
     "timestamp": new Date("2025-08-08T17:16:15.000Z"),
-    "userId": "testUser"
-  }
+  },
 ]
 const mockValenciaCityWalk: Location[] = [
   {
@@ -271,10 +251,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 1.2
+      "speed": 1.2,
     },
     "timestamp": new Date("2025-08-08T17:12:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -284,10 +263,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 1.5
+      "speed": 1.5,
     },
     "timestamp": new Date("2025-08-08T17:12:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -297,10 +275,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 0,
-      "speed": 1.1
+      "speed": 1.1,
     },
     "timestamp": new Date("2025-08-08T17:12:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -310,10 +287,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 7,
       "altitudeAccuracy": 1,
       "heading": 315,
-      "speed": 1.3
+      "speed": 1.3,
     },
     "timestamp": new Date("2025-08-08T17:12:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -323,10 +299,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 270,
-      "speed": 1.0
+      "speed": 1.0,
     },
     "timestamp": new Date("2025-08-08T17:12:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -336,10 +311,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 225,
-      "speed": 1.4
+      "speed": 1.4,
     },
     "timestamp": new Date("2025-08-08T17:12:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -349,10 +323,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 180,
-      "speed": 1.2
+      "speed": 1.2,
     },
     "timestamp": new Date("2025-08-08T17:12:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -362,10 +335,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 7,
       "altitudeAccuracy": 1,
       "heading": 135,
-      "speed": 1.1
+      "speed": 1.1,
     },
     "timestamp": new Date("2025-08-08T17:12:35.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -375,10 +347,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 1.3
+      "speed": 1.3,
     },
     "timestamp": new Date("2025-08-08T17:12:40.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -388,10 +359,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 1.5
+      "speed": 1.5,
     },
     "timestamp": new Date("2025-08-08T17:12:45.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -401,10 +371,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 0,
-      "speed": 1.2
+      "speed": 1.2,
     },
     "timestamp": new Date("2025-08-08T17:12:50.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -414,10 +383,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 7,
       "altitudeAccuracy": 1,
       "heading": 315,
-      "speed": 1.4
+      "speed": 1.4,
     },
     "timestamp": new Date("2025-08-08T17:12:55.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -427,10 +395,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 270,
-      "speed": 1.1
+      "speed": 1.1,
     },
     "timestamp": new Date("2025-08-08T17:13:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -440,10 +407,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 225,
-      "speed": 1.3
+      "speed": 1.3,
     },
     "timestamp": new Date("2025-08-08T17:13:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -453,10 +419,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 180,
-      "speed": 1.0
+      "speed": 1.0,
     },
     "timestamp": new Date("2025-08-08T17:13:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -466,10 +431,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 7,
       "altitudeAccuracy": 1,
       "heading": 135,
-      "speed": 1.2
+      "speed": 1.2,
     },
     "timestamp": new Date("2025-08-08T17:13:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -479,10 +443,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 1.4
+      "speed": 1.4,
     },
     "timestamp": new Date("2025-08-08T17:13:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -492,10 +455,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 1.1
+      "speed": 1.1,
     },
     "timestamp": new Date("2025-08-08T17:13:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -505,10 +467,9 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 0,
-      "speed": 1.3
+      "speed": 1.3,
     },
     "timestamp": new Date("2025-08-08T17:13:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -518,13 +479,12 @@ const mockValenciaCityWalk: Location[] = [
       "accuracy": 7,
       "altitudeAccuracy": 1,
       "heading": 315,
-      "speed": 1.0
+      "speed": 1.0,
     },
     "timestamp": new Date("2025-08-08T17:13:35.000Z"),
-    "userId": "testUser"
-  }
+  },
 ]
-
+0
 const mockValenciaRun: Location[] = [
   {
     "coords": {
@@ -534,10 +494,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.0
+      "speed": 4.0,
     },
     "timestamp": new Date("2025-08-08T19:49:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -547,10 +506,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 40,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T19:49:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -560,10 +518,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 48,
-      "speed": 3.9
+      "speed": 3.9,
     },
     "timestamp": new Date("2025-08-08T19:49:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -573,10 +530,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 35,
-      "speed": 4.1
+      "speed": 4.1,
     },
     "timestamp": new Date("2025-08-08T19:49:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -586,10 +542,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 42,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T19:49:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -599,10 +554,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 38,
-      "speed": 4.0
+      "speed": 4.0,
     },
     "timestamp": new Date("2025-08-08T19:49:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -612,10 +566,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T19:49:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -625,10 +578,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 40,
-      "speed": 3.9
+      "speed": 3.9,
     },
     "timestamp": new Date("2025-08-08T19:49:35.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -638,10 +590,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 48,
-      "speed": 4.1
+      "speed": 4.1,
     },
     "timestamp": new Date("2025-08-08T19:49:40.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -651,10 +602,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 35,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T19:49:45.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -664,10 +614,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 42,
-      "speed": 4.0
+      "speed": 4.0,
     },
     "timestamp": new Date("2025-08-08T19:49:50.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -677,10 +626,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 38,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T19:49:55.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -690,10 +638,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 3.9
+      "speed": 3.9,
     },
     "timestamp": new Date("2025-08-08T19:50:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -703,10 +650,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 40,
-      "speed": 4.1
+      "speed": 4.1,
     },
     "timestamp": new Date("2025-08-08T19:50:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -716,10 +662,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 48,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T19:50:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -729,10 +674,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 35,
-      "speed": 4.0
+      "speed": 4.0,
     },
     "timestamp": new Date("2025-08-08T19:50:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -742,10 +686,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 8,
       "altitudeAccuracy": 1,
       "heading": 42,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T19:50:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -755,10 +698,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 38,
-      "speed": 3.9
+      "speed": 3.9,
     },
     "timestamp": new Date("2025-08-08T19:50:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -768,10 +710,9 @@ const mockValenciaRun: Location[] = [
       "accuracy": 9,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.1
+      "speed": 4.1,
     },
     "timestamp": new Date("2025-08-08T19:50:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -781,13 +722,12 @@ const mockValenciaRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 40,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T19:50:35.000Z"),
-    "userId": "testUser"
-  }
+  },
 ]
-
+0
 const mockMadridRun: Location[] = [
   {
     "coords": {
@@ -797,10 +737,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 15,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.5
+      "speed": 4.5,
     },
     "timestamp": new Date("2025-08-08T17:21:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -810,10 +749,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 4.8
+      "speed": 4.8,
     },
     "timestamp": new Date("2025-08-08T17:21:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -823,10 +761,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 14,
       "altitudeAccuracy": 1,
       "heading": 135,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T17:21:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -836,10 +773,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 180,
-      "speed": 4.6
+      "speed": 4.6,
     },
     "timestamp": new Date("2025-08-08T17:21:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -849,10 +785,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 16,
       "altitudeAccuracy": 1,
       "heading": 225,
-      "speed": 4.9
+      "speed": 4.9,
     },
     "timestamp": new Date("2025-08-08T17:21:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -862,10 +797,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 13,
       "altitudeAccuracy": 1,
       "heading": 270,
-      "speed": 4.4
+      "speed": 4.4,
     },
     "timestamp": new Date("2025-08-08T17:21:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -875,10 +809,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 15,
       "altitudeAccuracy": 1,
       "heading": 315,
-      "speed": 4.7
+      "speed": 4.7,
     },
     "timestamp": new Date("2025-08-08T17:21:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -888,10 +821,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 0,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T17:21:35.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -901,10 +833,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.5
+      "speed": 4.5,
     },
     "timestamp": new Date("2025-08-08T17:21:40.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -914,10 +845,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 14,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 4.9
+      "speed": 4.9,
     },
     "timestamp": new Date("2025-08-08T17:21:45.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -927,10 +857,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 135,
-      "speed": 4.3
+      "speed": 4.3,
     },
     "timestamp": new Date("2025-08-08T17:21:50.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -940,10 +869,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 16,
       "altitudeAccuracy": 1,
       "heading": 180,
-      "speed": 4.7
+      "speed": 4.7,
     },
     "timestamp": new Date("2025-08-08T17:21:55.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -953,10 +881,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 13,
       "altitudeAccuracy": 1,
       "heading": 225,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T17:22:00.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -966,10 +893,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 15,
       "altitudeAccuracy": 1,
       "heading": 270,
-      "speed": 4.6
+      "speed": 4.6,
     },
     "timestamp": new Date("2025-08-08T17:22:05.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -979,10 +905,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 10,
       "altitudeAccuracy": 1,
       "heading": 315,
-      "speed": 4.9
+      "speed": 4.9,
     },
     "timestamp": new Date("2025-08-08T17:22:10.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -992,10 +917,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 12,
       "altitudeAccuracy": 1,
       "heading": 0,
-      "speed": 4.4
+      "speed": 4.4,
     },
     "timestamp": new Date("2025-08-08T17:22:15.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -1005,10 +929,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 14,
       "altitudeAccuracy": 1,
       "heading": 45,
-      "speed": 4.7
+      "speed": 4.7,
     },
     "timestamp": new Date("2025-08-08T17:22:20.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -1018,10 +941,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 11,
       "altitudeAccuracy": 1,
       "heading": 90,
-      "speed": 4.2
+      "speed": 4.2,
     },
     "timestamp": new Date("2025-08-08T17:22:25.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -1031,10 +953,9 @@ const mockMadridRun: Location[] = [
       "accuracy": 16,
       "altitudeAccuracy": 1,
       "heading": 135,
-      "speed": 4.9
+      "speed": 4.9,
     },
     "timestamp": new Date("2025-08-08T17:22:30.000Z"),
-    "userId": "testUser"
   },
   {
     "coords": {
@@ -1044,12 +965,13 @@ const mockMadridRun: Location[] = [
       "accuracy": 13,
       "altitudeAccuracy": 1,
       "heading": 180,
-      "speed": 4.4
+      "speed": 4.4,
     },
     "timestamp": new Date("2025-08-08T17:22:35.000Z"),
-    "userId": "testUser"
-  }
+  },
 ]
+
+
 const mockRaro = mockMadridRun.map((track, num) => {
   return { ...track, altitude: num % 2 ? 18 : 21 }
 })

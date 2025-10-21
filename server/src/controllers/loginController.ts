@@ -2,7 +2,7 @@ import { Response } from "express"
 import { removeRunnerFromChatRoom } from "../helpers/chatFunctions";
 import ChatRoomModel from "../models/chatRoomModel";
 import { AuthRequest, Runner } from "../types/types";
-import { getDBPreferredNick } from "./profileController";
+import ProfileModel from "../models/profileModel";
 
 //minutes of inactivity to autologout users
 const LOGIN_EXPIRES_MINUTES = 30;
@@ -16,7 +16,10 @@ export async function logUser(req: AuthRequest, res: Response, next: Function) {
   else {
 
     const userId = req.user?.email;
-    const { desiredNickname } = await getDBPreferredNick(userId);
+    const userProfile = await ProfileModel.findOne({ where: { userId: req.user.email } });
+    console.log('userId is', userId);
+    console.warn('userProfile is', userProfile);
+    const desiredNickname = userProfile?.desiredNickname || 'packrunner';
     const { longitude, latitude } = req.body.coords;
     const updatedAt = new Date();
     const runner: Runner = { userId, longitude, latitude, desiredNickname, updatedAt };
@@ -81,7 +84,6 @@ async function checkForEmptyChatRooms() {
 }
 
 export async function checkIfLoggedIn(req: AuthRequest, res: Response, next: Function) {
-  console.log('Checking if user is logged in');
   activeRunners.has(req.user.email)
     ?
     next()

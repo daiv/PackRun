@@ -1,7 +1,7 @@
 import { Message } from "@common";
 import { userPayload } from "./express";
 import { Request } from "express";
-
+import { ExtendedError } from 'socket.io';
 export interface Runner {
   id?: bigint,
   userId: string,
@@ -18,8 +18,9 @@ export interface AuthRequest extends Request {
 export interface AuthSocketData {
   user: userPayload;
 }
-
-export interface ClientToServerEvents { message: (msg: Message) => void; trackrun: () => void };
+export type AckResponse = { success: boolean, message?: Message | string }
+export type MessageAck = (response: AckResponse) => void;
+export interface ClientToServerEvents { message: (msg: Message, callback?: MessageAck) => void; trackrun: () => void };
 export interface ServerToClientEvents extends ClientToServerEvents { };
 export interface InterServerEvents { };
 type LocationObjectCoords = {
@@ -54,9 +55,9 @@ type LocationObjectCoords = {
    */
   speed: number | null;
 };
-
+export type SocketIONext = (err?: ExtendedError | undefined) => void;
 export type Location = {
   coords: LocationObjectCoords;
   timestamp: Date;
-  userId: string;
+  /* userId: string; */
 }

@@ -11,9 +11,6 @@ import TestAgent from 'supertest/lib/agent';
 import { Server as HttpServer } from 'node:http';
 import { AddressInfo } from 'node:net';
 
-
-
-//const mockUser = { user: { email: 'mocked@mock.es', desiredNickname: 'Timotea' }, };
 const socketUsers = [
   { user: { email: 'Timotea@mock.es', desiredNickname: 'Timotea' }, },
   { user: { email: 'Stacy@mock.es', desiredNickname: 'Stacy' }, },
@@ -27,7 +24,6 @@ jest.mock('./middleware/auth', () => ({
     next();
   }),
   authSocket: jest.fn((socket: Socket, next: SocketIONext) => {
-    // socket.data.user = mockUser.user;
     socket.data.user = socketUsers[userSelected].user;
     next();
   })
@@ -94,7 +90,6 @@ describe('Server tests', () => {
 
   afterAll(async () => {
     ioServer.close();
-    // clientSocket.disconnect();
     clientSocket.forEach(client => client.disconnect());
     httpServer.close();
     await sequelize.close();
@@ -186,7 +181,7 @@ describe('Server tests', () => {
     });
 
   });
-  describe('Messages', () => {
+  describe('Chat', () => {
     const mockMessage = "this is a mock message.";
 
     const sender = async (message: string, client: number) => {
@@ -241,68 +236,114 @@ describe('Server tests', () => {
         const response = await request.get('/messages/');
         expect(response.body[0].author).toBe(socketUsers[userSelected].user.desiredNickname);
       });
-      it('should show Date', async () => {
+
+      it('should include in message a valid time', async () => {
         const response = await request.get('/messages/');
-        
-      })
-
-    });
-  });
-
-  describe('Tracks', () => {
-
-    let trackId = '';
-
-    describe('PUT /tracks', () => {
-      it('should return 201 and the trackId', async () => {
-        const response = await request.put('/tracks/');
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('trackId');
-        expect(response.body.trackId).not.toBeNaN();
-        trackId = response.body.trackId;
+        expect(response.body[0]).toHaveProperty('time');
+        expect(response.body[0].time).not.toBeNull();
+        expect(new Date(response.body[0].time).toString()).not.toBe('Invalid Date');
       });
+
+      it('should contain the original message', async () => {
+        const response = await request.get('/messages/');
+        expect(response.body[0].message).toBe(mockMessage);
+      });
+
     });
 
-    describe('GET /tracks', () => {
-      it('should return 200 and an array when there is tracks', async () => {
-        const response = await request.get('/tracks/');
+    describe('Chatroom Nick Assignment', () => {
+
+      it('should use desired nickname when available', async () => {
+        await sender("hello from Stacy", STACY);
+        const response = await request.get('/messages/');
         expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body.length).toBe(1);
+        const lastMessage = response.body[response.body.length - 1];
+        expect(lastMessage.author).toBe(socketUsers[STACY].user.desiredNickname);
       });
+
+      it('should change to new desired nickname when updated', async () => {
+        const newNick = "Muzzy";
+        userSelected = STACY;
+        const body = { desiredNickname: newNick };
+        await request.post('/profile').send(body);
+        await sender("hello I am Muzzy now", STACY);
+        const response = await request.get('/messages/');
+        expect(response.body[response.body.length - 1].author).toBe(newNick);
+      });
+
+      it('should assign a numeric suffix when desired nickname is taken', async () => {
+        await request.post('/profile').send({ desiredNickname: socketUsers[TIMOTEA].user.desiredNickname });
+        await sender("hello I want to be Timotea too", STACY);
+        const response = await request.get('/messages/');
+        const lastMessage = response.body[response.body.length - 1];
+        expect(lastMessage.author).toBe(socketUsers[TIMOTEA].user.desiredNickname + '-01');
+      });
+
+      it('should use desired nickname when available', async () => {
+        await request.post('/profile').send({ desiredNickname: socketUsers[STACY].user.desiredNickname });
+        await sender("hello I am Stacy again", STACY);
+        const response = await request.get('/messages/');
+        const lastMessage = response.body[response.body.length - 1];
+        expect(lastMessage.author).toBe(socketUsers[STACY].user.desiredNickname);
+      });
+
     });
 
-    describe('POST /tracks', () => {
-      it('should return 204 if not enough waypoints', async () => {
-        const response = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
-        expect(response.status).toBe(204);
+    describe('Tracks', () => {
+
+      let trackId = '';
+
+      describe('PUT /tracks', () => {
+        it('should return 201 and the trackId', async () => {
+          const response = await request.put('/tracks/');
+          expect(response.status).toBe(201);
+          expect(response.body).toHaveProperty('trackId');
+          expect(response.body.trackId).not.toBeNaN();
+          trackId = response.body.trackId;
+        });
       });
 
-      it('should return 400 if no coords are provided', async () => {
-        const response = await request.post('/tracks/' + '/' + trackId).send({});
-        expect(response.status).toBe(400);
+      describe('GET /tracks', () => {
+        it('should return 200 and an array when there is tracks', async () => {
+          const response = await request.get('/tracks/');
+          expect(response.status).toBe(200);
+          expect(Array.isArray(response.body)).toBe(true);
+          expect(response.body.length).toBe(1);
+        });
       });
 
-      it('should return 200 and the waypoints', async () => {
-        const result = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
-        expect(result.status).toBe(200);
-      });
-    });
+      describe('POST /tracks', () => {
+        it('should return 204 if not enough waypoints', async () => {
+          const response = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
+          expect(response.status).toBe(204);
+        });
 
-    describe('DELETE /tracks', () => {
-      it('should return 200 and delete the track', async () => {
-        const response = await request.delete('/tracks/' + '/' + trackId);
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Track deleted');
-      });
-    });
+        it('should return 400 if no coords are provided', async () => {
+          const response = await request.post('/tracks/' + '/' + trackId).send({});
+          expect(response.status).toBe(400);
+        });
 
-    describe('GET /tracks', () => {
-      it('should return 200 and an empty array when no tracks', async () => {
-        const response = await request.get('/tracks/');
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body.length).toBe(0);
+        it('should return 200 and the waypoints', async () => {
+          const result = await request.post('/tracks/' + '/' + trackId).send(mockLocation);
+          expect(result.status).toBe(200);
+        });
+      });
+
+      describe('DELETE /tracks', () => {
+        it('should return 200 and delete the track', async () => {
+          const response = await request.delete('/tracks/' + '/' + trackId);
+          expect(response.status).toBe(200);
+          expect(response.body.message).toBe('Track deleted');
+        });
+      });
+
+      describe('GET /tracks', () => {
+        it('should return 200 and an empty array when no tracks', async () => {
+          const response = await request.get('/tracks/');
+          expect(response.status).toBe(200);
+          expect(Array.isArray(response.body)).toBe(true);
+          expect(response.body.length).toBe(0);
+        });
       });
     });
   });

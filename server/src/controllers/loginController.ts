@@ -17,8 +17,6 @@ export async function logUser(req: AuthRequest, res: Response, next: Function) {
 
     const userId = req.user?.email;
     const userProfile = await ProfileModel.findOne({ where: { userId: req.user.email } });
-    console.log('userId is', userId);
-    console.warn('userProfile is', userProfile);
     const desiredNickname = userProfile?.desiredNickname || 'packrunner';
     const { longitude, latitude } = req.body.coords;
     const updatedAt = new Date();
@@ -34,6 +32,7 @@ export async function logUser(req: AuthRequest, res: Response, next: Function) {
     next();
   }
 }
+
 function showRunners() {
   console.log(`
   
@@ -53,6 +52,7 @@ function showRunners() {
   });
   console.log('************************')
 }
+
 function isMissingFields(req: AuthRequest): boolean {
   return !req.body
     || !req.body.hasOwnProperty('coords')

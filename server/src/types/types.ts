@@ -2,6 +2,7 @@ import { Message } from "@common";
 import { userPayload } from "./express";
 import { Request } from "express";
 import { ExtendedError } from 'socket.io';
+import { ChatRoom } from "../models/chatRoomModel";
 export interface Runner {
   id?: bigint,
   userId: string,
@@ -23,6 +24,11 @@ export type MessageAck = (response: AckResponse) => void;
 export interface ClientToServerEvents { message: (msg: Message, callback?: MessageAck) => void; trackrun: () => void };
 export interface ServerToClientEvents extends ClientToServerEvents { };
 export interface InterServerEvents { };
+
+export interface ChatRoomAccumulator {
+  chatRoom: ChatRoom | null;
+  distance: number;
+}
 type LocationObjectCoords = {
   /**
    * The latitude in degrees.

@@ -1,14 +1,14 @@
 import { LocationResponse } from "@common";
 import { activeRunners } from "../controllers/loginController";
-import ChatRoomModel, { chatRoom } from "../models/chatRoomModel";
-import { Runner } from "../types/types";
+import ChatRoomModel, { ChatRoom } from "../models/chatRoomModel";
+import { ChatRoomAccumulator, Runner } from "../types/types";
 
 const CHAT_ROOM_AREA_IN_MTS = 3 * 1000;
 const CHAT_ROOM_TOLERANCY = 250;
 
 export async function assignToChatRoom(runner: Runner): Promise<LocationResponse | undefined> {
 
-  let chatRoomId = await getNearestChatRoom(runner);
+  let chatRoomId = await getNearestChatRoomId(runner);
   let nearbyUsers = -1;
 
   if (!chatRoomId) {
@@ -78,7 +78,7 @@ export async function changeNickName(runner: Runner) {
   const room = await ChatRoomModel.findOne({ where: { chatRoomId: runner.assignedChatRoom } });
   if (!room || !room.usersId.includes(runner.userId)) return;
   const existingNicks = new Set<string>();
-  
+
   room.usersId.forEach(userId => {
     if (userId != runner.userId) {
       const currentNick = activeRunners.get(userId)?.currentNickname;
@@ -95,22 +95,26 @@ async function createNewChatRoom(runner: Runner) {
   return isChatRoomCreated ? chatRoomId : undefined;
 }
 
-async function getNearestChatRoom(referencePoint: Runner): Promise<string | undefined> {
+async function getNearestChatRoomId(referencePoint: Runner): Promise<string | undefined> {
   try {
-    const nearestChatRoom = await ChatRoomModel.findAll();
-    if (nearestChatRoom) {
+    const chatRoomsArray = await ChatRoomModel.findAll();
+    if (!chatRoomsArray || chatRoomsArray.length === 0) return undefined;
 
-      if (nearestChatRoom.length !== 0) return nearestChatRoom
-        .map(chatRoom => { return { ...chatRoom, distance: calculateDistance(referencePoint, chatRoom) }; })
-        .filter(chatRoom => chatRoom.distance <= CHAT_ROOM_AREA_IN_MTS + CHAT_ROOM_TOLERANCY)
-        .reduce((acum, chatRoom) => chatRoom.distance <= acum.distance
-          ? chatRoom
-          : acum)
+    const initialValue: ChatRoomAccumulator = { chatRoom: null, distance: Infinity };
+    const nearestChatRoom = chatRoomsArray.reduce((acum, chatRoom) => {
+      const distance = calculateDistance(referencePoint, chatRoom);
+      if (distance < acum.distance) {
+        return { chatRoom, distance }
+      } else return acum;
+    }, initialValue);
 
-        .dataValues.chatRoomId;
-    }
+    return (nearestChatRoom.chatRoom === null || nearestChatRoom.distance > CHAT_ROOM_AREA_IN_MTS + CHAT_ROOM_TOLERANCY) ?
+      undefined
+      :
+      nearestChatRoom.chatRoom.chatRoomId;
   } catch (err) {
     console.log(err);
+    return undefined;
   }
 }
 
@@ -140,7 +144,7 @@ export async function getAssignedChatRoom(userId: string) {
   return runner?.assignedChatRoom;
 }
 
-function calculateDistance(user: Runner, db: chatRoom) {
+function calculateDistance(user: Runner, db: ChatRoom) {
 
   const dbLatitude = Number(db.chatRoomId.split('_')[0]);
   const dbLongitude = Number(db.chatRoomId.split('_')[1]);

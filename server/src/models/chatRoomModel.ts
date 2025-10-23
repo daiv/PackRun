@@ -1,7 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "./model";
 
-export interface chatRoom {
+export interface ChatRoom {
   id?: bigint,
   chatRoomId: string,
   usersId: string[],
@@ -14,7 +14,7 @@ export interface Messages {
   time: Date,
 }
 
-class ChatRoomModel extends Model<chatRoom> implements chatRoom {
+class ChatRoomModel extends Model<ChatRoom> implements ChatRoom {
   id!: bigint;
   chatRoomId!: string;
   usersId!: string[];

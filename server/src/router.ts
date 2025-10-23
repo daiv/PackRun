@@ -11,7 +11,6 @@ import profileRouter from './routers/profileRouter';
 const router: Router = express.Router();
 
 router.use(auth);
-//logs the user in and returns assigned chatroom and nearbyUsers
 
 router.post('/locations', logUser, assignChatRoom);
 

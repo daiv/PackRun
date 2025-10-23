@@ -231,6 +231,7 @@ describe('Server tests', () => {
         expect(response.body.length).toBe(2);
       });
     });
+
     describe('Message integrity', () => {
       it('should identify sender', async () => {
         const response = await request.get('/messages/');
@@ -344,6 +345,7 @@ describe('Server tests', () => {
           expect(Array.isArray(response.body)).toBe(true);
           expect(response.body.length).toBe(0);
         });
+        
       });
     });
   });

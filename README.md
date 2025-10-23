@@ -8,14 +8,17 @@ An application for **tracking running routes** and **facilitating communication*
 
 [Watch demo](https://www.youtube.com/watch?v=CFTHtGVFQRM)
 
-<p style="display: flex; ">
-  <img style="width:30%; padding-right: 2%; height: auto" src="1.png"/>
-  <img style="width:30%; padding-right: 2%; height: auto"src="2.png" />
-  <img style="width:30%; padding-right: 2%; height: auto"src="3.png" />
+<p style="display: flex; justify-content:center;">
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/home.png"/>
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/runHistory.png"/>
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/chat.png"/>
+  
 </p>
 <p style="display: flex; justify-content:center;">
-  <img style="width:30%; padding-right: 2%; height: auto" src="4.png"/>
-  <img style="width:30%; padding-right: 2%; height: auto"src="5.png" />
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/currentRun.png"/>
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/authentication.png"/>
+  <img style="width:30%; padding-right: 2%; height: auto" src="./githubAssets/profile.png"/>
+  
 </p>
 
 ---

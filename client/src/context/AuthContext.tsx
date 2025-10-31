@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthContextType, AuthResponse } from "../types/types";
 import { AuthTokens, confirmSignUp, fetchAuthSession, getCurrentUser, resendSignUpCode, signIn, signOut, signUp } from "aws-amplify/auth";
 
@@ -184,7 +184,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally { setIsLoading(false); }
   }, []);
 
-  const contextValue: AuthContextType = {
+  const contextValue = useMemo<AuthContextType>(() => ({
     createAccount,
     confirmAccount,
     resendConfirmationCode,
@@ -197,7 +197,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     nickName,
     setNickName,
     isLoading,
-  }
+  }),
+    [createAccount,
+      confirmAccount,
+      resendConfirmationCode,
+      login,
+      logout,
+      getTokens,
+      getUser,
+      tokens,
+      userId,
+      nickName,
+      setNickName,
+      isLoading,]);
 
   return (
     <AuthContext.Provider value={contextValue}>

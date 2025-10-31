@@ -1,14 +1,14 @@
-import React, { createContext, useEffect, useContext, useState } from 'react';
+import React, { createContext, useEffect, useContext, useState, useCallback, useMemo } from 'react';
 import { RunContextType, RunProviderProps } from '../types/types';
 import { useConnContext } from './ConnContext';
 import { Alert } from 'react-native';
 import { FeatureCollection } from 'geojson';
 
-const RunContext = createContext<RunContextType | undefined>(undefined);
+const RunContext = createContext<RunContextType | null>(null);
 
 export const useRunContext = () => {
   const context = useContext(RunContext);
-  if (context === undefined) {
+  if (context === null) {
     throw new Error('useRunContext must be used within a RunProvider');
   }
   return context;
@@ -46,7 +46,7 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
 
   }, [lastKnownLocation]);
 
-  async function toogleRunning() {
+  const toogleRunning = useCallback(async () => {
     if (isRunning) setIsRunning(false);
     else {
       const response = await fetchData<{ trackId: string }>('/tracks/', 'PUT', null);
@@ -56,9 +56,9 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
         setIsRunning(true);
       } else Alert.alert('Error Failed to start the run. Please try again later. ', response?.error || 'Unknown error.');
     }
-  }
+  }, [isRunning, fetchData]);
 
-  const contextValue: RunContextType = {
+  const contextValue: RunContextType = useMemo(() => ({
     isRunning,
     secondsElapsed,
     setSecondsElapsed,
@@ -66,7 +66,16 @@ export const RunProvider: React.FC<RunProviderProps> = ({ children }) => {
     toogleRunning,
     metersRan,
     route
-  };
+  }),
+    [
+      isRunning,
+      secondsElapsed,
+      setSecondsElapsed,
+      lastKnownLocation,
+      toogleRunning,
+      metersRan,
+      route,
+    ]);
 
   return (
     <RunContext.Provider value={contextValue}>

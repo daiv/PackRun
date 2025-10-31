@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, useRef, useContext, useCallback } from 'react';
+import React, { createContext, useEffect, useState, useRef, useContext, useCallback, useMemo } from 'react';
 import * as Location from 'expo-location';
 import { fetchFactory } from '../helpers/helper';
 import { ConnContextType, FetchDataResult, HttpMethod } from '../types/types';
@@ -87,13 +87,24 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
     console.log('Last known location updated:', lastKnownLocation);
   }, [lastKnownLocation]);
 
+  const fetchData = useCallback(async<T,>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<FetchDataResult<T>> => {
+    if (!userId) return { success: false, error: 'User not logged in, cannot fetch data' };
+    try {
+      const data = await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: (error as Error).message || 'Unknown error' };
+    }
+
+  }, [userId, tokens]);
+  
   useEffect(function reportLocationToServer() {
     if (!userId || !tokens?.idToken || !gpsPermissionGranted) {
       console.log('Not reporting location: missing userId, token, or permission not granted');
       return;
     }
 
-    const report = async () => {
+    const reportLocation = async () => {
       const body = lastKnownLocationRef.current ? { ...lastKnownLocationRef.current, timeStamp: new Date().toISOString() } : null;
       if (body) {
         const reportResponse = await fetchData<{ assignedChatRoom: string, nickName: string }>('/locations', 'POST', body);
@@ -101,8 +112,8 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
         reportResponse.success && setNickName(reportResponse.data?.nickName ? reportResponse.data?.nickName : null);
       }
     }
-    report();
-    const interval = setInterval(report, SERVER_TIME_INTERVAL);
+    reportLocation();
+    const interval = setInterval(reportLocation, SERVER_TIME_INTERVAL);
 
     return () => {
       clearInterval(interval);
@@ -111,24 +122,23 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   }, [userId, tokens, gpsPermissionGranted]);
 
-  async function fetchData<T>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<FetchDataResult<T>> {
-    if (!userId) return { success: false, error: 'User not logged in, cannot fetch data' };
-    try {
-      const data = await fetchFactory<T>(URL + endpoint, method, tokens?.idToken?.toString(), body);
-      return { success: true, data };
-    } catch (error) {
-      return { success: false, error: (error as Error).message || 'Unknown error' };
-    }
-  }
+  const setRunningMode = useCallback((runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000), []);
 
-  const contextValue: ConnContextType = {
+  const contextValue = useMemo(() => ({
     lastKnownLocation,
     socket: socketRef.current,
     setLastKnownLocation,
-    setRunningMode: (runningMode: boolean) => runningMode ? setGpsTimeInterval(1000) : setGpsTimeInterval(5000),
+    setRunningMode,
     fetchData,
     isConnected
-  };
+  }),
+    [lastKnownLocation,
+      socketRef,
+      setLastKnownLocation,
+      setRunningMode,
+      fetchData,
+      isConnected
+    ]);
 
   return (
     <ConnContext.Provider value={contextValue} >

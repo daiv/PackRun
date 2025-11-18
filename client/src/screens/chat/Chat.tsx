@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform,
   TouchableWithoutFeedback, Keyboard, NativeSyntheticEvent, NativeScrollEvent
@@ -6,42 +6,21 @@ import {
 import styles from './styles';
 
 import { useAuthContext } from '../../context/AuthContext';
-import { useConnContext } from '../../context/ConnContext';
-import { Message } from '@common';
+import { useChat } from 'client/src/hooks/useChat';
 
 
 export default function Chatscreen() {
 
-  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 
   const { nickName } = useAuthContext();
-  const { socket, fetchData } = useConnContext();
 
+  const { messages, send } = useChat();
 
-  useEffect(function getInitialMessagesFromServer() {
-    fetchData<Message[]>('/messages/', 'GET')
-      .then(messagesArray => {
-        if (messagesArray?.success) {
-          messagesArray.data && setMessages(messagesArray.data);
-        } else console.error('Error getting messages', messagesArray?.error);
-      });
-  }, []);
-
-  useEffect(function ioSocketInit() {
-    socket && socket.on('message', (message: Message) => {
-      console.log('receivedMessageSocket', message);
-      setMessages(prevMess => [...prevMess, message]);
-    });
-
-    return () => { socket && socket.off('message') };
-  }, []);
-
-  async function send() {
-    if (socket) socket.emit('message', { message: input });
-    else console.error('socket error');
+  async function handleSendMessage() {
+    send(input);
     setInput('');
   }
 
@@ -90,7 +69,7 @@ export default function Chatscreen() {
               value={input}
               onChangeText={setInput}
             />
-            <TouchableOpacity style={styles.sendButton} onPress={send}>
+            <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
               <Text style={styles.sendButtonText}>Send</Text>
             </TouchableOpacity>
           </View>

@@ -11,7 +11,6 @@ export default function RunHistory() {
   const [runs, setRuns] = useState<Run[]>([]);
   const [refresh, setRefresh] = useState(false);
   const { fetchData } = useConnContext();
-  const flatListRef = useRef<FlatList>(null);
 
   const getRuns = async (): Promise<RunResponse[]> => {
     const runsArray = await fetchData<RunResponse[]>('/tracks/', 'GET');
@@ -57,7 +56,7 @@ export default function RunHistory() {
       <Text style={styles.title}>History</Text>
       {runs.length === 0 ? <Text>no runs yet</Text> :
 
-        <FlatList style={styles.listContainer} ref={flatListRef} data={runs} keyExtractor={(item) => item.id}
+        <FlatList style={styles.listContainer} data={runs} keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
 
             <View style={styles.runCard}>

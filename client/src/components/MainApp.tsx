@@ -5,7 +5,7 @@ import { Image } from "react-native";
 import Home from "../screens/home/Home";
 import CurrentRun from "../screens/currentRun/CurrentRun";
 import RunHistory from "../screens/runhistory/RunHistory";
-import Chat from "../screens/chat/chat";
+import Chat from "../screens/chat/Chat";
 import Auth from "../screens/authentication/Auth";
 import Profile from "../screens/profile/Profile";
 import { MaterialCommunityIcons } from "@expo/vector-icons";

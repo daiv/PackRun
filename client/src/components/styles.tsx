@@ -1,11 +1,6 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  /*   dashbutton: {
-      marginBottom: 20,
-      alignItems: 'center',
-      justifyContent: 'center',
-    }, */
 
   title: {
     fontSize: 24,
@@ -21,14 +16,21 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  /*   bottomdash: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      paddingBottom: 50,
-      width: '100%',
-      height: 180,
-      backgroundColor: '#f8f8f8',
-    }, */
+  markerIcon: {
+    alignSelf: 'center',
+    justifyContent: 'center'
+  },
+  fullScreen: {
+    height: '100%',
+    width: '100%',
+    justifyContent: 'center'
+  },
+  mapview: {
+    flex: 1,
+  },
+  markerView: {
+    flex: 1,
+  },
   startbtn: {
     width: 90,
     height: 90,

@@ -11,11 +11,13 @@ export const activeRunners = new Map<string, Runner>();
 
 export async function logUser(req: AuthRequest, res: Response, next: Function) {
 
-  if (isMissingFields(req)) res.status(400).json({ message: 'Missing fields' });
-  else if (incorrectCoordinates(req)) res.status(400).json({ message: 'Incorrect coordinates ' });
+  if (isMissingFields(req)) return res.status(400).json({ message: 'Missing fields' });
+  else if (incorrectCoordinates(req)) return res.status(400).json({ message: 'Incorrect coordinates ' });
   else {
 
     const userId = req.user?.email;
+    if (!userId) return res.status(400).json({ message: 'User not identified' });
+
     const userProfile = await ProfileModel.findOne({ where: { userId: req.user.email } });
     const desiredNickname = userProfile?.desiredNickname || 'packrunner';
     const { longitude, latitude } = req.body.coords;

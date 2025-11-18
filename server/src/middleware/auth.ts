@@ -24,7 +24,7 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
     if (!req.user.email) return res.status(401).json({ message: 'Email not found in token' });
 
   } catch (error) {
-    res.status(403).json({ message: 'Invalid token' });
+    return res.status(403).json({ message: 'Invalid token' });
   }
   next();
 }

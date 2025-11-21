@@ -1,8 +1,8 @@
-import CreateAccount from "../../components/CreateAccount";
 import { useState } from "react";
-import Login from "../../components/Login";
 import { View } from "react-native";
 import { styles } from "./styles";
+import CreateAccount from "client/src/components/CreateAccount/CreateAccount";
+import Login from "client/src/components/Login/Login";
 
 
 export default function Auth() {

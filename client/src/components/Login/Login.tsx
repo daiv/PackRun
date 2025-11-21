@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
-import SmartInput from "./SmartInput";
-import { useAuthContext } from "../context/AuthContext";
+import SmartInput from "../SmartInput/SmartInput";
+import { useAuthContext } from "../../context/AuthContext";
 
 export default function Login({ toggleLogin }: { toggleLogin: () => void }) {
   const [email, setEmail] = useState('');

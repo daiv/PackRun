@@ -1,34 +1,24 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  Text, View, TextInput, FlatList, TouchableOpacity, KeyboardAvoidingView, Platform,
-  TouchableWithoutFeedback, Keyboard, NativeSyntheticEvent, NativeScrollEvent
+  Text, View, KeyboardAvoidingView, Platform,
+  TouchableWithoutFeedback, Keyboard,
 } from 'react-native';
 import styles from './styles';
 
-import { useAuthContext } from '../../context/AuthContext';
-import { useChat } from 'client/src/hooks/useChat';
+import { useChat } from 'client/src/hooks';
+import ChatInput from 'client/src/components/ChatInput/ChatInput';
+import MessageList from 'client/src/components/MessageList/MessageList';
 
 
 export default function Chatscreen() {
 
   const [input, setInput] = useState('');
-  const [isAtBottom, setIsAtBottom] = useState(true);
-  const flatListRef = useRef<FlatList>(null);
-
-  const { nickName } = useAuthContext();
-
   const { messages, send } = useChat();
 
   async function handleSendMessage() {
     send(input);
     setInput('');
   }
-
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
-    const paddingToBottom = 20;
-    setIsAtBottom(layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom);
-  };
 
   return (
     <KeyboardAvoidingView
@@ -39,40 +29,11 @@ export default function Chatscreen() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1, paddingTop: 25 }}>
           <Text style={styles.title}>Chat</Text>
-          <FlatList
-            style={{ flex: 1 }}
-            ref={flatListRef}
-            data={messages}
-            keyExtractor={(item) => item.time}
-            renderItem={({ item }) => (
-              <View>
-                <Text style={item.author === nickName ? styles.userText : styles.othersText}>
-                  {item.author}
-                </Text>
-                <View style={item.author === nickName ? styles.userMessage : styles.othersMessage}>
-                  <Text style={styles.messageText}>{item.message}</Text>
-                </View>
-              </View>
-            )}
-            onContentSizeChange={() => {
-              if (isAtBottom) {
-                flatListRef.current?.scrollToEnd({ animated: true });
-              }
-            }}
-            onScroll={handleScroll}
-            scrollEventThrottle={16}
-          />
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message..."
-              value={input}
-              onChangeText={setInput}
-            />
-            <TouchableOpacity style={styles.sendButton} onPress={handleSendMessage}>
-              <Text style={styles.sendButtonText}>Send</Text>
-            </TouchableOpacity>
-          </View>
+
+          <MessageList messages={messages} />
+
+          <ChatInput input={input} setInput={setInput} sendMessage={handleSendMessage} />
+
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

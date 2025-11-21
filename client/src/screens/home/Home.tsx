@@ -1,7 +1,7 @@
-import RunButton from '../../components/RunButton';
+import RunButton from '../../components/RunButton/RunButton';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import { Map } from 'client/src/components/Map';
+import { Map } from 'client/src/components/Map/Map';
 
 export default function HomePage() {
 

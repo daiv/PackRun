@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useConnContext } from "../context/ConnContext";
+import { useConnContext } from "../../context/ConnContext";
 import { Camera, MapView, MarkerView, LineLayer, ShapeSource } from '@maplibre/maplibre-react-native';
 import { ActivityIndicator, Text, View } from 'react-native';
 import styles from './styles';
 
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import { useRunContext } from "../context/RunContext";
+import { useRunContext } from "../../context/RunContext";
 
 function useStadiakey() {
   const [stadiaKey, setStadiaKey] = useState<string | null>(null);

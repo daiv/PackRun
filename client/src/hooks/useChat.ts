@@ -11,6 +11,7 @@ export function useChat() {
 
     fetchData<Message[]>('/messages/', 'GET')
       .then(messagesArray => {
+        console.log('fetchedMessages', messagesArray);
         if (messagesArray?.success) {
           messagesArray.data && setMessages(messagesArray.data);
         } else console.error('Error getting messages', messagesArray?.error);

@@ -1,11 +1,10 @@
 import { ActivityIndicator, Alert, Modal, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { avoidFirstRender, checkEmail, checkPassword } from "../helpers/helper";
+import { avoidFirstRender, checkEmail, checkPassword } from "../../helpers/helper";
 import { useEffect, useRef, useState } from "react"
-import SmartInput from "./SmartInput";
+import SmartInput from "../SmartInput/SmartInput";
 import styles from "./styles";
-import { useAuthContext } from "../context/AuthContext";
-import { useConnContext } from "../context/ConnContext";
-
+import { useAuthContext } from "../../context/AuthContext";
+import { useConnContext } from "../../context/ConnContext";
 
 export default function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
 

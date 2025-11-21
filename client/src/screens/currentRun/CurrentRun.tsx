@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import RunButton from '../../components/RunButton';
+import RunButton from '../../components/RunButton/RunButton';
 import { useRunContext } from '../../context/RunContext';
 
 

@@ -1,25 +1,20 @@
 import { ActivityIndicator, Alert, Modal, Text, TextInput, TouchableOpacity, View } from "react-native"
-import { avoidFirstRender, checkEmail, checkPassword } from "../../helpers/helper";
-import { useEffect, useRef, useState } from "react"
-import { SmartInput } from "@components";
+import { checkEmail, checkPassword, checkNick, checkMatchingPasswords } from "../../helpers/helper";
+import { useRef, useState } from "react"
+import { SmartInput } from "../SmartInput/SmartInput";
 import styles from "./styles";
 import { useAuthContext, useConnContext } from "@context";
+import { useValidatedState } from "@hooks";
 
 export function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
 
-  const [email, setEmail] = useState('');
-  const [nick, setNick] = useState('');
-  const [password, setPassword] = useState('');
-  const [matchingPwd, setMatchingPwd] = useState('');
+  const { value: email, setValue: setEmail, error: emailError, validate: validateEmail } = useValidatedState<string>('', checkEmail);
+  const { value: nick, setValue: setNick, error: nickError, validate: validateNick } = useValidatedState<string>('', checkNick);
+  const { value: password, setValue: setPassword, error: pwError, validate: validatePwd } = useValidatedState<string>('', checkPassword);
+  const { value: matchingPwd, setValue: setMatchingPwd, error: matchingPwdError, validate: validateMatchingPwd } = useValidatedState<string>('', checkMatchingPasswords(password));
   const [confirmationCode, setConfirmationCode] = useState('');
 
-  const [emailError, setEmailError] = useState('');
-  const [nickError, setNickError] = useState('');
-  const [pwError, setPwError] = useState('');
-  const [matchingPwdError, setMatchingPwdError] = useState('');
-
   const [isModalVisible, setModalVisible] = useState(false);
-
 
   const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens, isLoading } = useAuthContext();
   const { fetchData } = useConnContext();
@@ -29,32 +24,18 @@ export function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
   const passRef = useRef<TextInput>(null);
   const matchPassRef = useRef<TextInput>(null);
 
-  const isFirstEmailRender = useRef(true);
-  const isFirstPwdRender = useRef(true);
-  const isFirstNickRender = useRef(true);
-
-
-  useEffect(() => avoidFirstRender(isFirstEmailRender, setEmailError, 'email', email), [email]);
-  useEffect(() => avoidFirstRender(isFirstPwdRender, setPwError, 'password', password), [password]);
-  useEffect(() => avoidFirstRender(isFirstNickRender, setNickError, 'nick', nick), [nick]);
-  useEffect(() => { setMatchingPwdError(password === matchingPwd ? '' : 'Passwords does not match') }, [password, matchingPwd]);
-
   function handleCancelModal() {
     setModalVisible(false);
     setConfirmationCode('');
   }
+
   async function handleAccountCreation() {
+    const currentEmailError = validateEmail();
+    const currentNickError = validateNick();
+    const currentPwdError = validatePwd();
+    const currentMatchingPwdError = validateMatchingPwd();
 
-    const currentEmailError = checkEmail(email);
-    const currentNickError = nick ? '' : 'Nick can not be empty';
-    const currentPasswordError = checkPassword(password);
-    const currentPasswordMatchError = password !== matchingPwd;
-
-    setEmailError(currentEmailError);
-    setNickError(currentNickError);
-    setPwError(currentPasswordError);
-
-    if (currentEmailError || currentNickError || currentPasswordError || currentPasswordMatchError) {
+    if (currentEmailError || currentNickError || currentPwdError || currentMatchingPwdError) {
       console.warn('There are errors in the form, please fix them before proceeding.');
       return;
     } else {

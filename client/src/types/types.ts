@@ -3,6 +3,7 @@ import * as Location from 'expo-location';
 import React from 'react';
 import { Socket } from 'socket.io-client';
 import { DimensionValue, TextInput, TextInputProps } from 'react-native';
+import { useValidatedState } from '@hooks';
 
 export interface Runner {
   userId: string,
@@ -91,4 +92,11 @@ export type RunResponse = {
   estimatedTime: string;
   distance: string;
   altitudes: altitudesType[];
+}
+
+export type ValidatedStateResponse<T> = {
+  value: T;
+  setValue: (state: T) => void;
+  error: string;
+  validate: () => string;
 }

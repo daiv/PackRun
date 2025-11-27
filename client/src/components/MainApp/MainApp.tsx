@@ -1,14 +1,11 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useAuthContext } from "../../context/AuthContext";
-import { NavigationContainer } from "@react-navigation/native";
 import { Image } from "react-native";
-import Home from "../../screens/home/Home";
-import CurrentRun from "../../screens/currentRun/CurrentRun";
-import RunHistory from "../../screens/runhistory/RunHistory";
-import Chat from "../../screens/chat/Chat";
-import Auth from "../../screens/authentication/Auth";
-import Profile from "../../screens/profile/Profile";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAuthContext } from "@context";
+
+import { Home, CurrentRun, RunHistory, Chat, Auth, Profile } from "@screens";
+
 import { styles } from "./styles";
 
 export function MainApp() {

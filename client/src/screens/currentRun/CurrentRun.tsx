@@ -1,11 +1,11 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
-import RunButton from '../../components/RunButton/RunButton';
-import { useRunContext } from '../../context/RunContext';
+import { useRunContext } from '@context';
+import { RunButton } from '../../components/RunButton/RunButton';
 
 
-export default function CurrentRun() {
+export function CurrentRun() {
   const { secondsElapsed, lastKnownLocation, isRunning, metersRan } = useRunContext();
 
   function formatTime() {

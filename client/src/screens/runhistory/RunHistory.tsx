@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text, View, FlatList, TouchableOpacity } from 'react-native';
-import styles from './styles';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRuns } from 'client/src/hooks';
-import { RunListItem } from 'client/src/components/RunItem/RunItem';
+import { useRuns } from '@hooks';
+import { RunListItem } from '../../components/RunListItem/RunListItem';
+import styles from './styles';
 
 
-export default function RunHistory() {
+export function RunHistory() {
 
   const { runs, refreshRuns } = useRuns();
 

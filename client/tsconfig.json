@@ -7,6 +7,18 @@
     "paths": {
       "@common": [
         "common/commonTypes.ts"
+      ],
+      "@components": [
+        "client/src/components/index.ts"
+      ],
+      "@context": [
+        "client/src/context/index.ts"
+      ],
+      "@hooks": [
+        "client/src/hooks/index.ts"
+      ],
+      "@screens": [
+        "client/src/screens/index.ts"
       ]
     }
   },

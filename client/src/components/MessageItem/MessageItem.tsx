@@ -1,9 +1,9 @@
 import { Message } from "@common";
-import { useAuthContext } from "client/src/context/AuthContext";
+import { useAuthContext } from "@context";
 import { Text, View } from "react-native";
 import styles from "./styles";
 
-export default function MessageItem({ message }: { message: Message }) {
+export function MessageItem({ message }: { message: Message }) {
   const { nickName } = useAuthContext();
   return <View>
     <Text style={message.author === nickName ? styles.userText : styles.othersText}>

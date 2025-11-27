@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { styles } from "./styles";
-import CreateAccount from "client/src/components/CreateAccount/CreateAccount";
-import Login from "client/src/components/Login/Login";
+import { Login } from "../../components/Login/Login";
+import { CreateAccount } from "../../components/CreateAccount/CreateAccount";
 
-
-export default function Auth() {
+export function Auth() {
   const [isLogin, setIsLogin] = useState(true);
 
   const toggleLogin = () => setIsLogin(isLogin => !isLogin);

@@ -7,7 +7,7 @@ interface ChatInputProps {
   sendMessage: (message: string) => void;
 }
 
-export default function ChatInput({ input, setInput, sendMessage }: ChatInputProps) {
+export function ChatInput({ input, setInput, sendMessage }: ChatInputProps) {
   function handleSendMessage() {
     Keyboard.dismiss();
     sendMessage(input);

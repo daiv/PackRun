@@ -1,7 +1,8 @@
 import { HttpMethod } from '../types/types';
 
 export const checkEmail = (email: string) => !email ? 'Email can not be empty' : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email) ? 'Invalid email address' : '';
-
+export const checkNick = (nick: string) => nick ? '' : 'Nick can not be empty';
+export const checkMatchingPasswords = (pass1: string) => ((pass2: string) => pass1 && pass1 === pass2 ? '' : 'Passwords does not match');
 export const checkPassword = (password: string) => {
   if (!password) return 'Password can not be empty';
   if (password.length < 8) return 'Password must be at least 8 characters long';

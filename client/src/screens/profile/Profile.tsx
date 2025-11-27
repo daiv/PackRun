@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
-import styles from "./styles";
-import { useAuthContext } from "../../context/AuthContext";
-import { useConnContext } from "../../context/ConnContext";
-import Entypo from '@expo/vector-icons/Entypo';
 import { useFocusEffect } from "@react-navigation/native";
+import { useAuthContext, useConnContext } from "@context";
+import Entypo from '@expo/vector-icons/Entypo';
+import styles from "./styles";
 
-export default function Profile() {
+export function Profile() {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [newNickname, setNewNickname] = useState('');

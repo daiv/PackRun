@@ -1,13 +1,13 @@
 import { Message } from "@common";
 import { useRef, useState } from "react";
 import { FlatList, NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-import MessageItem from "../MessageItem/MessageItem";
+import { MessageItem } from "../MessageItem/MessageItem";
 
 type MessageListProps = {
   messages: Message[];
 }
 
-export default function MessageList({ messages }: MessageListProps) {
+export function MessageList({ messages }: MessageListProps) {
   const [isAtBottom, setIsAtBottom] = useState(true);
   const flatListRef = useRef<FlatList>(null);
 

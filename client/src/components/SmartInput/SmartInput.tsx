@@ -3,7 +3,7 @@ import { Text, TextInput, View, TouchableOpacity } from "react-native";
 import { SmartInputProps } from "../../types/types";
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const SmartInput = React.forwardRef<TextInput, SmartInputProps>((props, ref) => {
+export const SmartInput = React.forwardRef<TextInput, SmartInputProps>((props, ref) => {
 
   const [isVisible, setIsVisible] = React.useState<boolean>(false);
 
@@ -39,4 +39,3 @@ const SmartInput = React.forwardRef<TextInput, SmartInputProps>((props, ref) => 
     </>
   )
 });
-export default SmartInput;

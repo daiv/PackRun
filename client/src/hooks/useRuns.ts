@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useConnContext } from "../context/ConnContext";
+import { useConnContext } from "@context";
 import { Run, RunResponse } from "../types/types";
 
 export function useRuns() {

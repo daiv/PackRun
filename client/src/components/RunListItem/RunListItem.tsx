@@ -1,7 +1,7 @@
 import { memo } from "react";
-import { Run } from "../../types/types";
 import { Text, View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
+import { Run } from "../../types/types";
 import styles from "./styles";
 
 

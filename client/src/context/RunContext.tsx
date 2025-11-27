@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useContext, useState, useCallback, useMemo } from 'react';
+import { Alert } from 'react-native';
 import { RunContextType, RunProviderProps } from '../types/types';
 import { useConnContext } from './ConnContext';
-import { Alert } from 'react-native';
 import { FeatureCollection } from 'geojson';
 
 const RunContext = createContext<RunContextType | null>(null);

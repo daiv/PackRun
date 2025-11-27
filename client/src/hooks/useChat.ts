@@ -1,6 +1,6 @@
 import { Message } from "@common";
 import { useEffect, useState } from "react";
-import { useConnContext } from "../context/ConnContext";
+import { useConnContext } from "@context";
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);

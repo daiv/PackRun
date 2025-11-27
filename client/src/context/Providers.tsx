@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
-import { AuthProvider } from "./AuthContext";
-import { ConnProvider } from "./ConnContext";
-import { RunProvider } from "./RunContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthProvider, } from "./AuthContext";
+import { ConnProvider, } from "./ConnContext";
+import { RunProvider, } from "./RunContext";
 
-export default function Providers({ children }: PropsWithChildren) {
+export function Providers({ children }: PropsWithChildren) {
   const providers = [
     AuthProvider,
     ConnProvider,

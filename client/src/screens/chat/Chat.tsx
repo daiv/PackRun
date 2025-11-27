@@ -5,12 +5,11 @@ import {
 } from 'react-native';
 import styles from './styles';
 
-import { useChat } from 'client/src/hooks';
-import ChatInput from 'client/src/components/ChatInput/ChatInput';
-import MessageList from 'client/src/components/MessageList/MessageList';
+import { useChat } from '@hooks';
+import { ChatInput } from '../../components/ChatInput/ChatInput';
+import { MessageList } from '../../components/MessageList/MessageList';
 
-
-export default function Chatscreen() {
+export function Chat() {
 
   const [input, setInput] = useState('');
   const { messages, send } = useChat();

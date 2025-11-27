@@ -1,10 +1,10 @@
+import { useState, useEffect } from "react";
 import { TouchableOpacity, View, Text } from "react-native";
 import styles from "./styles";
-import { useState, useEffect } from "react";
-import { useRunContext } from "../../context/RunContext";
+import { useRunContext } from "@context";
 import { RunButtonStyleProps } from "../../types/types";
 
-export default function RunButton({ bottom }: RunButtonStyleProps) {
+export function RunButton({ bottom }: RunButtonStyleProps) {
 
   const [isVisible, setIsVisible] = useState(true);
   const { isRunning, toogleRunning } = useRunContext();

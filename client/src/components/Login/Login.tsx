@@ -1,51 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { ActivityIndicator, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import { SmartInput } from "../SmartInput/SmartInput";
-import { useAuthContext } from "@context";
+import { useLogin } from "@hooks";
 
 export function Login({ toggleLogin }: { toggleLogin: () => void }) {
-  const [email, setEmail] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-
-  const { login, getTokens, isLoading } = useAuthContext();
-
+  const { email, setEmail, emailError, password, setPassword, passwordError, handleLogin, isLoading } = useLogin();
   const emailRef = useRef<TextInput>(null);
   const passRef = useRef<TextInput>(null);
-
-  useEffect(() => { getTokens() }, []);
-
-  const handleLogin = async () => {
-    const currentEmailError = email ? '' : 'Email cannot be empty';
-    const currentPasswordError = password ? '' : 'Password cannot be empty';
-
-    setEmailError(currentEmailError);
-    setPasswordError(currentPasswordError);
-
-    if (currentEmailError || currentPasswordError) {
-      console.warn('There are errors in the form, please fix them before proceeding.');
-      return;
-    }
-
-    const loginResponse = await login(email, password);
-
-    console.log('loginResponse', loginResponse);
-    if (loginResponse.success) {
-    } else {
-      switch (loginResponse.errorCode) {
-        case 1:
-          console.warn('User already authenticated');
-          break;
-        case 2:
-          console.warn('Invalid credentials');
-          break;
-        default:
-          console.warn('An unknown error occurred while logging in.');
-      }
-    }
-  }
 
   return (
     <>

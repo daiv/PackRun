@@ -19,6 +19,9 @@
       ],
       "@screens": [
         "client/src/screens/index.ts"
+      ],
+      "@assets/*": [
+        "client/assets/*"
       ]
     }
   },

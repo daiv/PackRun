@@ -52,7 +52,7 @@ export async function getTracksInfo(req: AuthRequest, res: Response) {
 export async function deleteTrack(req: AuthRequest, res: Response) {
   const userId = req.user.email;
   const trackId = req.params.trackId;
-  if (await deleteTrackFromDb(userId, trackId)) res.status(200).json({ message: 'Track deleted' });
+  if (await deleteTrackFromDb(userId, trackId)) res.status(204).json({ message: 'Track deleted' });
   else res.status(500).json({ message: 'Server error. Unable to delete track' });
 
 }

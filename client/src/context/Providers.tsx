@@ -1,8 +1,6 @@
 import { PropsWithChildren } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { AuthProvider, } from "./AuthContext";
-import { ConnProvider, } from "./ConnContext";
-import { RunProvider, } from "./RunContext";
+import { AuthProvider, ConnProvider, RunProvider } from "./";
 
 export function Providers({ children }: PropsWithChildren) {
   const providers = [

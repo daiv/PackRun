@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useConnContext } from "@context";
 import { Run, RunResponse } from "../types/types";
 
@@ -43,5 +43,13 @@ export function useRuns() {
     console.log('final runs', runs);
   }, []);
 
-  return { runs, refreshRuns: getRuns };
+  const deleteRun = useCallback(async (runId: string) => {
+    const response = await fetchData(`/tracks/${runId}`, 'DELETE', null);
+    if (response?.success) {
+      setRuns(prevRuns => prevRuns.filter(run => run.id !== runId));
+      return true;
+    } else return false;
+  }, [fetchData]);
+
+  return { runs, refreshRuns: getRuns, deleteRun };
 }

@@ -1,12 +1,22 @@
 import { memo } from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
 import { Run } from "../../types/types";
 import styles from "./styles";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 
-export const RunListItem = memo(({ run }: { run: Run }) => {
+export const RunListItem = memo(({ run, deleteRun }: { run: Run, deleteRun: (arg: string) => Promise<boolean> }) => {
   return <View style={styles.runCard}>
+
+    <TouchableOpacity onPress={async () => {
+      Alert.alert('Delete Run', 'Are you sure you want to delete this run?', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: () => { deleteRun(run.id) || ToastAndroid.show('Unable to delete Run ', ToastAndroid.SHORT) } }]);
+    }} >
+
+      <FontAwesome name="trash-o" size={24} color="black" style={{ alignSelf: 'flex-end' }} />
+    </TouchableOpacity>
 
     <View style={styles.runHeader}>
       <Text style={styles.runTitle}>Run #{run.id}</Text>
@@ -28,7 +38,6 @@ export const RunListItem = memo(({ run }: { run: Run }) => {
 
       <View style={styles.runRow}>
         <Text style={styles.runLabel}>Pace:{run.pace}/km</Text>
-        {/* <Text style={styles.runValue}>{item.pace}</Text> */}
       </View>
 
     </View>

@@ -8,7 +8,7 @@ import styles from './styles';
 
 export function RunHistory() {
 
-  const { runs, refreshRuns } = useRuns();
+  const { runs, refreshRuns, deleteRun } = useRuns();
 
   return (
     <View style={styles.container}>
@@ -17,7 +17,7 @@ export function RunHistory() {
         <Text>no runs yet</Text>
         :
         <FlatList style={styles.listContainer} data={runs} keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <RunListItem run={item} />}
+          renderItem={({ item }) => <RunListItem run={item} deleteRun={deleteRun} />}
         />
       }
 

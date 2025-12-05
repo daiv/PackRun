@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRuns } from '@hooks';
-import { RunListItem } from '../../components/RunListItem/RunListItem';
+import { RunListItem } from '@components';
 import styles from './styles';
 
 

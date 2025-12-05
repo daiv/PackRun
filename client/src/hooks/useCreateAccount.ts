@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { checkEmail, checkMatchingPasswords, checkNick, checkPassword } from "../helpers/helper";
 import { useValidatedState } from "./useValidatedState";
 import { useAuthContext, useConnContext } from "@context";
-import { Alert } from "react-native";
+import { Alert, TextInput } from "react-native";
 
 export function useCreateAccount() {
 
@@ -18,6 +18,10 @@ export function useCreateAccount() {
   const { createAccount, confirmAccount, resendConfirmationCode, login, getTokens, isLoading } = useAuthContext();
   const { fetchData } = useConnContext();
 
+  const emailRef = useRef<TextInput>(null);
+  const nickRef = useRef<TextInput>(null);
+  const passRef = useRef<TextInput>(null);
+  const matchPassRef = useRef<TextInput>(null);
 
   function handleCancelModal() {
     setModalVisible(false);
@@ -106,7 +110,7 @@ export function useCreateAccount() {
     }
     console.warn('Account confirmation response:', responseConfirmation);
   }
-return {
+  return {
     email,
     setEmail,
     emailError,
@@ -126,6 +130,10 @@ return {
     isLoading,
     handleCancelModal,
     handleAccountCreation,
-    handleAccountConfirmation
+    handleAccountConfirmation,
+    emailRef,
+    nickRef,
+    passRef,
+    matchPassRef,
   };
 }

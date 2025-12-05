@@ -1,23 +1,12 @@
-import React, { useState } from 'react';
-import {
-  Text, View, KeyboardAvoidingView, Platform,
-  TouchableWithoutFeedback, Keyboard,
-} from 'react-native';
+import React from 'react';
+import { Text, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import styles from './styles';
-
 import { useChat } from '@hooks';
-import { ChatInput } from '../../components/ChatInput/ChatInput';
-import { MessageList } from '../../components/MessageList/MessageList';
+import { ChatInput, MessageList } from '@components';
 
 export function Chat() {
 
-  const [input, setInput] = useState('');
-  const { messages, send } = useChat();
-
-  async function handleSendMessage() {
-    send(input);
-    setInput('');
-  }
+  const { messages, send, input, setInput } = useChat();
 
   return (
     <KeyboardAvoidingView
@@ -28,11 +17,8 @@ export function Chat() {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{ flex: 1, paddingTop: 25 }}>
           <Text style={styles.title}>Chat</Text>
-
           <MessageList messages={messages} />
-
-          <ChatInput input={input} setInput={setInput} sendMessage={handleSendMessage} />
-
+          <ChatInput input={input} setInput={setInput} sendMessage={send} />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

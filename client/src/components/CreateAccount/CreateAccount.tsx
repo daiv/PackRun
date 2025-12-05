@@ -16,13 +16,12 @@ export function CreateAccount({ toggleLogin }: { toggleLogin: () => void }) {
     handleAccountCreation,
     handleCancelModal,
     setMatchingPwd,
-    setConfirmationCode
+    setConfirmationCode,
+    emailRef,
+    nickRef,
+    passRef,
+    matchPassRef,
   } = useCreateAccount();
-
-  const emailRef = useRef<TextInput>(null);
-  const nickRef = useRef<TextInput>(null);
-  const passRef = useRef<TextInput>(null);
-  const matchPassRef = useRef<TextInput>(null);
 
   return (
     <>

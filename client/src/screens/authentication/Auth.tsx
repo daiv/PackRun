@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 import { styles } from "./styles";
-import { Login } from "../../components/Login/Login";
-import { CreateAccount } from "../../components/CreateAccount/CreateAccount";
+import { CreateAccount, Login } from "@components";
 
 export function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -12,7 +11,11 @@ export function Auth() {
   return (
     <View style={styles.mainContainer}>
       <View style={{ width: '60%' }}>
-        {isLogin ? <Login toggleLogin={toggleLogin} /> : <CreateAccount toggleLogin={toggleLogin} />}
+        {isLogin
+          ?
+          <Login toggleLogin={toggleLogin} />
+          :
+          <CreateAccount toggleLogin={toggleLogin} />}
       </View>
     </View>
   )

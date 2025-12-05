@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import styles from './styles';
 import { useRunContext } from '@context';
-import { RunButton } from '../../components/RunButton/RunButton';
+import { RunButton } from '@components';
 
 
 export function CurrentRun() {

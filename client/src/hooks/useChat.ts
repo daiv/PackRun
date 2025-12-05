@@ -4,6 +4,7 @@ import { useConnContext } from "@context";
 
 export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
   const { socket, fetchData } = useConnContext();
 
 
@@ -27,9 +28,11 @@ export function useChat() {
     return () => { socket && socket.off('message') };
   }, []);
 
-  async function send(input: string) {
-    if (socket) socket.emit('message', { message: input });
+  async function send(message: string) {
+    if (socket) socket.emit('message', { message });
     else console.error('socket error');
+
+    setInput('');
   }
-  return { messages, send };
+  return { messages, send, input, setInput };
 }

@@ -92,4 +92,3 @@ export async function fetchFactory<T>(url: string, method: HttpMethod, token: st
     throw new ApiError('Unexpected connection error', 0, error);
   }
 }
-

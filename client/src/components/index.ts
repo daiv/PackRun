@@ -1,7 +1,6 @@
 export * from './ChatInput/ChatInput';
 export * from './CreateAccount/CreateAccount';
 export * from './Login/Login';
-export * from './MainApp/MainApp';
 export * from './Map/Map'
 export * from './MessageItem/MessageItem';
 export * from './MessageList/MessageList';

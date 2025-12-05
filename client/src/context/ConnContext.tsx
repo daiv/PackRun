@@ -64,7 +64,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       , location => {
         setLastKnownLocation(location);
-        console.log('Location received: ', location);
+        // console.log('Location received: ', location);
       }, error => console.log('error occurred watching location:', error))
       .then(subscription => {
         console.log('Location watcher started', subscription);
@@ -84,7 +84,7 @@ export const ConnProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(function updateLastKnownLocation() {
     lastKnownLocationRef.current = lastKnownLocation;
-    console.log('Last known location updated:', lastKnownLocation);
+    // console.log('Last known location updated:', lastKnownLocation);
   }, [lastKnownLocation]);
 
   const fetchData = useCallback(async<T,>(endpoint: string, method: HttpMethod, body: unknown = null): Promise<FetchDataResult<T>> => {

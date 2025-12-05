@@ -1,8 +1,6 @@
 import { Text, View } from 'react-native';
 import styles from './styles';
-import { RunButton } from '../../components/RunButton/RunButton';
-import { Map } from '../../components/Map/Map';
-
+import { Map, RunButton } from '@components';
 
 export function Home() {
 

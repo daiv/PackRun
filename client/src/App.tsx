@@ -1,8 +1,8 @@
 import { StatusBar, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Providers } from '@context';
-import { MainApp } from '@components';
 import '../amplify-config';
+import { Providers } from './context/Providers';
+import { MainApp } from './components/MainApp/MainApp';
 
 export default function App() {
   return (
